@@ -17,18 +17,25 @@
 <body>
     <!-- Главный контейнер. У него будет темный фон и стеклянный эффект -->
     <div class="app-container" id="app">
-        <!-- Шапка приложения -->
+      <!-- Шапка приложения -->
 <header class="app-header">
-  <h1><i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
-  <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
-  
-  <!-- Кнопка профиля - теперь под заголовком -->
-  <div class="profile-button-container">
+  <div class="header-top">
+    <!-- Баланс слева -->
+    <div class="balance-display" id="balance-display">
+      <i class="fas fa-coins"></i>
+      <span class="balance-amount" id="header-balance">85</span>
+    </div>
+    
+    <!-- Центральный заголовок -->
+    <h1><i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
+    
+    <!-- Кнопка профиля справа -->
     <button class="profile-button" id="profile-button">
       <i class="fas fa-user"></i>
-      <span>Мой профиль</span>
     </button>
   </div>
+  
+  <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
 </header>
 
         <!-- Основная часть, где будет меняться контент -->
