@@ -137,7 +137,7 @@ const App = {
         
         window.selectedStyle = style;
         
-        this.showNotification(`Выбран стиль: <strong>${style.name}</strong>. Теперь загрузите ваше фото.`);
+        this.showUploadScreen(style);
     },
 
     // Настройка кнопки покупки
@@ -173,6 +173,290 @@ const App = {
             notification.classList.remove('show');
         }, duration);
     },
+    // Переход на экран загрузки фото
+    showUploadScreen(style) {
+        // Обновляем текст с выбранным стилем
+        document.getElementById('current-style').textContent = style.name;
+        document.getElementById('credits-cost').textContent = `(${style.credits} кредитов)`;
+        
+        // Скрываем главный экран, показываем экран загрузки
+        const mainScreen = document.getElementById('screen-main');
+        const uploadScreen = document.getElementById('screen-upload');
+        
+        mainScreen.style.opacity = '0';
+        setTimeout(() => {
+            mainScreen.classList.add('hidden');
+            uploadScreen.classList.remove('hidden');
+            setTimeout(() => {
+                uploadScreen.style.opacity = '1';
+            }, 50);
+            
+            // Инициализируем загрузку фото
+            this.initFileUpload();
+        }, 400);
+    },
+
+    // Инициализация загрузки файлов
+    initFileUpload() {
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const selectButton = document.getElementById('select-button');
+        const generateButton = document.getElementById('generate-button');
+        const backButton = document.getElementById('back-button');
+        
+        // Массив для хранения загруженных фото
+        window.uploadedPhotos = [];
+        
+        // Обработка drag & drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-over');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-over');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-over');
+            const files = e.dataTransfer.files;
+            this.handleFiles(files);
+        });
+        
+        // Клик по области загрузки
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        // Кнопка выбора файлов
+        selectButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            fileInput.click();
+        });
+        
+        // Обработка выбора файлов
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            this.handleFiles(files);
+        });
+        
+        // Кнопка "Назад"
+        backButton.addEventListener('click', () => {
+            this.goBackToCatalog();
+        });
+        
+        // Кнопка "Сгенерировать"
+        generateButton.addEventListener('click', () => {
+            this.startGeneration();
+        });
+        
+        // Обновляем счетчик фото
+        this.updatePhotoCount();
+    },
+
+    // Обработка выбранных файлов
+    handleFiles(files) {
+        const maxPhotos = 10;
+        const remainingSlots = maxPhotos - window.uploadedPhotos.length;
+        
+        if (files.length > remainingSlots) {
+            this.showNotification(`Можно загрузить не более ${maxPhotos} фото. Осталось мест: ${remainingSlots}`);
+            return;
+        }
+        
+        for (let i = 0; i < Math.min(files.length, remainingSlots); i++) {
+            const file = files[i];
+            
+            // Проверяем, что это изображение
+            if (!file.type.startsWith('image/')) {
+                this.showNotification('Пожалуйста, загружайте только изображения');
+                continue;
+            }
+            
+            // Проверяем размер (максимум 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                this.showNotification(`Фото "${file.name}" слишком большое (макс. 5MB)`);
+                continue;
+            }
+            
+            // Добавляем фото в массив
+            window.uploadedPhotos.push({
+                file: file,
+                id: Date.now() + Math.random(),
+                validated: false
+            });
+            
+            // Создаем превью
+            this.createPreview(file, window.uploadedPhotos.length - 1);
+        }
+        
+        // Обновляем интерфейс
+        this.updatePhotoCount();
+        this.checkGenerateButton();
+        
+        // Запускаем "валидацию"
+        if (window.uploadedPhotos.length > 0) {
+            this.simulateValidation();
+        }
+    },
+
+    // Создание превью фото
+    createPreview(file, index) {
+        const reader = new FileReader();
+        const previewGrid = document.getElementById('preview-grid');
+        
+        reader.onload = (e) => {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.dataset.index = index;
+            
+            previewItem.innerHTML = `
+                <img src="${e.target.result}" alt="Preview">
+                <button class="remove-btn" data-index="${index}">
+                    <i class="fas fa-times"></i>
+                </button>
+                <span class="badge">${index + 1}</span>
+            `;
+            
+            previewGrid.appendChild(previewItem);
+            
+            // Добавляем обработчик удаления
+            const removeBtn = previewItem.querySelector('.remove-btn');
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.removePhoto(index);
+            });
+            
+            // Если это первое фото, убираем сообщение "нет фото"
+            const emptyMessage = previewGrid.querySelector('.empty-message');
+            if (emptyMessage) {
+                emptyMessage.remove();
+            }
+        };
+        
+        reader.readAsDataURL(file);
+    },
+
+    // Удаление фото
+    removePhoto(index) {
+        window.uploadedPhotos.splice(index, 1);
+        
+        // Обновляем превью
+        this.updatePreviews();
+        this.updatePhotoCount();
+        this.checkGenerateButton();
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+        
+        this.showNotification('Фото удалено');
+    },
+
+    // Обновление всех превью
+    updatePreviews() {
+        const previewGrid = document.getElementById('preview-grid');
+        previewGrid.innerHTML = '';
+        
+        if (window.uploadedPhotos.length === 0) {
+            previewGrid.innerHTML = '<div class="empty-message">Загрузите ваши фото для предпросмотра</div>';
+            return;
+        }
+        
+        // Пересоздаем все превью
+        window.uploadedPhotos.forEach((photo, index) => {
+            this.createPreview(photo.file, index);
+        });
+    },
+
+    // Обновление счетчика фото
+    updatePhotoCount() {
+        const countElement = document.getElementById('photo-count');
+        countElement.textContent = `(${window.uploadedPhotos.length}/10)`;
+    },
+
+    // Проверка кнопки генерации
+    checkGenerateButton() {
+        const generateButton = document.getElementById('generate-button');
+        generateButton.disabled = window.uploadedPhotos.length === 0;
+    },
+
+    // Имитация валидации фото
+    simulateValidation() {
+        const validationPanel = document.getElementById('validation-panel');
+        const progressFill = document.getElementById('progress-fill');
+        const validationText = document.getElementById('validation-text');
+        
+        // Показываем панель валидации
+        validationPanel.classList.remove('hidden');
+        validationPanel.classList.add('validating');
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 10;
+            progressFill.style.width = `${progress}%`;
+            
+            if (progress <= 30) {
+                validationText.textContent = 'Анализ лиц на фото...';
+            } else if (progress <= 60) {
+                validationText.textContent = 'Проверка качества изображения...';
+            } else if (progress <= 90) {
+                validationText.textContent = 'Оптимизация для ИИ...';
+            } else {
+                validationText.textContent = '✅ Фото готовы к генерации!';
+                validationPanel.classList.remove('validating');
+                clearInterval(interval);
+                
+                // Помечаем фото как валидированные
+                window.uploadedPhotos.forEach(photo => {
+                    photo.validated = true;
+                });
+                
+                // Виброотклик
+                if (window.tg) {
+                    window.tg.HapticFeedback.notificationOccurred('success');
+                }
+            }
+        }, 300);
+    },
+
+    // Возврат в каталог
+    goBackToCatalog() {
+        const uploadScreen = document.getElementById('screen-upload');
+        const mainScreen = document.getElementById('screen-main');
+        
+        uploadScreen.style.opacity = '0';
+        setTimeout(() => {
+            uploadScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            setTimeout(() => {
+                mainScreen.style.opacity = '1';
+            }, 50);
+        }, 400);
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+    },
+
+    // Начало генерации (заглушка для следующего этапа)
+    startGeneration() {
+        if (window.uploadedPhotos.length === 0) {
+            this.showNotification('Сначала загрузите фото');
+            return;
+        }
+        
+        this.showNotification('Генерация AI фото начнется на следующем этапе!');
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('heavy');
+        }
+    },
+
 
     // Функция для перехода на главный экран
     showMainScreen() {
