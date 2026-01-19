@@ -705,14 +705,21 @@ const App = {
     // ============================================
 
     // Инициализация кнопки профиля
-    initProfileButton() {
-        const profileButton = document.getElementById('profile-button');
-        if (profileButton) {
-            profileButton.addEventListener('click', () => {
-                this.showProfileScreen();
-            });
-        }
-    },
+initProfileButton() {
+  const profileButton = document.getElementById('profile-button');
+  if (profileButton) {
+    // Удаляем существующие обработчики (если есть)
+    profileButton.removeEventListener('click', this.handleProfileClick);
+    
+    // Создаем новый обработчик
+    this.handleProfileClick = () => {
+      this.showProfileScreen();
+    };
+    
+    // Добавляем обработчик
+    profileButton.addEventListener('click', this.handleProfileClick);
+  }
+},
 
     // Показ экрана профиля
     showProfileScreen() {
