@@ -27,10 +27,13 @@ const App = {
         // 5. Инициализируем каталог стилей
         this.initCatalog();
 
-        // 6. Настраиваем кнопку покупки
+        // 6. Инициализируем кнопку профиля
+        this.initProfileButton();
+
+        // 7. Настраиваем кнопку покупки
         this.setupBuyButton();
 
-        // 7. Имитируем короткую загрузку, потом показываем главный экран
+        // 8. Имитируем короткую загрузку, потом показываем главный экран
         setTimeout(() => {
             this.showMainScreen();
             tg.HapticFeedback.impactOccurred('light');
@@ -664,7 +667,7 @@ const App = {
             
             // Настраиваем кнопки
             document.getElementById('view-results-btn').addEventListener('click', () => {
-                this.showNotification('Просмотр результатов будет на следующем этапе!');
+                this.showResultsScreen();
             });
             
             document.getElementById('download-all-btn').addEventListener('click', () => {
@@ -696,6 +699,520 @@ const App = {
         if (window.tg) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
+    },
+    // ============================================
+    // ФУНКЦИИ ДЛЯ ЭКРАНА РЕЗУЛЬТАТОВ И ПРОФИЛЯ
+    // ============================================
+
+    // Инициализация кнопки профиля
+    initProfileButton() {
+        const profileButton = document.getElementById('profile-button');
+        if (profileButton) {
+            profileButton.addEventListener('click', () => {
+                this.showProfileScreen();
+            });
+        }
+    },
+
+    // Показ экрана профиля
+    showProfileScreen() {
+        const currentScreen = this.getCurrentScreen();
+        const profileScreen = document.getElementById('screen-profile');
+        
+        // Обновляем данные профиля
+        this.updateProfileData();
+        
+        currentScreen.style.opacity = '0';
+        setTimeout(() => {
+            currentScreen.classList.add('hidden');
+            profileScreen.classList.remove('hidden');
+            setTimeout(() => {
+                profileScreen.style.opacity = '1';
+                
+                // Настраиваем кнопки профиля
+                this.setupProfileButtons();
+            }, 50);
+        }, 400);
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+    },
+
+    // Обновление данных профиля
+    updateProfileData() {
+        const user = window.userData || { first_name: 'Пользователь' };
+        
+        // Имя пользователя
+        document.getElementById('profile-name').textContent = 
+            user.first_name || 'Пользователь';
+        
+        // ID пользователя
+        document.getElementById('profile-id').textContent = 
+            user.id || '000000';
+        
+        // Аватар (можно сделать первую букву имени)
+        const avatar = document.getElementById('user-avatar');
+        const firstName = user.first_name || 'П';
+        avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
+        
+        // Баланс (сохраняем в localStorage)
+        let balance = localStorage.getItem('ai_photo_balance');
+        if (!balance) {
+            balance = '85'; // Начальный баланс
+            localStorage.setItem('ai_photo_balance', balance);
+        }
+        document.getElementById('profile-balance').textContent = balance;
+        
+        // Обновляем баланс на главном экране
+        document.querySelector('.credits-count').textContent = balance;
+        
+        // Статистика (можно сохранять в localStorage)
+        const generated = localStorage.getItem('ai_photos_generated') || '12';
+        const styles = localStorage.getItem('ai_styles_used') || '4';
+        
+        document.getElementById('photos-generated').textContent = generated;
+        document.getElementById('styles-used').textContent = styles;
+        
+        // Загружаем историю
+        this.loadHistory();
+    },
+
+    // Загрузка истории генераций
+    loadHistory() {
+        const historyList = document.getElementById('history-list');
+        const historyEmpty = document.getElementById('history-empty');
+        
+        // Получаем историю из localStorage
+        let history = JSON.parse(localStorage.getItem('ai_generation_history')) || [];
+        
+        if (history.length === 0) {
+            historyList.classList.add('hidden');
+            historyEmpty.classList.remove('hidden');
+            return;
+        }
+        
+        historyEmpty.classList.add('hidden');
+        historyList.classList.remove('hidden');
+        historyList.innerHTML = '';
+        
+        // Показываем последние 5 записей
+        history.slice(-5).forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            
+            const date = new Date(item.date);
+            const formattedDate = date.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'short'
+            });
+            
+            historyItem.innerHTML = `
+                <div class="history-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <div class="history-details">
+                    <h4>${item.style}</h4>
+                    <div class="history-meta">
+                        <span>${formattedDate}</span>
+                        <span>${item.photos} фото</span>
+                        <span class="history-credits">${item.credits} кредитов</span>
+                    </div>
+                </div>
+            `;
+            
+            historyList.appendChild(historyItem);
+        });
+    },
+
+    // Настройка кнопок профиля
+    setupProfileButtons() {
+        // Кнопка "Назад" в профиле
+        document.getElementById('back-to-main').addEventListener('click', () => {
+            this.goBackFromProfile();
+        });
+        
+        // Кнопка пополнения баланса
+        document.getElementById('add-balance-btn').addEventListener('click', () => {
+            this.showPaymentModal();
+        });
+        
+        // Кнопка "Создать первую фотосессию"
+        document.getElementById('start-from-profile').addEventListener('click', () => {
+            this.goBackFromProfile();
+        });
+        
+        // Переключатели в настройках
+        document.querySelectorAll('.switch input').forEach(switchEl => {
+            switchEl.addEventListener('change', (e) => {
+                const setting = e.target.parentElement.parentElement.querySelector('span').textContent;
+                const value = e.target.checked;
+                console.log(`Настройка "${setting}" изменена на: ${value}`);
+                
+                // Можно сохранять в localStorage
+                // localStorage.setItem(`setting_${setting}`, value);
+            });
+        });
+    },
+
+    // Возврат из профиля
+    goBackFromProfile() {
+        const profileScreen = document.getElementById('screen-profile');
+        const mainScreen = document.getElementById('screen-main');
+        
+        profileScreen.style.opacity = '0';
+        setTimeout(() => {
+            profileScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            setTimeout(() => {
+                mainScreen.style.opacity = '1';
+            }, 50);
+        }, 400);
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+    },
+
+    // ============================================
+    // ФУНКЦИИ ДЛЯ ЭКРАНА РЕЗУЛЬТАТОВ
+    // ============================================
+
+    // Показ экрана результатов
+    showResultsScreen() {
+        const generationScreen = document.getElementById('screen-generation');
+        const resultsScreen = document.getElementById('screen-results');
+        
+        // Обновляем информацию
+        document.getElementById('results-style').textContent = window.selectedStyle.name;
+        document.getElementById('credits-spent').textContent = window.selectedStyle.credits;
+        
+        // Устанавливаем текущую дату
+        const now = new Date();
+        document.getElementById('order-date').textContent = now.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+        
+        generationScreen.style.opacity = '0';
+        setTimeout(() => {
+            generationScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            setTimeout(() => {
+                resultsScreen.style.opacity = '1';
+                
+                // Настраиваем экран результатов
+                this.setupResultsScreen();
+            }, 50);
+        }, 400);
+        
+        // Сохраняем в историю
+        this.saveToHistory();
+        
+        // Обновляем баланс (списываем кредиты)
+        this.updateBalance(-window.selectedStyle.credits);
+    },
+
+    // Настройка экрана результатов
+    setupResultsScreen() {
+        // Кнопка "Назад"
+        document.getElementById('back-to-generation').addEventListener('click', () => {
+            this.goBackToGenerationFromResults();
+        });
+        
+        // Кнопка "Создать новую фотосессию"
+        document.getElementById('new-generation-btn').addEventListener('click', () => {
+            this.goBackToCatalogFromResults();
+        });
+        
+        // Кнопки действий
+        document.getElementById('download-single-btn').addEventListener('click', () => {
+            this.showNotification('Скачивание будет доступно при подключении AI API');
+        });
+        
+        document.getElementById('download-all-results-btn').addEventListener('click', () => {
+            this.showNotification('Скачивание ZIP архива будет доступно при подключении AI API');
+        });
+        
+        document.getElementById('share-btn').addEventListener('click', () => {
+            this.showNotification('Поделиться результатами можно после генерации реальных фото');
+        });
+        
+        // Дополнительные возможности
+        document.getElementById('enhance-btn').addEventListener('click', () => {
+            this.showPaymentForFeature('Улучшение качества', 3);
+        });
+        
+        document.getElementById('variations-btn').addEventListener('click', () => {
+            this.showPaymentForFeature('Создание вариаций', 5);
+        });
+        
+        document.getElementById('different-style-btn').addEventListener('click', () => {
+            this.showPaymentForFeature('Смена стиля', 7);
+        });
+        
+        document.getElementById('remove-bg-btn').addEventListener('click', () => {
+            this.showPaymentForFeature('Удаление фона', 2);
+        });
+        
+        // Загружаем тестовые изображения
+        this.loadTestResults();
+    },
+
+    // Загрузка тестовых результатов
+    loadTestResults() {
+        const galleryGrid = document.getElementById('results-gallery');
+        
+        // Очищаем галерею
+        galleryGrid.innerHTML = '';
+        
+        // Тестовые URL изображений (можно заменить на свои)
+        const testImages = [
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=533&fit=crop',
+            'https://images.unsplash.com/photo-1494790108755-2616b786d4d9?w=400&h=533&fit=crop',
+            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=533&fit=crop',
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w-400&h=533&fit=crop'
+        ];
+        
+        // Создаем карточки с тестовыми изображениями
+        testImages.forEach((imgUrl, index) => {
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="${imgUrl}" alt="AI фото ${index + 1}" loading="lazy">
+                <div class="select-overlay">
+                    <i class="fas fa-check"></i>
+                </div>
+            `;
+            
+            // Добавляем обработчик выбора
+            galleryItem.addEventListener('click', () => {
+                galleryItem.classList.toggle('selected');
+                
+                // Виброотклик
+                if (window.tg) {
+                    window.tg.HapticFeedback.impactOccurred('light');
+                }
+            });
+            
+            galleryGrid.appendChild(galleryItem);
+        });
+    },
+
+    // Возврат из результатов на генерацию
+    goBackToGenerationFromResults() {
+        const resultsScreen = document.getElementById('screen-results');
+        const generationScreen = document.getElementById('screen-generation');
+        
+        resultsScreen.style.opacity = '0';
+        setTimeout(() => {
+            resultsScreen.classList.add('hidden');
+            generationScreen.classList.remove('hidden');
+            setTimeout(() => {
+                generationScreen.style.opacity = '1';
+            }, 50);
+        }, 400);
+    },
+
+    // Возврат из результатов в каталог
+    goBackToCatalogFromResults() {
+        const resultsScreen = document.getElementById('screen-results');
+        const mainScreen = document.getElementById('screen-main');
+        
+        resultsScreen.style.opacity = '0';
+        setTimeout(() => {
+            resultsScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            setTimeout(() => {
+                mainScreen.style.opacity = '1';
+            }, 50);
+        }, 400);
+    },
+
+    // Сохранение в историю
+    saveToHistory() {
+        let history = JSON.parse(localStorage.getItem('ai_generation_history')) || [];
+        
+        history.push({
+            date: new Date().toISOString(),
+            style: window.selectedStyle.name,
+            photos: 4, // Количество сгенерированных фото
+            credits: window.selectedStyle.credits
+        });
+        
+        // Сохраняем только последние 20 записей
+        if (history.length > 20) {
+            history = history.slice(-20);
+        }
+        
+        localStorage.setItem('ai_generation_history', JSON.stringify(history));
+        
+        // Обновляем счетчик сгенерированных фото
+        let generated = parseInt(localStorage.getItem('ai_photos_generated') || '0');
+        generated += 4;
+        localStorage.setItem('ai_photos_generated', generated.toString());
+    },
+
+    // ============================================
+    // ФУНКЦИИ ДЛЯ ОПЛАТЫ (ЮKassa)
+    // ============================================
+
+    // Показ модального окна оплаты
+    showPaymentModal() {
+        const modal = document.getElementById('payment-modal');
+        modal.classList.remove('hidden');
+        
+        // Настройка модального окна
+        this.setupPaymentModal();
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('medium');
+        }
+    },
+
+    // Настройка модального окна оплаты
+    setupPaymentModal() {
+        const modal = document.getElementById('payment-modal');
+        const closeBtn = document.getElementById('modal-close');
+        const payBtn = document.getElementById('pay-button');
+        const paymentCards = document.querySelectorAll('.payment-card');
+        
+        // Закрытие модального окна
+        closeBtn.addEventListener('click', () => {
+            this.closePaymentModal();
+        });
+        
+        modal.querySelector('.modal-overlay').addEventListener('click', () => {
+            this.closePaymentModal();
+        });
+        
+        // Выбор пакета кредитов
+        let selectedAmount = 100;
+        let selectedPrice = 99;
+        
+        paymentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Убираем выделение со всех карточек
+                paymentCards.forEach(c => c.classList.remove('selected'));
+                
+                // Выделяем выбранную карточку
+                card.classList.add('selected');
+                
+                // Обновляем выбранные значения
+                selectedAmount = parseInt(card.dataset.amount);
+                selectedPrice = parseInt(card.dataset.price);
+                
+                // Обновляем информацию в модальном окне
+                document.getElementById('selected-pack').textContent = `${selectedAmount} кредитов`;
+                document.getElementById('total-price').textContent = `${selectedPrice} ₽`;
+            });
+        });
+        
+        // Кнопка оплаты
+        payBtn.addEventListener('click', () => {
+            this.processPayment(selectedAmount, selectedPrice);
+        });
+    },
+
+    // Закрытие модального окна оплаты
+    closePaymentModal() {
+        const modal = document.getElementById('payment-modal');
+        modal.classList.add('hidden');
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+    },
+
+    // Обработка оплаты (имитация)
+    processPayment(amount, price) {
+        console.log(`Оплата: ${amount} кредитов за ${price} ₽`);
+        
+        // Имитация процесса оплаты
+        this.showNotification(`Перенаправление на ЮKassa... ${price} ₽`);
+        
+        // Через 2 секунды "завершаем" оплату
+        setTimeout(() => {
+            // Обновляем баланс
+            this.updateBalance(amount);
+            
+            // Закрываем модальное окно
+            this.closePaymentModal();
+            
+            // Показываем успешное уведомление
+            this.showNotification(`✅ Баланс пополнен на ${amount} кредитов!`);
+            
+            // Виброотклик успеха
+            if (window.tg) {
+                window.tg.HapticFeedback.notificationOccurred('success');
+            }
+        }, 2000);
+    },
+
+    // Обновление баланса
+    updateBalance(change) {
+        let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        balance += change;
+        
+        // Баланс не может быть отрицательным
+        if (balance < 0) balance = 0;
+        
+        localStorage.setItem('ai_photo_balance', balance.toString());
+        
+        // Обновляем отображение баланса
+        document.querySelector('.credits-count').textContent = balance;
+        document.getElementById('profile-balance').textContent = balance;
+    },
+
+    // Показ оплаты за дополнительную функцию
+    showPaymentForFeature(featureName, credits) {
+        const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        
+        if (currentBalance < credits) {
+            this.showNotification(`Недостаточно кредитов. Нужно ${credits}, доступно ${currentBalance}`);
+            this.showPaymentModal();
+            return;
+        }
+        
+        // Подтверждение покупки
+        if (confirm(`Использовать ${credits} кредитов для "${featureName}"?`)) {
+            // Списание кредитов
+            this.updateBalance(-credits);
+            
+            // Показываем уведомление
+            this.showNotification(`✅ ${featureName} активировано!`);
+            
+            // Виброотклик
+            if (window.tg) {
+                window.tg.HapticFeedback.notificationOccurred('success');
+            }
+        }
+    },
+
+    // Получение текущего экрана
+    getCurrentScreen() {
+        const screens = [
+            'screen-welcome',
+            'screen-main', 
+            'screen-upload',
+            'screen-generation',
+            'screen-results',
+            'screen-profile'
+        ];
+        
+        for (const screenId of screens) {
+            const screen = document.getElementById(screenId);
+            if (!screen.classList.contains('hidden')) {
+                return screen;
+            }
+        }
+        
+        return document.getElementById('screen-main');
     },
 
     // Функция для перехода на главный экран
