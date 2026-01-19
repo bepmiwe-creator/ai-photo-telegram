@@ -124,6 +124,114 @@
                     </p>
                 </div>
             </section>
+            <!-- Экран генерации AI-фото (будет скрыт) -->
+            <section class="screen screen-generation hidden" id="screen-generation">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-upload">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-magic"></i> Генерация AI-фото</h2>
+                    <p class="screen-subtitle">ИИ создает ваши фото в стиле: <span id="generation-style">Бизнес-портрет</span></p>
+                </div>
+                
+                <div class="generation-container">
+                    <!-- Анимированный индикатор процесса -->
+                    <div class="ai-process glass-card">
+                        <div class="ai-brain">
+                            <div class="brain-animation">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="pulse"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="process-info">
+                            <h3><i class="fas fa-brain"></i> ИИ обрабатывает ваши фото</h3>
+                            <p class="process-step" id="process-step">Загрузка модели Stable Diffusion...</p>
+                            
+                            <!-- Детальный прогресс-бар -->
+                            <div class="detailed-progress">
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-check"></i></span>
+                                    <span class="step-text">Загрузка фото</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-1-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-sync"></i></span>
+                                    <span class="step-text">Анализ лиц</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-2-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-cog"></i></span>
+                                    <span class="step-text">Применение стиля</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-3-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-sparkles"></i></span>
+                                    <span class="step-text">Генерация изображений</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-4-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Основной прогресс-бар -->
+                            <div class="main-progress">
+                                <div class="progress-labels">
+                                    <span>0%</span>
+                                    <span id="progress-percent">0%</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="main-progress-bar">
+                                    <div class="main-progress-fill" id="main-progress-fill"></div>
+                                    <div class="progress-glow"></div>
+                                </div>
+                            </div>
+                            
+                            <p class="time-estimate"><i class="fas fa-clock"></i> Примерное время: <span id="time-left">30</span> сек.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Предпросмотр генерируемых фото (появляется в процессе) -->
+                    <div class="generation-preview glass-card hidden" id="generation-preview">
+                        <h3><i class="fas fa-images"></i> Предпросмотр результатов</h3>
+                        <div class="preview-grid-small" id="generation-preview-grid">
+                            <!-- Сюда будут добавляться предпросмотры генерируемых фото -->
+                        </div>
+                        <p class="preview-hint">ИИ создает 4 варианта фото в выбранном стиле</p>
+                    </div>
+                    
+                    <!-- Кнопки после завершения -->
+                    <div class="generation-complete glass-card hidden" id="generation-complete">
+                        <div class="complete-header">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>Генерация завершена!</h3>
+                        </div>
+                        <p class="complete-text">ИИ создал 4 уникальных фото в стиле <span id="complete-style">Бизнес-портрет</span></p>
+                        
+                        <div class="complete-buttons">
+                            <button class="btn-view" id="view-results-btn">
+                                <i class="fas fa-eye"></i> Посмотреть фото
+                            </button>
+                            <button class="btn-download" id="download-all-btn">
+                                <i class="fas fa-download"></i> Скачать все
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Нижняя панель (здесь будет кнопка от Telegram) -->
