@@ -67,6 +67,63 @@
                     <p>После выбора стиля вы сможете загрузить до 10 своих фото для лучшего качества</p>
                 </div>
             </section>
+            <!-- Экран загрузки фото (будет скрыт) -->
+            <section class="screen screen-upload hidden" id="screen-upload">
+                <div class="screen-header">
+                    <button class="back-button" id="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-cloud-upload-alt"></i> Загрузка фото</h2>
+                    <p class="screen-subtitle" id="selected-style-text">Выбран стиль: <span id="current-style">Бизнес-портрет</span></p>
+                </div>
+                
+                <div class="upload-container glass-card">
+                    <!-- Область для перетаскивания файлов -->
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-zone-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Перетащите фото сюда</h3>
+                            <p>Или нажмите для выбора</p>
+                            <p class="hint">До 10 фото. Лицо должно быть четко видно</p>
+                            <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
+                            <button class="btn-select" id="select-button">
+                                <i class="fas fa-folder-open"></i> Выбрать файлы
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Предпросмотр загруженных фото -->
+                    <div class="preview-container" id="preview-container">
+                        <h3><i class="fas fa-images"></i> Загруженные фото <span id="photo-count">(0)</span></h3>
+                        <div class="preview-grid" id="preview-grid">
+                            <!-- Сюда будут добавляться превью фото -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Прогресс бар для валидации -->
+                <div class="validation-panel glass-card hidden" id="validation-panel">
+                    <div class="validation-header">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Проверка качества фото</h3>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="validation-text" id="validation-text">Анализ лиц на фото...</p>
+                </div>
+                
+                <!-- Кнопка генерации -->
+                <div class="generate-section">
+                    <button class="btn-generate" id="generate-button" disabled>
+                        <i class="fas fa-magic"></i> Сгенерировать AI фото
+                        <span class="credits-cost" id="credits-cost">(5 кредитов)</span>
+                    </button>
+                    <p class="generate-hint">
+                        <i class="fas fa-lightbulb"></i> Чем больше фото вы загрузите, тем лучше будет результат!
+                    </p>
+                </div>
+            </section>
         </main>
 
         <!-- Нижняя панель (здесь будет кнопка от Telegram) -->
