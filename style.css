@@ -1408,9 +1408,927 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+/* =========================== */
+/* ЭКРАН РЕЗУЛЬТАТОВ */
+/* =========================== */
 
+.results-container {
+    padding: 0 1rem 1.5rem;
+}
 
+/* Информация о заказе */
+.order-info {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+}
 
+.order-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
 
+.order-item {
+    display: flex;
+    flex-direction: column;
+}
 
+.order-label {
+    font-size: 0.85rem;
+    color: #aaaaaa;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+}
 
+.order-label i {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.order-value {
+    font-size: 1.05rem;
+    color: white;
+    font-weight: 500;
+}
+
+.credits-spent {
+    color: #ff7eb3;
+    font-weight: 600;
+}
+
+/* Галерея результатов */
+.gallery-container {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.gallery-container h3 {
+    color: white;
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.gallery-container h3 i {
+    margin-right: 0.7rem;
+    background: linear-gradient(135deg, #ffd166, #ffb347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.gallery-item {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    border-color: #5ac8fb;
+    box-shadow: 0 10px 25px rgba(90, 200, 251, 0.3);
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-item.selected {
+    border-color: #ff7eb3;
+    box-shadow: 0 0 0 3px rgba(255, 126, 179, 0.3);
+}
+
+.gallery-item .select-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 126, 179, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.gallery-item:hover .select-overlay {
+    opacity: 1;
+}
+
+.gallery-item.selected .select-overlay {
+    opacity: 1;
+    background: #ff7eb3;
+}
+
+/* Кнопки действий галереи */
+.gallery-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.btn-action {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: white;
+    padding: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.btn-action:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.btn-action i {
+    margin-right: 0.7rem;
+    font-size: 1.1rem;
+}
+
+/* Дополнительные возможности */
+.photo-actions {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.photo-actions h3 {
+    color: white;
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.photo-actions h3 i {
+    margin-right: 0.7rem;
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.action-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.2rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.action-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(90, 200, 251, 0.3);
+}
+
+.action-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(90, 200, 251, 0.2), rgba(157, 76, 255, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    font-size: 1.5rem;
+}
+
+.action-icon i {
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.action-text {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.action-price {
+    color: #ffd166;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Кнопка новой генерации */
+.new-generation {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-new-gen {
+    background: linear-gradient(135deg, #ff7eb3, #7e8cff);
+    border: none;
+    border-radius: 20px;
+    color: white;
+    padding: 1.2rem 2.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.05rem;
+    box-shadow: 0 6px 20px rgba(255, 126, 179, 0.3);
+}
+
+.btn-new-gen:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 126, 179, 0.4);
+}
+
+.btn-new-gen i {
+    margin-right: 0.8rem;
+    font-size: 1.3rem;
+}
+
+/* =========================== */
+/* МОДАЛЬНОЕ ОКНО ОПЛАТЫ */
+/* =========================== */
+
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    z-index: 10001;
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.modal-content h2 {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.modal-content h2 i {
+    margin-right: 0.8rem;
+    background: linear-gradient(135deg, #00d2a0, #00a8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Варианты оплаты */
+.payment-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.payment-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-card.selected {
+    border-color: #00d2a0;
+    background: rgba(0, 210, 160, 0.1);
+    transform: translateY(-5px);
+}
+
+.payment-card:hover:not(.selected) {
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
+}
+
+.payment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.payment-header h3 {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.payment-badge {
+    background: linear-gradient(135deg, #ff7eb3, #7e8cff);
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.payment-price {
+    margin-bottom: 0.5rem;
+}
+
+.price {
+    display: block;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+}
+
+.per-credit {
+    font-size: 0.85rem;
+    color: #aaaaaa;
+}
+
+.payment-bonus {
+    font-size: 0.85rem;
+    color: #ffd166;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.payment-bonus i {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+/* Сводка оплаты */
+.payment-summary {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.summary-item:last-child {
+    margin-bottom: 0;
+}
+
+.summary-item span:first-child {
+    color: #aaaaaa;
+    font-size: 0.95rem;
+}
+
+.summary-item span:last-child {
+    color: white;
+    font-weight: 600;
+}
+
+.total-price {
+    color: #00d2a0 !important;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* Способы оплаты */
+.payment-methods {
+    margin-bottom: 2rem;
+}
+
+.payment-methods h3 {
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.payment-methods h3 i {
+    margin-right: 0.7rem;
+    color: #5ac8fb;
+}
+
+.methods-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.method-option {
+    cursor: pointer;
+}
+
+.method-option input {
+    display: none;
+}
+
+.method-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.method-option input:checked + .method-card {
+    border-color: #00d2a0;
+    background: rgba(0, 210, 160, 0.1);
+}
+
+.method-card i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #5ac8fb;
+}
+
+.method-card span {
+    color: white;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Кнопка оплаты */
+.btn-pay {
+    background: linear-gradient(135deg, #00d2a0, #00a8ff);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    width: 100%;
+    margin-bottom: 1rem;
+    box-shadow: 0 6px 20px rgba(0, 210, 160, 0.3);
+}
+
+.btn-pay:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 210, 160, 0.4);
+}
+
+.btn-pay i {
+    margin-right: 0.8rem;
+    font-size: 1.3rem;
+}
+
+.payment-security {
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.payment-security i {
+    margin-right: 0.5rem;
+    color: #00d2a0;
+}
+
+/* =========================== */
+/* ЭКРАН ПРОФИЛЯ */
+/* =========================== */
+
+.profile-container {
+    padding: 0 1rem 1.5rem;
+}
+
+/* Информация профиля */
+.profile-info {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.avatar-section {
+    display: flex;
+    align-items: center;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1.5rem;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.user-details h3 {
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 0.3rem;
+}
+
+.user-id {
+    color: #aaaaaa;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.member-since {
+    color: #777;
+    font-size: 0.85rem;
+}
+
+/* Баланс и статистика */
+.balance-stats {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.balance-stats h3 {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.balance-stats h3 i {
+    margin-right: 0.7rem;
+    color: #00d2a0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.8rem;
+    font-size: 1.2rem;
+}
+
+.stat-info {
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    color: #aaaaaa;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+}
+
+.stat-value {
+    display: block;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.btn-add-balance {
+    background: linear-gradient(135deg, #ff7eb3, #7e8cff);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.btn-add-balance:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 126, 179, 0.3);
+}
+
+.btn-add-balance i {
+    margin-right: 0.7rem;
+    font-size: 1.1rem;
+}
+
+/* История генераций */
+.history-section {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.history-section h3 {
+    color: white;
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.history-section h3 i {
+    margin-right: 0.7rem;
+    color: #5ac8fb;
+}
+
+.history-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+}
+
+.history-item:last-child {
+    margin-bottom: 0;
+}
+
+.history-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(90, 200, 251, 0.2), rgba(157, 76, 255, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    color: #5ac8fb;
+}
+
+.history-details {
+    flex: 1;
+}
+
+.history-details h4 {
+    color: white;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.history-meta {
+    display: flex;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.history-meta span {
+    margin-right: 1rem;
+}
+
+.history-credits {
+    color: #ff7eb3;
+    font-weight: 600;
+}
+
+.history-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+}
+
+.history-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #5ac8fb;
+    opacity: 0.5;
+}
+
+.history-empty p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.btn-start-creation {
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 0.9rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.btn-start-creation:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(90, 200, 251, 0.3);
+}
+
+/* Настройки */
+.settings-section {
+    padding: 1.5rem;
+}
+
+.settings-section h3 {
+    color: white;
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.settings-section h3 i {
+    margin-right: 0.7rem;
+    color: #9d4cff;
+}
+
+.settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.setting-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(5px);
+}
+
+.setting-item i:first-child {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+    color: #5ac8fb;
+    width: 20px;
+    text-align: center;
+}
+
+.setting-item span {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.setting-item i:last-child {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* Переключатель (switch) */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #555;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background: linear-gradient(135deg, #00d2a0, #00a8ff);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
