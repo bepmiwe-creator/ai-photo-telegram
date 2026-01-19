@@ -2,303 +2,597 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>AI Photo Studio</title>
+    <!-- Подключаем Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем наши стили и скрипт -->
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #f8fafc;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Заголовок с профилем */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .logo-section {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 5px;
-            letter-spacing: -0.5px;
-        }
-        
-        .subtitle {
-            color: #94a3b8;
-            font-size: 1rem;
-            font-weight: 400;
-        }
-        
-        /* Профиль - квадратик с закругленными углами */
-        .profile-container {
-            display: flex;
-            align-items: center;
-        }
-        
-        .profile-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
-            border: none;
-            border-radius: 12px;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: white;
-            font-size: 1.3rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-        
-        .profile-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
-        }
-        
-        .profile-btn:active {
-            transform: translateY(0);
-        }
-        
-        /* Основной контент */
-        .content {
-            margin-top: 20px;
-        }
-        
-        .intro {
-            font-size: 1.1rem;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-        
-        /* Стили карточек */
-        .styles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 30px;
-        }
-        
-        .style-card {
-            background: rgba(30, 41, 59, 0.7);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .style-card:hover {
-            transform: translateY(-5px);
-            background: rgba(30, 41, 59, 0.9);
-            border-color: rgba(99, 102, 241, 0.3);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-        
-        .style-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #f8fafc;
-        }
-        
-        .credits {
-            background: rgba(59, 130, 246, 0.2);
-            color: #60a5fa;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .credits i {
-            margin-right: 5px;
-            font-size: 0.8rem;
-        }
-        
-        .style-description {
-            color: #94a3b8;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-        }
-        
-        .feature {
-            background: rgba(30, 41, 59, 0.5);
-            color: #cbd5e1;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
-        
-        /* Подвал с кредитами */
-        .footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            
-            .profile-container {
-                align-self: flex-end;
-                margin-top: -60px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .styles-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Совет от дизайнера: Подключаем красивый шрифт для "дорогого" вида -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Для GitHub Pages: базовый путь -->
+    <base href="/ai-photo-telegram/">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <div class="logo-section">
-                <h1>AI Photo Studio</h1>
-                <p class="subtitle">Ваша виртуальная фотосессия с искусственным интеллектом</p>
-            </div>
-            <div class="profile-container">
-                <button class="profile-btn" id="profileBtn">
-                    <i class="fas fa-user"></i>
-                </button>
-            </div>
+    <!-- Главный контейнер. У него будет темный фон и стеклянный эффект -->
+    <div class="app-container" id="app">
+        <!-- Шапка приложения -->
+        <header class="app-header">
+            <h1> <button class="profile-button" id="profile-button" title="Мой профиль">
+    <i class="fas fa-user"></i>
+    <span class="profile-tooltip">Мой профиль</span>
+</button>
+<i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
+            <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
         </header>
-        
-        <main class="content">
-            <p class="intro">Преобразуйте свои фотографии с помощью передового ИИ. Выберите стиль для виртуальной фотосессии. Каждый стиль требует определённое количество кредитов.</p>
+
+        <!-- Основная часть, где будет меняться контент -->
+        <main class="app-main">
+            <!-- Экран загрузки/приветствия. Позже мы его будем скрывать -->
+            <section class="screen screen-welcome" id="screen-welcome">
+                <div class="loader-container">
+                    <div class="glass-card">
+                        <div class="scanning-animation">
+                            <div class="scan-line"></div>
+                        </div>
+                        <h2>Инициализация...</h2>
+                        <p>Подключаемся к Telegram</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Главный экран с каталогом стилей -->
+            <section class="screen screen-main hidden" id="screen-main">
+                <div class="screen-header">
+                    <h2><i class="fas fa-palette"></i> Выберите стиль</h2>
+                    <p class="screen-subtitle">Каждый стиль требует определённое количество кредитов</p>
+                </div>
+                
+                <div class="catalog-container" id="catalog-container">
+                    <!-- Стили будут добавляться через JavaScript -->
+                </div>
+                
+                <div class="balance-panel glass-card">
+                    <div class="balance-info">
+                        <h3><i class="fas fa-wallet"></i> Ваш баланс</h3>
+                        <div class="balance-amount">
+                            <span class="credits-count">15</span>
+                            <span class="credits-label">кредитов</span>
+                        </div>
+                    </div>
+                    <button class="btn-buy" id="btn-buy">
+                        <i class="fas fa-plus-circle"></i> Купить ещё
+                    </button>
+                </div>
+                
+                <div class="upload-hint glass-card">
+                    <i class="fas fa-info-circle"></i>
+                    <p>После выбора стиля вы сможете загрузить до 10 своих фото для лучшего качества</p>
+                </div>
+            </section>
+            <!-- Экран загрузки фото (будет скрыт) -->
+            <section class="screen screen-upload hidden" id="screen-upload">
+                <div class="screen-header">
+                    <button class="back-button" id="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-cloud-upload-alt"></i> Загрузка фото</h2>
+                    <p class="screen-subtitle" id="selected-style-text">Выбран стиль: <span id="current-style">Бизнес-портрет</span></p>
+                </div>
+                
+                <div class="upload-container glass-card">
+                    <!-- Область для перетаскивания файлов -->
+                    <div class="drop-zone" id="drop-zone">
+                        <div class="drop-zone-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Перетащите фото сюда</h3>
+                            <p>Или нажмите для выбора</p>
+                            <p class="hint">До 10 фото. Лицо должно быть четко видно</p>
+                            <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
+                            <button class="btn-select" id="select-button">
+                                <i class="fas fa-folder-open"></i> Выбрать файлы
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Предпросмотр загруженных фото -->
+                    <div class="preview-container" id="preview-container">
+                        <h3><i class="fas fa-images"></i> Загруженные фото <span id="photo-count">(0)</span></h3>
+                        <div class="preview-grid" id="preview-grid">
+                            <!-- Сюда будут добавляться превью фото -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Прогресс бар для валидации -->
+                <div class="validation-panel glass-card hidden" id="validation-panel">
+                    <div class="validation-header">
+                        <i class="fas fa-check-circle"></i>
+                        <h3>Проверка качества фото</h3>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p class="validation-text" id="validation-text">Анализ лиц на фото...</p>
+                </div>
+                
+                <!-- Кнопка генерации -->
+                <div class="generate-section">
+                    <button class="btn-generate" id="generate-button" disabled>
+                        <i class="fas fa-magic"></i> Сгенерировать AI фото
+                        <span class="credits-cost" id="credits-cost">(5 кредитов)</span>
+                    </button>
+                    <p class="generate-hint">
+                        <i class="fas fa-lightbulb"></i> Чем больше фото вы загрузите, тем лучше будет результат!
+                    </p>
+                </div>
+            </section>
+            <!-- Экран генерации AI-фото (будет скрыт) -->
+            <section class="screen screen-generation hidden" id="screen-generation">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-upload">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-magic"></i> Генерация AI-фото</h2>
+                    <p class="screen-subtitle">ИИ создает ваши фото в стиле: <span id="generation-style">Бизнес-портрет</span></p>
+                </div>
+                
+                <div class="generation-container">
+                    <!-- Анимированный индикатор процесса -->
+                    <div class="ai-process glass-card">
+                        <div class="ai-brain">
+                            <div class="brain-animation">
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="neuron"></div>
+                                <div class="pulse"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="process-info">
+                            <h3><i class="fas fa-brain"></i> ИИ обрабатывает ваши фото</h3>
+                            <p class="process-step" id="process-step">Загрузка модели Stable Diffusion...</p>
+                            
+                            <!-- Детальный прогресс-бар -->
+                            <div class="detailed-progress">
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-check"></i></span>
+                                    <span class="step-text">Загрузка фото</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-1-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-sync"></i></span>
+                                    <span class="step-text">Анализ лиц</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-2-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-cog"></i></span>
+                                    <span class="step-text">Применение стиля</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-3-fill"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress-step">
+                                    <span class="step-icon"><i class="fas fa-sparkles"></i></span>
+                                    <span class="step-text">Генерация изображений</span>
+                                    <div class="step-progress">
+                                        <div class="step-fill" id="step-4-fill"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Основной прогресс-бар -->
+                            <div class="main-progress">
+                                <div class="progress-labels">
+                                    <span>0%</span>
+                                    <span id="progress-percent">0%</span>
+                                    <span>100%</span>
+                                </div>
+                                <div class="main-progress-bar">
+                                    <div class="main-progress-fill" id="main-progress-fill"></div>
+                                    <div class="progress-glow"></div>
+                                </div>
+                            </div>
+                            
+                            <p class="time-estimate"><i class="fas fa-clock"></i> Примерное время: <span id="time-left">30</span> сек.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Предпросмотр генерируемых фото (появляется в процессе) -->
+                    <div class="generation-preview glass-card hidden" id="generation-preview">
+                        <h3><i class="fas fa-images"></i> Предпросмотр результатов</h3>
+                        <div class="preview-grid-small" id="generation-preview-grid">
+                            <!-- Сюда будут добавляться предпросмотры генерируемых фото -->
+                        </div>
+                        <p class="preview-hint">ИИ создает 4 варианта фото в выбранном стиле</p>
+                    </div>
+                    
+                    <!-- Кнопки после завершения -->
+                    <div class="generation-complete glass-card hidden" id="generation-complete">
+                        <div class="complete-header">
+                            <i class="fas fa-check-circle"></i>
+                            <h3>Генерация завершена!</h3>
+                        </div>
+                        <p class="complete-text">ИИ создал 4 уникальных фото в стиле <span id="complete-style">Бизнес-портрет</span></p>
+                        
+                        <div class="complete-buttons">
+                            <button class="btn-view" id="view-results-btn">
+                                <i class="fas fa-eye"></i> Посмотреть фото
+                            </button>
+                            <button class="btn-download" id="download-all-btn">
+                                <i class="fas fa-download"></i> Скачать все
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+                  <!-- Экран результатов (галерея сгенерированных фото) -->
+            <section class="screen screen-results hidden" id="screen-results">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-generation">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-images"></i> Ваши AI-фото</h2>
+                    <p class="screen-subtitle">Стиль: <span id="results-style">Бизнес-портрет</span> • 4 фото</p>
+                </div>
+                
+                <div class="results-container">
+                    <!-- Детали заказа -->
+                    <div class="order-info glass-card">
+                        <div class="order-details">
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-calendar"></i> Дата:</span>
+                                <span class="order-value" id="order-date">19 января 2024</span>
+                            </div>
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-clock"></i> Время генерации:</span>
+                                <span class="order-value" id="order-time">24 сек</span>
+                            </div>
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-coins"></i> Потрачено кредитов:</span>
+                                <span class="order-value credits-spent" id="credits-spent">5</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Галерея результатов -->
+                    <div class="gallery-container glass-card">
+                        <h3><i class="fas fa-star"></i> Лучшие результаты</h3>
+                        <div class="gallery-grid" id="results-gallery">
+                            <!-- Сюда будут добавляться сгенерированные фото -->
+                            <!-- Пока используем тестовые изображения -->
+                        </div>
+                        
+                        <div class="gallery-actions">
+                            <button class="btn-action" id="download-single-btn">
+                                <i class="fas fa-download"></i> Скачать выбранное
+                            </button>
+                            <button class="btn-action" id="download-all-results-btn">
+                                <i class="fas fa-download"></i> Скачать все (ZIP)
+                            </button>
+                            <button class="btn-action" id="share-btn">
+                                <i class="fas fa-share-alt"></i> Поделиться
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Действия с фото -->
+                    <div class="photo-actions glass-card">
+                        <h3><i class="fas fa-magic"></i> Дополнительные возможности</h3>
+                        <div class="actions-grid">
+                            <button class="action-card" id="enhance-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                </div>
+                                <span class="action-text">Улучшить качество</span>
+                                <span class="action-price">+3 кредита</span>
+                            </button>
+                            
+                            <button class="action-card" id="variations-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-copy"></i>
+                                </div>
+                                <span class="action-text">Создать вариации</span>
+                                <span class="action-price">+5 кредитов</span>
+                            </button>
+                            
+                            <button class="action-card" id="different-style-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <span class="action-text">Другой стиль</span>
+                                <span class="action-price">+7 кредитов</span>
+                            </button>
+                            
+                            <button class="action-card" id="remove-bg-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-cut"></i>
+                                </div>
+                                <span class="action-text">Убрать фон</span>
+                                <span class="action-price">+2 кредита</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопка новой генерации -->
+                    <div class="new-generation">
+                        <button class="btn-new-gen" id="new-generation-btn">
+                            <i class="fas fa-plus-circle"></i> Создать новую фотосессию
+                        </button>
+                    </div>
+                </div>
+            </section>
             
-            <div class="styles-grid">
-                <!-- Бизнес-портрет -->
-                <div class="style-card">
-                    <div class="card-header">
-                        <h3 class="style-title">Бизнес-портрет</h3>
-                        <div class="credits">
-                            <i class="fas fa-star"></i> 5
+            <!-- Экран оплаты (модальное окно) -->
+            <div class="payment-modal hidden" id="payment-modal">
+                <div class="modal-overlay"></div>
+                <div class="modal-content glass-card">
+                    <button class="modal-close" id="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <h2><i class="fas fa-shopping-cart"></i> Пополнение баланса</h2>
+                    
+                    <div class="payment-options">
+                        <div class="payment-card selected" data-amount="100" data-price="99">
+                            <div class="payment-header">
+                                <h3>100 кредитов</h3>
+                                <span class="payment-badge">Популярно</span>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">99 ₽</span>
+                                <span class="per-credit">0.99 ₽/кредит</span>
+                            </div>
+                            <div class="payment-bonus">
+                                <i class="fas fa-gift"></i> +5 бонусных кредитов
+                            </div>
+                        </div>
+                        
+                        <div class="payment-card" data-amount="50" data-price="59">
+                            <div class="payment-header">
+                                <h3>50 кредитов</h3>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">59 ₽</span>
+                                <span class="per-credit">1.18 ₽/кредит</span>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-card" data-amount="200" data-price="179">
+                            <div class="payment-header">
+                                <h3>200 кредитов</h3>
+                                <span class="payment-badge">Выгодно</span>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">179 ₽</span>
+                                <span class="per-credit">0.90 ₽/кредит</span>
+                            </div>
+                            <div class="payment-bonus">
+                                <i class="fas fa-gift"></i> +20 бонусных кредитов
+                            </div>
                         </div>
                     </div>
-                    <p class="style-description">Профессиональный образ для LinkedIn, деловых встреч и карьерного роста. Идеально подходит для резюме и профилей в социальных сетях.</p>
-                    <div class="features">
-                        <span class="feature">Профессиональный стиль</span>
-                        <span class="feature">Офисный фон</span>
-                        <span class="feature">Деловая одежда</span>
-                    </div>
-                </div>
-                
-                <!-- Киберпанк -->
-                <div class="style-card">
-                    <div class="card-header">
-                        <h3 class="style-title">Киберпанк</h3>
-                        <div class="credits">
-                            <i class="fas fa-star"></i> 8
+                    
+                    <div class="payment-summary">
+                        <div class="summary-item">
+                            <span>Выбранный пакет:</span>
+                            <span id="selected-pack">100 кредитов</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Сумма к оплате:</span>
+                            <span class="total-price" id="total-price">99 ₽</span>
                         </div>
                     </div>
-                    <p class="style-description">Неоновые огни будущего, высокие технологии и урбанистическая эстетика. Погрузитесь в мир киберпанка с футуристическими элементами.</p>
-                    <div class="features">
-                        <span class="feature">Неоновые цвета</span>
-                        <span class="feature">Футуристический фон</span>
-                        <span class="feature">Техно-аксессуары</span>
-                    </div>
-                </div>
-                
-                <!-- Фэнтези -->
-                <div class="style-card">
-                    <div class="card-header">
-                        <h3 class="style-title">Фэнтези</h3>
-                        <div class="credits">
-                            <i class="fas fa-star"></i> 8
+                    
+                    <div class="payment-methods">
+                        <h3><i class="fas fa-credit-card"></i> Способ оплаты</h3>
+                        <div class="methods-grid">
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="card" checked>
+                                <div class="method-card">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <span>Банковская карта</span>
+                                </div>
+                            </label>
+                            
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="sbp">
+                                <div class="method-card">
+                                    <i class="fas fa-qrcode"></i>
+                                    <span>СБП</span>
+                                </div>
+                            </label>
+                            
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="yoomoney">
+                                <div class="method-card">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>ЮMoney</span>
+                                </div>
+                            </label>
                         </div>
                     </div>
-                    <p class="style-description">Мир магии, древних замков и мифических существ. Станьте частью волшебной вселенной с элементами фэнтези и средневековья.</p>
-                    <div class="features">
-                        <span class="feature">Магические эффекты</span>
-                        <span class="feature">Средневековые замки</span>
-                        <span class="feature">Фэнтези-реквизит</span>
-                    </div>
+                    
+                    <button class="btn-pay" id="pay-button">
+                        <i class="fas fa-lock"></i> Перейти к оплате
+                    </button>
+                    
+                    <p class="payment-security">
+                        <i class="fas fa-shield-alt"></i> Оплата защищена ЮKassa. Мы не храним данные вашей карты.
+                    </p>
                 </div>
             </div>
-        </main>
-        
-        <footer class="footer">
-            <p>© 2023 AI Photo Studio. Все права защищены. Кредиты можно приобрести в разделе профиля.</p>
+            
+            <!-- Экран профиля -->
+            <section class="screen screen-profile hidden" id="screen-profile">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-main">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-user-circle"></i> Мой профиль</h2>
+                </div>
+                
+                <div class="profile-container">
+                    <!-- Информация пользователя -->
+                    <div class="profile-info glass-card">
+                        <div class="avatar-section">
+                            <div class="avatar" id="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-details">
+                                <h3 id="profile-name">Катерина Мишина</h3>
+                                <p class="user-id">ID: <span id="profile-id">918457897</span></p>
+                                <p class="member-since">С нами с января 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Баланс и статистика -->
+                    <div class="balance-stats glass-card">
+                        <h3><i class="fas fa-wallet"></i> Баланс и статистика</h3>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(0, 210, 160, 0.1);">
+                                    <i class="fas fa-coins" style="color: #00d2a0;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Кредитов</span>
+                                    <span class="stat-value" id="profile-balance">85</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(255, 126, 179, 0.1);">
+                                    <i class="fas fa-camera" style="color: #ff7eb3;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Сгенерировано фото</span>
+                                    <span class="stat-value" id="photos-generated">12</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(90, 200, 251, 0.1);">
+                                    <i class="fas fa-palette" style="color: #5ac8fb;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Использовано стилей</span>
+                                    <span class="stat-value" id="styles-used">4</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(157, 76, 255, 0.1);">
+                                    <i class="fas fa-crown" style="color: #9d4cff;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Уровень</span>
+                                    <span class="stat-value" id="user-level">Новичок</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-add-balance" id="add-balance-btn">
+                            <i class="fas fa-plus"></i> Пополнить баланс
+                        </button>
+                    </div>
+                    
+                    <!-- История генераций -->
+                    <div class="history-section glass-card">
+                        <h3><i class="fas fa-history"></i> История генераций</h3>
+                        
+                        <div class="history-list" id="history-list">
+                            <!-- История будет добавляться через JavaScript -->
+                        </div>
+                        
+                        <div class="history-empty" id="history-empty">
+                            <i class="fas fa-images"></i>
+                            <p>У вас еще нет созданных фотосессий</p>
+                            <button class="btn-start-creation" id="start-from-profile">
+                                Создать первую фотосессию
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Настройки -->
+                    <div class="settings-section glass-card">
+                        <h3><i class="fas fa-cog"></i> Настройки</h3>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <i class="fas fa-bell"></i>
+                                <span>Уведомления</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <i class="fas fa-moon"></i>
+                                <span>Темная тема</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <i class="fas fa-save"></i>
+                                <span>Автосохранение фото</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Помощь и поддержка</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Пользовательское соглашение</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Политика конфиденциальности</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>  
+
+
+</main>
+
+        <!-- Нижняя панель (здесь будет кнопка от Telegram) -->
+        <footer class="app-footer">
+            <div class="user-info" id="user-info">
+                Пользователь не определен
+            </div>
+            <!-- Кнопка от Telegram SDK. Пока невидима. -->
+            <div id="tg-button-container"></div>
         </footer>
     </div>
 
-    <script>
-        // Обработчик нажатия на кнопку профиля
-        document.getElementById('profileBtn').addEventListener('click', function() {
-            alert('Переход в профиль пользователя');
-            // В реальном приложении здесь была бы навигация на страницу профиля
-        });
-        
-        // Обработчики для карточек стилей
-        document.querySelectorAll('.style-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const styleName = this.querySelector('.style-title').textContent;
-                const credits = this.querySelector('.credits').textContent.trim();
-                
-                alert(`Вы выбрали стиль "${styleName}" за ${credits} кредитов. Начнём фотосессию!`);
-                // В реальном приложении здесь был бы переход к загрузке фото и применению стиля
-            });
-        });
-    </script>
+    <!-- Подключаем наш основной JavaScript код -->
+    <script src="app.js"></script>
 </body>
 </html>
