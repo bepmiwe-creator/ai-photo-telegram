@@ -18,14 +18,15 @@
     <!-- Главный контейнер. У него будет темный фон и стеклянный эффект -->
     <div class="app-container" id="app">
         <!-- Шапка приложения -->
-        <header class="app-header">
-            <h1> <button class="profile-button" id="profile-button" title="Мой профиль">
-    <i class="fas fa-user"></i>
-    <span class="profile-tooltip">Мой профиль</span>
-</button>
-<i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
-            <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
-        </header>
+<header class="app-header">
+  <div class="header-top">
+    <h1><i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
+    <button class="profile-button" id="profile-button" title="">
+      <i class="fas fa-user"></i>
+    </button>
+  </div>
+  <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
+</header>
 
         <!-- Основная часть, где будет меняться контент -->
         <main class="app-main">
@@ -71,6 +72,7 @@
                     <p>После выбора стиля вы сможете загрузить до 10 своих фото для лучшего качества</p>
                 </div>
             </section>
+            
             <!-- Экран загрузки фото (будет скрыт) -->
             <section class="screen screen-upload hidden" id="screen-upload">
                 <div class="screen-header">
@@ -128,6 +130,7 @@
                     </p>
                 </div>
             </section>
+            
             <!-- Экран генерации AI-фото (будет скрыт) -->
             <section class="screen screen-generation hidden" id="screen-generation">
                 <div class="screen-header">
@@ -236,7 +239,8 @@
                     </div>
                 </div>
             </section>
-                  <!-- Экран результатов (галерея сгенерированных фото) -->
+            
+            <!-- Экран результатов (галерея сгенерированных фото) -->
             <section class="screen screen-results hidden" id="screen-results">
                 <div class="screen-header">
                     <button class="back-button" id="back-to-generation">
@@ -577,10 +581,8 @@
                         </div>
                     </div>
                 </div>
-            </section>  
-
-
-</main>
+            </section>
+        </main>
 
         <!-- Нижняя панель (здесь будет кнопка от Telegram) -->
         <footer class="app-footer">
