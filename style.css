@@ -357,6 +357,7 @@ body {
     line-height: 1.4;
 }
 
+/* Стили для уведомлений (светлые) */
 #custom-notification {
     position: fixed;
     top: 20px;
@@ -366,6 +367,7 @@ body {
     max-width: 400px;
     z-index: 1000;
     transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    pointer-events: none;
 }
 
 #custom-notification.show {
@@ -373,12 +375,59 @@ body {
 }
 
 .notification-content {
-    padding: 1.2rem;
+    padding: 1.2rem 1.5rem;
     text-align: center;
-    font-weight: 500;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+    font-size: 0.95rem;
+    
+    /* Светлый градиентный фон */
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(240, 245, 255, 0.95) 100%
+    );
+    
+    /* Темный текст для контраста */
+    color: #2d3748;
+    
+    /* Красивая обводка и тень */
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.2),
+        0 0 0 1px rgba(90, 200, 251, 0.2),
+        inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    
+    border-radius: 16px;
+    
+    /* Легкий блюр для стеклянного эффекта */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    /* Акцентная полоска слева */
+    position: relative;
+    overflow: hidden;
 }
 
+.notification-content::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(180deg, 
+        #5ac8fb 0%,
+        #9d4cff 50%,
+        #ff7eb3 100%
+    );
+}
+
+/* Иконка в уведомлении */
+.notification-content i {
+    margin-right: 8px;
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 .telegram-warning {
     background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
     min-height: 100vh;
