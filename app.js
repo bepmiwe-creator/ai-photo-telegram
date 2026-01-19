@@ -457,6 +457,246 @@ const App = {
         }
     },
 
+    // Начало генерации AI-фото
+    startGeneration() {
+        if (window.uploadedPhotos.length === 0) {
+            this.showNotification('Сначала загрузите фото');
+            return;
+        }
+        
+        // Переходим на экран генерации
+        this.showGenerationScreen();
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('heavy');
+        }
+    },
+
+    // Показ экрана генерации
+    showGenerationScreen() {
+        const uploadScreen = document.getElementById('screen-upload');
+        const generationScreen = document.getElementById('screen-generation');
+        
+        // Обновляем текст с выбранным стилем
+        document.getElementById('generation-style').textContent = window.selectedStyle.name;
+        document.getElementById('complete-style').textContent = window.selectedStyle.name;
+        
+        uploadScreen.style.opacity = '0';
+        setTimeout(() => {
+            uploadScreen.classList.add('hidden');
+            generationScreen.classList.remove('hidden');
+            setTimeout(() => {
+                generationScreen.style.opacity = '1';
+                // Запускаем процесс генерации
+                this.startAIProcess();
+            }, 50);
+        }, 400);
+        
+        // Настраиваем кнопку "Назад"
+        const backButton = document.getElementById('back-to-upload');
+        backButton.addEventListener('click', () => {
+            this.goBackToUpload();
+        });
+    },
+
+    // Запуск процесса AI-генерации
+    startAIProcess() {
+        // Сброс прогресса
+        this.resetProgress();
+        
+        // Этапы генерации
+        const steps = [
+            { text: 'Загрузка модели Stable Diffusion...', duration: 3000 },
+            { text: 'Анализ лиц на фото...', duration: 4000 },
+            { text: 'Применение стиля "' + window.selectedStyle.name + '"...', duration: 5000 },
+            { text: 'Генерация изображений...', duration: 6000 },
+            { text: 'Финальная обработка...', duration: 3000 }
+        ];
+        
+        let currentStep = 0;
+        let totalProgress = 0;
+        const totalTime = steps.reduce((sum, step) => sum + step.duration, 0);
+        
+        // Обновляем таймер
+        const timeElement = document.getElementById('time-left');
+        let timeLeft = Math.round(totalTime / 1000);
+        timeElement.textContent = timeLeft;
+        
+        const timeInterval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft >= 0) {
+                timeElement.textContent = timeLeft;
+            }
+        }, 1000);
+        
+        // Функция для выполнения шага
+        const executeStep = (stepIndex) => {
+            if (stepIndex >= steps.length) {
+                this.completeGeneration();
+                clearInterval(timeInterval);
+                return;
+            }
+            
+            const step = steps[stepIndex];
+            const stepElement = document.getElementById(`step-${stepIndex + 1}-fill`);
+            const stepIcon = document.querySelectorAll('.step-icon')[stepIndex];
+            const processStep = document.getElementById('process-step');
+            
+            // Активируем иконку шага
+            stepIcon.classList.add('active');
+            processStep.textContent = step.text;
+            
+            // Анимация прогресса шага
+            let stepProgress = 0;
+            const stepInterval = setInterval(() => {
+                stepProgress += 1;
+                stepElement.style.width = stepProgress + '%';
+                
+                // Общий прогресс
+                totalProgress += (100 / steps.length) / (step.duration / 100);
+                if (totalProgress > 100) totalProgress = 100;
+                
+                this.updateMainProgress(totalProgress);
+                
+                if (stepProgress >= 100) {
+                    clearInterval(stepInterval);
+                    
+                    // Показываем предпросмотр после 3 шага
+                    if (stepIndex === 2) {
+                        this.showGenerationPreview();
+                    }
+                    
+                    // Переход к следующему шагу
+                    currentStep++;
+                    setTimeout(() => executeStep(currentStep), 500);
+                }
+            }, step.duration / 100);
+        };
+        
+        // Запускаем первый шаг
+        executeStep(currentStep);
+    },
+
+    // Сброс прогресса
+    resetProgress() {
+        // Сбрасываем все прогресс-бары
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`step-${i}-fill`).style.width = '0%';
+        }
+        
+        document.getElementById('main-progress-fill').style.width = '0%';
+        document.querySelector('.progress-glow').style.width = '0%';
+        document.getElementById('progress-percent').textContent = '0%';
+        
+        // Сбрасываем иконки шагов
+        document.querySelectorAll('.step-icon').forEach(icon => {
+            icon.classList.remove('active');
+        });
+        
+        // Скрываем предпросмотр и завершение
+        document.getElementById('generation-preview').classList.add('hidden');
+        document.getElementById('generation-complete').classList.add('hidden');
+    },
+
+    // Обновление основного прогресс-бара
+    updateMainProgress(percent) {
+        const progressFill = document.getElementById('main-progress-fill');
+        const progressGlow = document.querySelector('.progress-glow');
+        const percentElement = document.getElementById('progress-percent');
+        
+        progressFill.style.width = percent + '%';
+        progressGlow.style.width = percent + '%';
+        percentElement.textContent = Math.round(percent) + '%';
+    },
+
+    // Показ предпросмотра генерируемых фото
+    showGenerationPreview() {
+        const previewContainer = document.getElementById('generation-preview');
+        const previewGrid = document.getElementById('generation-preview-grid');
+        
+        // Очищаем предыдущие превью
+        previewGrid.innerHTML = '';
+        
+        // Создаем 4 карточки для предпросмотра
+        for (let i = 0; i < 4; i++) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item generating';
+            previewItem.innerHTML = `
+                <div class="loading-placeholder">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Генерация ${i + 1}/4</span>
+                </div>
+            `;
+            previewGrid.appendChild(previewItem);
+        }
+        
+        // Показываем контейнер
+        previewContainer.classList.remove('hidden');
+    },
+
+    // Завершение генерации
+    completeGeneration() {
+        const processStep = document.getElementById('process-step');
+        const previewGrid = document.getElementById('generation-preview-grid');
+        const completeContainer = document.getElementById('generation-complete');
+        
+        // Обновляем текст
+        processStep.textContent = '✅ Генерация завершена!';
+        
+        // Обновляем предпросмотр - убираем анимацию загрузки
+        previewGrid.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.innerHTML = `
+                <div class="placeholder-complete">
+                    <i class="fas fa-image"></i>
+                    <span>Фото ${i + 1}</span>
+                </div>
+            `;
+            previewGrid.appendChild(previewItem);
+        }
+        
+        // Показываем блок завершения через 1 секунду
+        setTimeout(() => {
+            completeContainer.classList.remove('hidden');
+            
+            // Настраиваем кнопки
+            document.getElementById('view-results-btn').addEventListener('click', () => {
+                this.showNotification('Просмотр результатов будет на следующем этапе!');
+            });
+            
+            document.getElementById('download-all-btn').addEventListener('click', () => {
+                this.showNotification('Скачивание будет доступно на следующем этапе!');
+            });
+        }, 1000);
+        
+        // Виброотклик успеха
+        if (window.tg) {
+            window.tg.HapticFeedback.notificationOccurred('success');
+        }
+    },
+
+    // Возврат на экран загрузки
+    goBackToUpload() {
+        const generationScreen = document.getElementById('screen-generation');
+        const uploadScreen = document.getElementById('screen-upload');
+        
+        generationScreen.style.opacity = '0';
+        setTimeout(() => {
+            generationScreen.classList.add('hidden');
+            uploadScreen.classList.remove('hidden');
+            setTimeout(() => {
+                uploadScreen.style.opacity = '1';
+            }, 50);
+        }, 400);
+        
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.impactOccurred('light');
+        }
+    },
 
     // Функция для перехода на главный экран
     showMainScreen() {
