@@ -19,7 +19,10 @@
     <div class="app-container" id="app">
         <!-- Шапка приложения -->
         <header class="app-header">
-            <h1><i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
+            <h1> <button class="profile-button" id="profile-button">
+                        <i class="fas fa-user"></i>
+                    </button>
+<i class="fas fa-camera-retro"></i> AI Photo Studio</h1>
             <p class="tagline">Ваша виртуальная фотосессия с искусственным интеллектом</p>
         </header>
 
@@ -232,7 +235,351 @@
                     </div>
                 </div>
             </section>
-        </main>
+                  <!-- Экран результатов (галерея сгенерированных фото) -->
+            <section class="screen screen-results hidden" id="screen-results">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-generation">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-images"></i> Ваши AI-фото</h2>
+                    <p class="screen-subtitle">Стиль: <span id="results-style">Бизнес-портрет</span> • 4 фото</p>
+                </div>
+                
+                <div class="results-container">
+                    <!-- Детали заказа -->
+                    <div class="order-info glass-card">
+                        <div class="order-details">
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-calendar"></i> Дата:</span>
+                                <span class="order-value" id="order-date">19 января 2024</span>
+                            </div>
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-clock"></i> Время генерации:</span>
+                                <span class="order-value" id="order-time">24 сек</span>
+                            </div>
+                            <div class="order-item">
+                                <span class="order-label"><i class="fas fa-coins"></i> Потрачено кредитов:</span>
+                                <span class="order-value credits-spent" id="credits-spent">5</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Галерея результатов -->
+                    <div class="gallery-container glass-card">
+                        <h3><i class="fas fa-star"></i> Лучшие результаты</h3>
+                        <div class="gallery-grid" id="results-gallery">
+                            <!-- Сюда будут добавляться сгенерированные фото -->
+                            <!-- Пока используем тестовые изображения -->
+                        </div>
+                        
+                        <div class="gallery-actions">
+                            <button class="btn-action" id="download-single-btn">
+                                <i class="fas fa-download"></i> Скачать выбранное
+                            </button>
+                            <button class="btn-action" id="download-all-results-btn">
+                                <i class="fas fa-download"></i> Скачать все (ZIP)
+                            </button>
+                            <button class="btn-action" id="share-btn">
+                                <i class="fas fa-share-alt"></i> Поделиться
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Действия с фото -->
+                    <div class="photo-actions glass-card">
+                        <h3><i class="fas fa-magic"></i> Дополнительные возможности</h3>
+                        <div class="actions-grid">
+                            <button class="action-card" id="enhance-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                </div>
+                                <span class="action-text">Улучшить качество</span>
+                                <span class="action-price">+3 кредита</span>
+                            </button>
+                            
+                            <button class="action-card" id="variations-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-copy"></i>
+                                </div>
+                                <span class="action-text">Создать вариации</span>
+                                <span class="action-price">+5 кредитов</span>
+                            </button>
+                            
+                            <button class="action-card" id="different-style-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-palette"></i>
+                                </div>
+                                <span class="action-text">Другой стиль</span>
+                                <span class="action-price">+7 кредитов</span>
+                            </button>
+                            
+                            <button class="action-card" id="remove-bg-btn">
+                                <div class="action-icon">
+                                    <i class="fas fa-cut"></i>
+                                </div>
+                                <span class="action-text">Убрать фон</span>
+                                <span class="action-price">+2 кредита</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Кнопка новой генерации -->
+                    <div class="new-generation">
+                        <button class="btn-new-gen" id="new-generation-btn">
+                            <i class="fas fa-plus-circle"></i> Создать новую фотосессию
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Экран оплаты (модальное окно) -->
+            <div class="payment-modal hidden" id="payment-modal">
+                <div class="modal-overlay"></div>
+                <div class="modal-content glass-card">
+                    <button class="modal-close" id="modal-close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <h2><i class="fas fa-shopping-cart"></i> Пополнение баланса</h2>
+                    
+                    <div class="payment-options">
+                        <div class="payment-card selected" data-amount="100" data-price="99">
+                            <div class="payment-header">
+                                <h3>100 кредитов</h3>
+                                <span class="payment-badge">Популярно</span>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">99 ₽</span>
+                                <span class="per-credit">0.99 ₽/кредит</span>
+                            </div>
+                            <div class="payment-bonus">
+                                <i class="fas fa-gift"></i> +5 бонусных кредитов
+                            </div>
+                        </div>
+                        
+                        <div class="payment-card" data-amount="50" data-price="59">
+                            <div class="payment-header">
+                                <h3>50 кредитов</h3>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">59 ₽</span>
+                                <span class="per-credit">1.18 ₽/кредит</span>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-card" data-amount="200" data-price="179">
+                            <div class="payment-header">
+                                <h3>200 кредитов</h3>
+                                <span class="payment-badge">Выгодно</span>
+                            </div>
+                            <div class="payment-price">
+                                <span class="price">179 ₽</span>
+                                <span class="per-credit">0.90 ₽/кредит</span>
+                            </div>
+                            <div class="payment-bonus">
+                                <i class="fas fa-gift"></i> +20 бонусных кредитов
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-summary">
+                        <div class="summary-item">
+                            <span>Выбранный пакет:</span>
+                            <span id="selected-pack">100 кредитов</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Сумма к оплате:</span>
+                            <span class="total-price" id="total-price">99 ₽</span>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <h3><i class="fas fa-credit-card"></i> Способ оплаты</h3>
+                        <div class="methods-grid">
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="card" checked>
+                                <div class="method-card">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <span>Банковская карта</span>
+                                </div>
+                            </label>
+                            
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="sbp">
+                                <div class="method-card">
+                                    <i class="fas fa-qrcode"></i>
+                                    <span>СБП</span>
+                                </div>
+                            </label>
+                            
+                            <label class="method-option">
+                                <input type="radio" name="payment-method" value="yoomoney">
+                                <div class="method-card">
+                                    <i class="fas fa-wallet"></i>
+                                    <span>ЮMoney</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-pay" id="pay-button">
+                        <i class="fas fa-lock"></i> Перейти к оплате
+                    </button>
+                    
+                    <p class="payment-security">
+                        <i class="fas fa-shield-alt"></i> Оплата защищена ЮKassa. Мы не храним данные вашей карты.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Экран профиля -->
+            <section class="screen screen-profile hidden" id="screen-profile">
+                <div class="screen-header">
+                    <button class="back-button" id="back-to-main">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2><i class="fas fa-user-circle"></i> Мой профиль</h2>
+                </div>
+                
+                <div class="profile-container">
+                    <!-- Информация пользователя -->
+                    <div class="profile-info glass-card">
+                        <div class="avatar-section">
+                            <div class="avatar" id="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="user-details">
+                                <h3 id="profile-name">Катерина Мишина</h3>
+                                <p class="user-id">ID: <span id="profile-id">918457897</span></p>
+                                <p class="member-since">С нами с января 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Баланс и статистика -->
+                    <div class="balance-stats glass-card">
+                        <h3><i class="fas fa-wallet"></i> Баланс и статистика</h3>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(0, 210, 160, 0.1);">
+                                    <i class="fas fa-coins" style="color: #00d2a0;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Кредитов</span>
+                                    <span class="stat-value" id="profile-balance">85</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(255, 126, 179, 0.1);">
+                                    <i class="fas fa-camera" style="color: #ff7eb3;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Сгенерировано фото</span>
+                                    <span class="stat-value" id="photos-generated">12</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(90, 200, 251, 0.1);">
+                                    <i class="fas fa-palette" style="color: #5ac8fb;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Использовано стилей</span>
+                                    <span class="stat-value" id="styles-used">4</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon" style="background: rgba(157, 76, 255, 0.1);">
+                                    <i class="fas fa-crown" style="color: #9d4cff;"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Уровень</span>
+                                    <span class="stat-value" id="user-level">Новичок</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-add-balance" id="add-balance-btn">
+                            <i class="fas fa-plus"></i> Пополнить баланс
+                        </button>
+                    </div>
+                    
+                    <!-- История генераций -->
+                    <div class="history-section glass-card">
+                        <h3><i class="fas fa-history"></i> История генераций</h3>
+                        
+                        <div class="history-list" id="history-list">
+                            <!-- История будет добавляться через JavaScript -->
+                        </div>
+                        
+                        <div class="history-empty" id="history-empty">
+                            <i class="fas fa-images"></i>
+                            <p>У вас еще нет созданных фотосессий</p>
+                            <button class="btn-start-creation" id="start-from-profile">
+                                Создать первую фотосессию
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Настройки -->
+                    <div class="settings-section glass-card">
+                        <h3><i class="fas fa-cog"></i> Настройки</h3>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <i class="fas fa-bell"></i>
+                                <span>Уведомления</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <i class="fas fa-moon"></i>
+                                <span>Темная тема</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <i class="fas fa-save"></i>
+                                <span>Автосохранение фото</span>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-question-circle"></i>
+                                <span>Помощь и поддержка</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Пользовательское соглашение</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                            
+                            <a href="#" class="setting-item">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Политика конфиденциальности</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>  
+
+
+</main>
 
         <!-- Нижняя панель (здесь будет кнопка от Telegram) -->
         <footer class="app-footer">
