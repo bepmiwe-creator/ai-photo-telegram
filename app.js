@@ -93,7 +93,7 @@ const App = {
             { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
             { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
             { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
-            { id: 'viking', name: 'Викинг', icon: 'fas fa-helmet-battle', desc: 'Суровый северный воин', credits: 9 },
+            { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
             { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
             { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
         ];
@@ -162,7 +162,11 @@ const App = {
             document.querySelector('.app-container').appendChild(notification);
         }
         
-        notification.innerHTML = `<div class="notification-content glass-card">${message}</div>`;
+       notification.innerHTML = `
+    <div class="notification-content">
+        <i class="fas fa-palette"></i> ${message}
+    </div>
+`;
         notification.classList.add('show');
         
         setTimeout(() => {
