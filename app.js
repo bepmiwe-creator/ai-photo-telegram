@@ -764,17 +764,22 @@ initProfileButton() {
         const firstName = user.first_name || 'П';
         avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
         
-        // Баланс (сохраняем в localStorage)
-        let balance = localStorage.getItem('ai_photo_balance');
-        if (!balance) {
-            balance = '85'; // Начальный баланс
-            localStorage.setItem('ai_photo_balance', balance);
-        }
-        document.getElementById('profile-balance').textContent = balance;
-        
-        // Обновляем баланс на главном экране
-        document.querySelector('.credits-count').textContent = balance;
-        
+         // Баланс (сохраняем в LocalStorage)
+  let balance = localStorage.getItem('ai_photo_balance');
+  if (!balance) {
+    balance = '85'; // Начальный баланс
+    localStorage.setItem('ai_photo_balance', balance);
+  }
+  
+  // Обновляем баланс в профиле
+  document.getElementById('profile-balance').textContent = balance;
+  
+  // Обновляем баланс в шапке
+  document.getElementById('header-balance').textContent = balance;
+  
+  // Обновляем баланс на главном экране
+  document.querySelector('.credits-count').textContent = balance;
+
         // Статистика (можно сохранять в localStorage)
         const generated = localStorage.getItem('ai_photos_generated') || '12';
         const styles = localStorage.getItem('ai_styles_used') || '4';
@@ -1161,20 +1166,21 @@ initProfileButton() {
         }, 2000);
     },
 
-    // Обновление баланса
-    updateBalance(change) {
-        let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-        balance += change;
-        
-        // Баланс не может быть отрицательным
-        if (balance < 0) balance = 0;
-        
-        localStorage.setItem('ai_photo_balance', balance.toString());
-        
-        // Обновляем отображение баланса
-        document.querySelector('.credits-count').textContent = balance;
-        document.getElementById('profile-balance').textContent = balance;
-    },
+   // Обновление баланса
+updateBalance(change) {
+  let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+  balance += change;
+
+  // Баланс не может быть отрицательным
+  if (balance < 0) balance = 0;
+
+  localStorage.setItem('ai_photo_balance', balance.toString());
+
+  // Обновляем отображение баланса ВЕЗДЕ
+  document.querySelector('.credits-count').textContent = balance;
+  document.getElementById('profile-balance').textContent = balance;
+  document.getElementById('header-balance').textContent = balance; // Добавляем эту строку
+}
 
     // Показ оплаты за дополнительную функцию
     showPaymentForFeature(featureName, credits) {
