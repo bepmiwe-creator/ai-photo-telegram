@@ -71,16 +71,16 @@ body {
 }
 
 .app-header .tagline {
-    font-size: 1.1rem;
+    font-size: 0.95rem; /* Уменьшили с 1.1rem */
     font-weight: 300;
     font-style: italic;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px; /* Немного уменьшили */
     color: rgba(255, 255, 255, 0.95);
     position: relative;
-    padding: 0.7rem 1.5rem;
-    border-radius: 18px;
+    padding: 0.6rem 1.3rem; /* Уменьшили padding */
+    border-radius: 16px; /* Немного меньше радиус */
     display: inline-block;
-    margin-top: 0.8rem;
+    margin-top: 0.6rem; /* Меньше отступ сверху */
     
     /* Стеклянный эффект */
     backdrop-filter: blur(15px) saturate(180%);
@@ -88,14 +88,14 @@ body {
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 6px 25px rgba(0, 0, 0, 0.25), /* Уменьшили тень */
         inset 0 1px 0 rgba(255, 255, 255, 0.1),
         inset 0 -1px 0 rgba(0, 0, 0, 0.2);
     
     /* Тень текста для лучшей читаемости */
     text-shadow: 
-        0 2px 4px rgba(0, 0, 0, 0.4),
-        0 0 15px rgba(90, 200, 251, 0.3);
+        0 1px 3px rgba(0, 0, 0, 0.4), /* Более мягкая тень */
+        0 0 12px rgba(90, 200, 251, 0.25);
     
     /* Плавная анимация свечения */
     animation: glassGlow 4s ease-in-out infinite alternate;
@@ -105,19 +105,19 @@ body {
 @keyframes glassGlow {
     0% {
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 6px 25px rgba(0, 0, 0, 0.25),
             inset 0 1px 0 rgba(255, 255, 255, 0.1),
             inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-            0 0 20px rgba(90, 200, 251, 0.1);
+            0 0 15px rgba(90, 200, 251, 0.08); /* Меньше свечение */
         border-color: rgba(255, 255, 255, 0.15);
     }
     100% {
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.4),
+            0 6px 25px rgba(0, 0, 0, 0.35),
             inset 0 1px 0 rgba(255, 255, 255, 0.15),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.3),
-            0 0 30px rgba(157, 76, 255, 0.2);
-        border-color: rgba(157, 76, 255, 0.3);
+            inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+            0 0 20px rgba(157, 76, 255, 0.15); /* Меньше свечение */
+        border-color: rgba(157, 76, 255, 0.25);
     }
 }
 
@@ -125,10 +125,10 @@ body {
 .app-header .tagline::after {
     content: '';
     position: absolute;
-    bottom: -5px;
-    left: 20%;
-    width: 60%;
-    height: 2px;
+    bottom: -4px; /* Подняли ближе к тексту */
+    left: 25%; /* Немного увеличили отступы с боков */
+    width: 50%; /* Уменьшили длину */
+    height: 1.5px; /* Немного тоньше */
     background: linear-gradient(90deg, 
         transparent, 
         #5ac8fb, 
@@ -136,14 +136,14 @@ body {
         #ff7eb3, 
         transparent
     );
-    border-radius: 2px;
+    border-radius: 1px;
     animation: lineFlow 3s ease-in-out infinite;
     opacity: 0.7;
 }
 
 @keyframes lineFlow {
     0% {
-        transform: translateX(-10%) scaleX(0.8);
+        transform: translateX(-5%) scaleX(0.9);
         opacity: 0.5;
     }
     50% {
@@ -151,39 +151,32 @@ body {
         opacity: 1;
     }
     100% {
-        transform: translateX(10%) scaleX(0.8);
+        transform: translateX(5%) scaleX(0.9);
         opacity: 0.5;
     }
 }
 
-/* Декоративные элементы по бокам */
+/* Декоративные элементы по бокам - уменьшаем */
 .app-header .tagline::before {
     content: '❖';
     position: absolute;
-    left: 8px;
+    left: 6px; /* Ближе к краю */
     top: 50%;
     transform: translateY(-50%);
     color: #5ac8fb;
-    font-size: 0.8rem;
+    font-size: 0.7rem; /* Уменьшили */
     opacity: 0.7;
     animation: twinkle 2s infinite;
 }
 
-.app-header .tagline .end-decor {
-    content: '❖';
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff7eb3;
-    font-size: 0.8rem;
-    opacity: 0.7;
-    animation: twinkle 2s infinite reverse;
+/* Убираем второй декор или уменьшаем */
+.app-header .tagline::after {
+    /* Уже добавлена линия, второй элемент убираем */
 }
 
 @keyframes twinkle {
     0%, 100% { opacity: 0.4; }
-    50% { opacity: 1; }
+    50% { opacity: 0.9; } /* Более мягкое мерцание */
 }
 
 .app-main {
@@ -989,6 +982,7 @@ body {
     font-style: italic;
     grid-column: 1 / -1;
 }
+
 
 
 
