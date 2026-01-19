@@ -1,6 +1,6 @@
-/* style.css */
+/* style.css - ПОЛНЫЙ КОД */
 :root {
-    --tg-theme-bg-color: #1a1a1a; /* Фон по умолчанию, если Telegram не передал свою тему */
+    --tg-theme-bg-color: #1a1a1a;
     --tg-theme-text-color: #ffffff;
     --tg-theme-hint-color: #aaaaaa;
     --tg-theme-link-color: #5ac8fb;
@@ -21,7 +21,6 @@ body {
     color: var(--tg-theme-text-color);
     min-height: 100vh;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    /* Это для корректного отображения на iPhone с "челкой" */
 }
 
 .app-container {
@@ -34,7 +33,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Стиль для "стеклянной" карточки (Glassmorphism) */
 .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(12px) saturate(180%);
@@ -45,7 +43,6 @@ body {
     box-shadow: var(--glass-shadow);
 }
 
-/* Шапка приложения */
 .app-header {
     text-align: center;
     padding: 1.5rem 1rem;
@@ -67,7 +64,6 @@ body {
     font-weight: 300;
 }
 
-/* Основная область */
 .app-main {
     flex: 1;
     padding: 1.5rem;
@@ -75,7 +71,6 @@ body {
     flex-direction: column;
 }
 
-/* Экран - общий стиль */
 .screen {
     flex: 1;
     display: flex;
@@ -83,13 +78,11 @@ body {
     transition: opacity 0.4s ease;
 }
 
-/* Класс для скрытия экранов */
 .hidden {
     display: none !important;
     opacity: 0;
 }
 
-/* Экран приветствия и загрузки */
 .screen-welcome {
     justify-content: center;
     align-items: center;
@@ -112,7 +105,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* Анимация "сканирования" лица (совет от дизайнера) */
 .scanning-animation {
     width: 180px;
     height: 180px;
@@ -141,7 +133,6 @@ body {
     100% { top: 0%; opacity: 0.5; }
 }
 
-/* Подвал с информацией о пользователе */
 .app-footer {
     padding: 1rem;
     text-align: center;
@@ -154,4 +145,290 @@ body {
     margin-bottom: 0.5rem;
     word-break: break-word;
     padding: 0.5rem;
+}
+
+/* Стили для главного экрана */
+.screen-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.screen-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #ff7eb3, #7e8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.screen-subtitle {
+    color: var(--tg-theme-hint-color);
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+.catalog-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.catalog-container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.catalog-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.catalog-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #5ac8fb, #9d4cff);
+    border-radius: 10px;
+}
+
+.style-card {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.style-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.style-card:hover::before {
+    left: 100%;
+}
+
+.style-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(90, 200, 251, 0.3);
+}
+
+.style-icon {
+    font-size: 1.8rem;
+    margin-right: 1.2rem;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(90, 200, 251, 0.2), rgba(157, 76, 255, 0.2));
+    border-radius: 12px;
+}
+
+.style-icon i {
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.style-info {
+    flex: 1;
+}
+
+.style-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+}
+
+.style-desc {
+    font-size: 0.85rem;
+    color: var(--tg-theme-hint-color);
+    line-height: 1.3;
+}
+
+.style-credits {
+    margin-left: 0.5rem;
+}
+
+.credits-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #ffd166, #ffb347);
+    border-radius: 20px;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.credits-badge i {
+    margin-right: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.balance-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.balance-info h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--tg-theme-hint-color);
+    font-weight: 500;
+}
+
+.balance-amount {
+    display: flex;
+    align-items: baseline;
+}
+
+.credits-count {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff7eb3, #7e8cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 0.5rem;
+    line-height: 1;
+}
+
+.credits-label {
+    font-size: 0.9rem;
+    color: var(--tg-theme-hint-color);
+}
+
+.btn-buy {
+    background: linear-gradient(135deg, #00d2a0, #00a8ff);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    padding: 0.8rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 210, 160, 0.3);
+}
+
+.btn-buy:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 210, 160, 0.4);
+}
+
+.btn-buy i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.upload-hint {
+    display: flex;
+    align-items: flex-start;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: var(--tg-theme-hint-color);
+}
+
+.upload-hint i {
+    margin-right: 0.8rem;
+    margin-top: 0.2rem;
+    color: #5ac8fb;
+    font-size: 1.1rem;
+}
+
+.upload-hint p {
+    line-height: 1.4;
+}
+
+#custom-notification {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    width: 90%;
+    max-width: 400px;
+    z-index: 1000;
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+#custom-notification.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification-content {
+    padding: 1.2rem;
+    text-align: center;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.telegram-warning {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+}
+
+.warning-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 400px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.warning-card h1 {
+    background: linear-gradient(90deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.warning-text {
+    margin-bottom: 30px;
+    color: #aaa;
+}
+
+.tg-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #0088cc, #00d2a0);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: transform 0.3s;
+    margin-bottom: 20px;
+}
+
+.tg-button:hover {
+    transform: translateY(-3px);
+}
+
+.instruction {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
 }
