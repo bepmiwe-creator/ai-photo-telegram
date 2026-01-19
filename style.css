@@ -1,0 +1,157 @@
+/* style.css */
+:root {
+    --tg-theme-bg-color: #1a1a1a; /* Фон по умолчанию, если Telegram не передал свою тему */
+    --tg-theme-text-color: #ffffff;
+    --tg-theme-hint-color: #aaaaaa;
+    --tg-theme-link-color: #5ac8fb;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background: var(--tg-theme-bg-color);
+    color: var(--tg-theme-text-color);
+    min-height: 100vh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    /* Это для корректного отображения на iPhone с "челкой" */
+}
+
+.app-container {
+    max-width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Стиль для "стеклянной" карточки (Glassmorphism) */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    box-shadow: var(--glass-shadow);
+}
+
+/* Шапка приложения */
+.app-header {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.app-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(90deg, #5ac8fb, #9d4cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.app-header .tagline {
+    font-size: 0.9rem;
+    color: var(--tg-theme-hint-color);
+    font-weight: 300;
+}
+
+/* Основная область */
+.app-main {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Экран - общий стиль */
+.screen {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.4s ease;
+}
+
+/* Класс для скрытия экранов */
+.hidden {
+    display: none !important;
+    opacity: 0;
+}
+
+/* Экран приветствия и загрузки */
+.screen-welcome {
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-container {
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+}
+
+.loader-container h2 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.loader-container p {
+    color: var(--tg-theme-hint-color);
+    font-size: 0.95rem;
+}
+
+/* Анимация "сканирования" лица (совет от дизайнера) */
+.scanning-animation {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    background: radial-gradient(circle, rgba(90, 200, 251, 0.1) 0%, rgba(90, 200, 251, 0) 70%);
+    overflow: hidden;
+    border: 2px solid rgba(90, 200, 251, 0.3);
+}
+
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #5ac8fb, transparent);
+    animation: scan 2s infinite ease-in-out;
+    border-radius: 2px;
+}
+
+@keyframes scan {
+    0% { top: 0%; opacity: 0.5; }
+    50% { top: 100%; opacity: 1; }
+    100% { top: 0%; opacity: 0.5; }
+}
+
+/* Подвал с информацией о пользователе */
+.app-footer {
+    padding: 1rem;
+    text-align: center;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.85rem;
+    color: var(--tg-theme-hint-color);
+}
+
+.user-info {
+    margin-bottom: 0.5rem;
+    word-break: break-word;
+    padding: 0.5rem;
+}
