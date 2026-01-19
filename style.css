@@ -59,9 +59,31 @@ body {
 }
 
 .app-header .tagline {
-    font-size: 0.9rem;
-    color: var(--tg-theme-hint-color);
+    font-size: 1.1rem;
     font-weight: 300;
+    font-style: italic;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    position: relative;
+    padding-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    opacity: 0.9;
+}
+
+.app-header .tagline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #5ac8fb, #9d4cff, transparent);
+    animation: lineGlow 2s ease-in-out infinite;
+}
+
+@keyframes lineGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .app-main {
@@ -867,3 +889,4 @@ body {
     font-style: italic;
     grid-column: 1 / -1;
 }
+
