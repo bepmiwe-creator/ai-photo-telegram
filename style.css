@@ -59,130 +59,61 @@ body {
 }
 
 .app-header .tagline {
-    font-size: 1rem;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.85);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 0.8rem;
-    position: relative;
-    display: inline-block;
-    padding: 0.3rem 1rem;
-}
-.app-header {
-    text-align: center;
-    padding: 1.5rem 1rem;
-    border-bottom: 1px solid var(--glass-border);
-    position: relative; /* Добавляем это */
-}
-
-.profile-button {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-size: 1.2rem;
-}
-
-.profile-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-50%) scale(1.1);
-}
-.app-header .tagline {
-    font-size: 0.95rem; /* Уменьшили с 1.1rem */
+    font-size: 0.85rem; /* Еще меньше для компактности */
     font-weight: 300;
     font-style: italic;
-    letter-spacing: 0.4px; /* Немного уменьшили */
+    letter-spacing: 0.3px;
     color: rgba(255, 255, 255, 0.95);
     position: relative;
-    padding: 0.6rem 1.3rem; /* Уменьшили padding */
-    border-radius: 16px; /* Немного меньше радиус */
+    padding: 0.4rem 0.8rem; /* Меньше padding */
+    border-radius: 12px; /* Меньше радиус */
     display: inline-block;
-    margin-top: 0.6rem; /* Меньше отступ сверху */
+    margin-top: 0.4rem; /* Меньше отступ */
+    line-height: 1.2; /* Более плотный межстрочный интервал */
     
     /* Стеклянный эффект */
-    backdrop-filter: blur(15px) saturate(180%);
-    -webkit-backdrop-filter: blur(15px) saturate(180%);
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 
-        0 6px 25px rgba(0, 0, 0, 0.25), /* Уменьшили тень */
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        0 4px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
     
     /* Тень текста для лучшей читаемости */
     text-shadow: 
-        0 1px 3px rgba(0, 0, 0, 0.4), /* Более мягкая тень */
-        0 0 12px rgba(90, 200, 251, 0.25);
+        0 1px 2px rgba(0, 0, 0, 0.4);
     
-    /* Плавная анимация свечения */
-    animation: glassGlow 4s ease-in-out infinite alternate;
+    /* Более тонкая анимация */
+    animation: subtleGlow 6s ease-in-out infinite alternate;
 }
 
-/* Анимация свечения стекла */
-@keyframes glassGlow {
+@keyframes subtleGlow {
     0% {
         box-shadow: 
-            0 6px 25px rgba(0, 0, 0, 0.25),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-            0 0 15px rgba(90, 200, 251, 0.08); /* Меньше свечение */
-        border-color: rgba(255, 255, 255, 0.15);
+            0 4px 15px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 0 8px rgba(90, 200, 251, 0.05);
     }
     100% {
         box-shadow: 
-            0 6px 25px rgba(0, 0, 0, 0.35),
-            inset 0 1px 0 rgba(255, 255, 255, 0.15),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(157, 76, 255, 0.15); /* Меньше свечение */
-        border-color: rgba(157, 76, 255, 0.25);
+            0 4px 15px rgba(0, 0, 0, 0.25),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1),
+            0 0 12px rgba(157, 76, 255, 0.08);
     }
 }
 
-/* Анимированная подчеркивающая линия */
+/* Простая линия без сложной анимации */
 .app-header .tagline::after {
     content: '';
     position: absolute;
-    bottom: -4px; /* Подняли ближе к тексту */
-    left: 25%; /* Немного увеличили отступы с боков */
-    width: 50%; /* Уменьшили длину */
-    height: 1.5px; /* Немного тоньше */
-    background: linear-gradient(90deg, 
-        transparent, 
-        #5ac8fb, 
-        #9d4cff, 
-        #ff7eb3, 
-        transparent
-    );
+    bottom: -2px; /* Ближе к тексту */
+    left: 30%;
+    width: 40%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #5ac8fb, transparent);
     border-radius: 1px;
-    animation: lineFlow 3s ease-in-out infinite;
-    opacity: 0.7;
-}
-
-@keyframes lineFlow {
-    0% {
-        transform: translateX(-5%) scaleX(0.9);
-        opacity: 0.5;
-    }
-    50% {
-        transform: translateX(0%) scaleX(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translateX(5%) scaleX(0.9);
-        opacity: 0.5;
-    }
+    opacity: 0.5;
 }
 
 /* Декоративные элементы по бокам - уменьшаем */
@@ -202,6 +133,111 @@ body {
 .app-header .tagline::after {
     /* Уже добавлена линия, второй элемент убираем */
 }
+
+.profile-button {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    
+    /* Яркий градиентный фон */
+    background: linear-gradient(135deg, #ff7eb3, #7e8cff);
+    border: none;
+    
+    /* Размер и форма */
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    
+    /* Центрирование иконки */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* Иконка */
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+    
+    /* Тень и эффекты */
+    box-shadow: 
+        0 4px 15px rgba(255, 126, 179, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    
+    /* Анимация при наведении */
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    /* Для лучшей видимости на темном фоне */
+    position: relative;
+    z-index: 10;
+}
+
+/* Эффект свечения */
+.profile-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #ff7eb3, #7e8cff, #5ac8fb);
+    border-radius: 50%;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* При наведении */
+.profile-button:hover {
+    transform: translateY(-50%) scale(1.15);
+    box-shadow: 
+        0 8px 25px rgba(255, 126, 179, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.profile-button:hover::before {
+    opacity: 0.3;
+    animation: pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { 
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% { 
+        transform: scale(1.05);
+        opacity: 0.5;
+    }
+}
+
+/* Эффект нажатия */
+.profile-button:active {
+    transform: translateY(-50%) scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* Более яркий вариант с иконкой "магической палочки" */
+/* Если хотите еще ярче - раскомментируйте этот код: */
+/*
+.profile-button {
+    background: linear-gradient(135deg, #ff7eb3, #ffd166, #7e8cff);
+    background-size: 200% 200%;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.profile-button i {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+*/
 
 @keyframes twinkle {
     0%, 100% { opacity: 0.4; }
@@ -2362,4 +2398,41 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
+/* Подсказка для кнопки профиля */
+.profile-button {
+    position: relative;
+}
 
+.profile-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.profile-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: rgba(0, 0, 0, 0.8);
+}
+
+.profile-button:hover .profile-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(5px);
+}
