@@ -70,31 +70,23 @@ body {
     padding: 0.3rem 1rem;
 }
 
-.app-header .tagline::before {
-    content: '✦';
-    position: absolute;
-    left: -5px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #5ac8fb;
-    font-size: 0.8rem;
-    animation: spin 4s linear infinite;
-}
-
-.app-header .tagline::after {
-    content: '✦';
-    position: absolute;
-    right: -5px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff7eb3;
-    font-size: 0.8rem;
-    animation: spin 4s linear infinite reverse;
-}
-
-@keyframes spin {
-    0% { transform: translateY(-50%) rotate(0deg); }
-    100% { transform: translateY(-50%) rotate(360deg); }
+.app-header .tagline {
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(90, 200, 251, 0.3),
+        0 0 40px rgba(157, 76, 255, 0.2);
+    position: relative;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    display: inline-block;
+    margin-top: 0.5rem;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .app-main {
@@ -900,5 +892,6 @@ body {
     font-style: italic;
     grid-column: 1 / -1;
 }
+
 
 
