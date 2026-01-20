@@ -362,50 +362,53 @@
                     <h2><i class="fas fa-shopping-cart"></i> Пополнение баланса</h2>
                     
                    <div class="payment-options">
-    <!-- Базовый тариф -->
+    <!-- Базовый тариф: 180 звезд за 180 рублей -->
     <div class="payment-card selected" data-amount="180" data-price="180">
         <div class="payment-header">
             <h3>180 звезд</h3>
         </div>
         <div class="payment-price">
             <span class="price">180 ₽</span>
-            <span class="per-credit">1 ₽/звезда</span>
+            <span class="per-credit">1.00 ₽/звезда</span>
         </div>
-        <div class="payment-bonus">
-            <i class="fas fa-star"></i> Стандартная цена
+        <div class="payment-description">
+            <i class="fas fa-check"></i> Без скидки, базовая цена
         </div>
     </div>
     
-    <!-- Средний тариф с скидкой 10% -->
-    <div class="payment-card" data-amount="330" data-price="299">
+    <!-- Средний тариф: 330 звезд за 299 рублей (скидка 10% + 15 бонусных звезд) -->
+    <div class="payment-card" data-amount="345" data-price="299">
         <div class="payment-header">
-            <h3>330 звезд</h3>
-            <span class="payment-badge" style="background: linear-gradient(135deg, #ff7eb3, #7e8cff);">-10%</span>
+            <h3>345 звезд</h3>
+            <span class="payment-badge" style="background: linear-gradient(135deg, #ff7eb3, #7e8cff);">-10% + бонус</span>
         </div>
         <div class="payment-price">
             <span class="price">299 ₽</span>
-            <span class="per-credit">0.91 ₽/звезда</span>
+            <span class="per-credit">0.87 ₽/звезда</span>
         </div>
-        <div class="payment-bonus">
-            <i class="fas fa-gift"></i> +15 бонусных звезд
+        <div class="payment-description">
+            <i class="fas fa-gift"></i> 330 звезд + 15 бонусных
+        </div>
+        <div class="payment-savings">
+            <i class="fas fa-percentage"></i> Экономия 10% + бонус
         </div>
     </div>
     
-    <!-- Премиум тариф с скидкой 20% -->
-    <div class="payment-card" data-amount="1188" data-price="990">
+    <!-- Премиум тариф: 1188 звезд за 990 рублей (скидка 20% + 50 бонусных звезд) -->
+    <div class="payment-card" data-amount="1238" data-price="990">
         <div class="payment-header">
-            <h3>1188 звезд</h3>
-            <span class="payment-badge" style="background: linear-gradient(135deg, #ffd166, #ffb347);">-20%</span>
+            <h3>1238 звезд</h3>
+            <span class="payment-badge" style="background: linear-gradient(135deg, #ffd166, #ffb347);">-20% + бонус</span>
         </div>
         <div class="payment-price">
             <span class="price">990 ₽</span>
-            <span class="per-credit">0.83 ₽/звезда</span>
+            <span class="per-credit">0.80 ₽/звезда</span>
         </div>
-        <div class="payment-bonus">
-            <i class="fas fa-gift"></i> +50 бонусных звезд
+        <div class="payment-description">
+            <i class="fas fa-gift"></i> 1188 звезд + 50 бонусных
         </div>
-        <div class="payment-bonus">
-            <i class="fas fa-crown"></i> Премиум статус на 30 дней
+        <div class="payment-savings">
+            <i class="fas fa-crown"></i> Максимальная экономия 20%
         </div>
     </div>
 </div>
@@ -623,6 +626,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
