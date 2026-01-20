@@ -3,12 +3,15 @@ const App = {
     // Инициализация приложения
     async init() {
         console.log('AI Photo Studio: Инициализация...');
-
+try {
         // 1. Ждем, пока Telegram SDK полностью загрузится
+        console.log('Шаг 1: Проверка Telegram SDK...');
         if (!window.Telegram || !window.Telegram.WebApp) {
+            console.log('Telegram SDK не найден!');
             this.showTelegramWarning();
             return;
         }
+        console.log('Telegram SDK найден!');
 
         // 2. Инициализируем WebApp
         const tg = window.Telegram.WebApp;
@@ -141,12 +144,15 @@ initCatalog() {
     this.updateBalanceDisplay();
 },
     
-   // Обновление отображения баланса во всех местах
+// Обновление отображения баланса во всех местах
 updateBalanceDisplay() {
     const balance = localStorage.getItem('ai_photo_balance') || '85';
     
     // 1. Верхняя панель
-    document.querySelector('.balance-amount .credits-count').textContent = balance;
+    const topBalanceEl = document.querySelector('.balance-amount .credits-count');
+    if (topBalanceEl) {
+        topBalanceEl.textContent = balance;
+    }
     
     // 2. Карточка баланса на главном экране
     const mainBalanceEl = document.querySelector('.balance-panel .credits-count');
@@ -1305,6 +1311,7 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
