@@ -2542,3 +2542,209 @@ input:checked + .slider:before {
     visibility: visible;
     transform: translateX(-50%) translateY(5px);
 }
+
+/* =========================== */
+/* УЛУЧШЕННЫЕ АНИМАЦИИ */
+/* =========================== */
+
+/* Плавное появление элементов */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анимация карточек стилей */
+.style-card {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+    animation-delay: calc(var(--card-index, 0) * 0.05s);
+}
+
+/* Улучшенный ховер эффект для карточек стилей */
+.style-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.style-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent
+    );
+    transition: left 0.7s ease;
+}
+
+.style-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(90, 200, 251, 0.3);
+}
+
+.style-card:hover::after {
+    left: 100%;
+}
+
+/* Эффект пульсации для выбранного стиля */
+.style-card.selected {
+    animation: pulseGlow 2s infinite;
+    border-color: #5ac8fb;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(90, 200, 251, 0.4); 
+    }
+    50% { 
+        box-shadow: 0 0 0 10px rgba(90, 200, 251, 0); 
+    }
+}
+
+/* Анимация кнопок */
+button {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Анимация иконок */
+i {
+    transition: transform 0.3s ease;
+}
+
+button:hover i {
+    transform: scale(1.1);
+}
+
+/* Анимация загрузки */
+.loading-wave {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.loading-wave div {
+    position: absolute;
+    width: 16px;
+    background: linear-gradient(135deg, #5ac8fb, #9d4cff);
+    animation: loading-wave 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+    border-radius: 50%;
+}
+
+.loading-wave div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+}
+
+.loading-wave div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+}
+
+.loading-wave div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+}
+
+@keyframes loading-wave {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+    50%, 100% {
+        top: 24px;
+        height: 32px;
+    }
+}
+
+/* Улучшенные уведомления */
+@keyframes slideInDown {
+    from {
+        transform: translateX(-50%) translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutUp {
+    from {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-50%) translateY(-100px);
+        opacity: 0;
+    }
+}
+
+#custom-notification.show {
+    animation: slideInDown 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+#custom-notification.hiding {
+    animation: slideOutUp 0.5s ease forwards;
+}
+
+/* Анимация появления экранов */
+.screen {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анимация прогресс-баров */
+.progress-fill, .step-fill, .main-progress-fill {
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Анимация фото в галерее */
+.gallery-item {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.gallery-item:hover {
+    transform: scale(1.05) rotate(1deg);
+}
+
+/* Анимация загрузки фото */
+.preview-item {
+    transition: all 0.3s ease;
+}
+
+.preview-item:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
