@@ -1,4 +1,110 @@
-/* style.css - ПОЛНЫЙ КОД */
+/* =========================== */
+/* КОМПАКТНАЯ ВЕРХНЯЯ ПАНЕЛЬ */
+/* =========================== */
+
+.top-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.8rem;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Стили для баланса */
+.balance-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.balance-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.balance-icon i {
+    font-size: 1.4rem;
+    color: #FFD700; /* Золотой цвет для звезды */
+    filter: drop-shadow(0 2px 3px rgba(255, 215, 0, 0.3));
+}
+
+.balance-amount {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.balance-amount .credits-count {
+    background: linear-gradient(135deg, #ffd700, #ffb347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Стили для кнопки профиля */
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.profile-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 126, 179, 0.2);
+}
+
+.profile-btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-btn-icon i {
+    font-size: 1.1rem;
+    color: #7e8cff;
+}
+
+.profile-btn-text {
+    font-size: 0.9rem;
+}
+
+/* Обновление заголовка приложения */
+.app-title {
+    text-align: center;
+    margin-top: 0.3rem;
+}
+
+.app-title h1 {
+    font-size: 1.7rem;
+    margin-bottom: 0.4rem;
+}
+
+.app-title .tagline {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    margin-top: 0.2rem;
+}/* style.css - ПОЛНЫЙ КОД */
 :root {
     --tg-theme-bg-color: #1a1a1a;
     --tg-theme-text-color: #ffffff;
