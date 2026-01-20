@@ -514,37 +514,39 @@ const App = {
         }
     },
 
-    // Обновление баланса
-    updateBalance(change) {
-        // Преобразуем change в число
-        const changeNum = parseInt(change) || 0;
-        
-        // Получаем текущий баланс как число
-        let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-        
-        // Обновляем баланс
-        balance += changeNum;
-        
-        // Баланс не может быть отрицательным
-        if (balance < 0) balance = 0;
-        
-        // Сохраняем
-        localStorage.setItem('ai_photo_balance', balance.toString());
-        
-        // Обновляем отображение баланса
-        document.querySelector('.balance-amount .credits-count').textContent = balance;
-        document.querySelector('.balance-panel .credits-count').textContent = balance;
-        
-        // В профиле
-        const profileBalanceEl = document.getElementById('profile-balance');
-        if (profileBalanceEl) {
-            profileBalanceEl.textContent = balance;
-        }
-        
-        console.log(`Баланс обновлен: ${changeNum} звезд. Новый баланс: ${balance}`);
-        
-        return balance;
-    },
+   // Обновление баланса (ДОЛЖНА БЫТЬ ТАКОЙ)
+updateBalance(change) {
+    // Преобразуем change в число
+    const changeNum = parseInt(change) || 0;
+    
+    // Получаем текущий баланс как число
+    let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    
+    // Обновляем баланс
+    balance += changeNum;
+    
+    // Баланс не может быть отрицательным (но для пополнения это не важно)
+    if (balance < 0) balance = 0;
+    
+    // Сохраняем
+    localStorage.setItem('ai_photo_balance', balance.toString());
+    
+    // Обновляем отображение баланса ВО ВСЕХ МЕСТАХ
+    const balanceElements = document.querySelectorAll('.credits-count, .stars-count, #profile-balance');
+    balanceElements.forEach(el => {
+        el.textContent = balance;
+    });
+    
+    // Также обновляем специфические элементы
+    const profileBalanceEl = document.getElementById('profile-balance');
+    if (profileBalanceEl) {
+        profileBalanceEl.textContent = balance;
+    }
+    
+    console.log(`Баланс изменен на: ${changeNum} звезд. Новый баланс: ${balance}`);
+    
+    return balance;
+},
 
     // Показ экрана генерации
     showGenerationScreen() {
@@ -1254,7 +1256,7 @@ const App = {
         }
     },
 
-// Настройка модального окна оплаты
+// Настройка модального окна оплаты (ИСПРАВЛЕННАЯ)
 setupPaymentModal() {
     const modal = document.getElementById('payment-modal');
     if (!modal) return;
@@ -1277,9 +1279,11 @@ setupPaymentModal() {
         });
     }
     
-    // Выбор пакета звезд - НАЧАЛЬНЫЕ ЗНАЧЕНИЯ ИЗ ВЫБРАННОЙ КАРТОЧКИ
-    let selectedAmount = 180; // Значение из выбранной по умолчанию карточки
-    let selectedPrice = 180;  // Значение из выбранной по умолчанию карточки
+    // Выбор пакета звезд
+    let selectedBaseAmount = 180;    // Основные звезды (без бонусов)
+    let selectedBonusAmount = 0;     // Бонусные звезды
+    let selectedTotalAmount = 180;   // Всего звезд (основные + бонусные)
+    let selectedPrice = 180;         // Цена в рублях
     
     // Обновляем начальные значения в тексте
     const selectedPack = document.getElementById('selected-pack');
@@ -1300,26 +1304,32 @@ setupPaymentModal() {
             // Выделяем выбранную карточку
             card.classList.add('selected');
             
-            // Обновляем выбранные значения
-            selectedAmount = parseInt(card.dataset.amount) || 180;
+            // Получаем значения из data-атрибутов
+            selectedBaseAmount = parseInt(card.dataset.amount) || 180;
+            selectedBonusAmount = parseInt(card.dataset.bonus) || 0;
+            selectedTotalAmount = selectedBaseAmount + selectedBonusAmount;
             selectedPrice = parseInt(card.dataset.price) || 180;
+            
+            console.log(`Выбрано: ${selectedBaseAmount} основных + ${selectedBonusAmount} бонусных = ${selectedTotalAmount} звезд за ${selectedPrice} ₽`);
             
             // Обновляем информацию в модальном окне
             if (selectedPack) {
-                selectedPack.textContent = `${selectedAmount} звезд`;
+                if (selectedBonusAmount > 0) {
+                    selectedPack.textContent = `${selectedTotalAmount} звезд (${selectedBaseAmount}+${selectedBonusAmount} бонус)`;
+                } else {
+                    selectedPack.textContent = `${selectedTotalAmount} звезд`;
+                }
             }
             if (totalPrice) {
                 totalPrice.textContent = `${selectedPrice} ₽`;
             }
-            
-            console.log(`Выбран тариф: ${selectedAmount} звезд за ${selectedPrice} ₽`);
         });
     });
     
     // Кнопка оплаты
     if (payBtn) {
         payBtn.addEventListener('click', () => {
-            this.processPayment(selectedAmount, selectedPrice);
+            this.processPayment(selectedBaseAmount, selectedBonusAmount, selectedPrice);
         });
     }
 },
@@ -1337,18 +1347,22 @@ setupPaymentModal() {
         }
     },
 
- // Обработка оплаты (имитация)
-processPayment(amount, price) {
+// Обработка оплаты (ИСПРАВЛЕННАЯ)
+processPayment(baseAmount, bonusAmount, price) {
     // Преобразуем в числа
-    const amountNum = parseInt(amount) || 0;
+    const baseNum = parseInt(baseAmount) || 0;
+    const bonusNum = parseInt(bonusAmount) || 0;
     const priceNum = parseInt(price) || 0;
+    const totalStars = baseNum + bonusNum;
     
     console.log(`=== НАЧАЛО ОПЛАТЫ ===`);
-    console.log(`Выбрано звезд: ${amountNum}`);
+    console.log(`Основные звезды: ${baseNum}`);
+    console.log(`Бонусные звезды: ${bonusNum}`);
+    console.log(`Всего звезд: ${totalStars}`);
     console.log(`Стоимость: ${priceNum} ₽`);
     
     // Проверяем валидность
-    if (amountNum <= 0) {
+    if (baseNum <= 0) {
         this.showNotification('Ошибка: неверная сумма пополнения');
         return;
     }
@@ -1358,32 +1372,51 @@ processPayment(amount, price) {
     console.log(`Текущий баланс до пополнения: ${currentBalance} звезд`);
     
     // Рассчитываем ожидаемый баланс
-    const expectedBalance = currentBalance + amountNum;
-    console.log(`Ожидаемый баланс после пополнения: ${currentBalance} + ${amountNum} = ${expectedBalance} звезд`);
+    const expectedBalance = currentBalance + baseNum + bonusNum;
+    console.log(`Ожидаемый баланс после пополнения: ${currentBalance} + ${baseNum} + ${bonusNum} = ${expectedBalance} звезд`);
     
     // Имитация процесса оплаты
     this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
     
     // Через 2 секунды "завершаем" оплату
     setTimeout(() => {
-        // ОБНОВЛЯЕМ БАЛАНС - ТОЛЬКО ОДИН РАЗ!
-        const newBalance = this.updateBalance(amountNum);
+        // СПИСЫВАНИЕ ПРОИСХОДИТ В ДВУХ ЭТАПАХ:
+        // 1. Сначала добавляем основные звезды (за которые платим)
+        const balanceAfterBase = this.updateBalance(baseNum);
+        
+        // 2. Затем добавляем бонусные звезды (если есть)
+        if (bonusNum > 0) {
+            const finalBalance = this.updateBalance(bonusNum);
+            console.log(`Бонусные звезды добавлены: +${bonusNum}`);
+        }
+        
+        // Получаем финальный баланс для проверки
+        const finalBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
         
         // Проверяем результат
         console.log(`=== РЕЗУЛЬТАТ ОПЛАТЫ ===`);
-        console.log(`Полученный баланс: ${newBalance} звезд`);
+        console.log(`Финальный баланс: ${finalBalance} звезд`);
         console.log(`Ожидалось: ${expectedBalance} звезд`);
-        console.log(`Совпадение: ${newBalance === expectedBalance ? 'ДА' : 'НЕТ'}`);
+        console.log(`Совпадение: ${finalBalance === expectedBalance ? 'ДА' : 'НЕТ'}`);
         
-        if (newBalance !== expectedBalance) {
-            console.error(`ОШИБКА: Баланс не совпадает! Разница: ${Math.abs(newBalance - expectedBalance)} звезд`);
+        if (finalBalance !== expectedBalance) {
+            console.error(`ОШИБКА: Баланс не совпадает! Разница: ${Math.abs(finalBalance - expectedBalance)} звезд`);
+            // Восстанавливаем правильный баланс
+            localStorage.setItem('ai_photo_balance', expectedBalance.toString());
+            // Обновляем отображение
+            document.querySelector('.balance-amount .credits-count').textContent = expectedBalance;
+            document.querySelector('.balance-panel .credits-count').textContent = expectedBalance;
         }
         
         // Закрываем модальное окно
         this.closePaymentModal();
         
         // Показываем успешное уведомление
-        this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
+        if (bonusNum > 0) {
+            this.showNotification(`✅ Баланс пополнен на ${totalStars} звезд! (${baseNum} основных + ${bonusNum} бонусных)`);
+        } else {
+            this.showNotification(`✅ Баланс пополнен на ${totalStars} звезд!`);
+        }
         
         // Виброотклик успеха
         if (window.tg && window.tg.HapticFeedback) {
@@ -1490,6 +1523,7 @@ window.testTariffs = testTariffs;
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
