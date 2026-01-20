@@ -767,7 +767,12 @@ const App = {
         
         // Обновляем баланс на главном экране
         document.querySelector('.credits-count').textContent = balance;
-        
+       
+ // Обновляем баланс в шапке
+const headerBalance = document.querySelector('.balance-count');
+if (headerBalance) {
+    headerBalance.textContent = balance;
+}
         // Статистика (можно сохранять в localStorage)
         const generated = localStorage.getItem('ai_photos_generated') || '12';
         const styles = localStorage.getItem('ai_styles_used') || '4';
@@ -1168,7 +1173,16 @@ const App = {
         document.querySelector('.credits-count').textContent = balance;
         document.getElementById('profile-balance').textContent = balance;
     },
-
+// Обновляем отображение баланса во всех местах
+    document.querySelector('.credits-count').textContent = balance;
+    document.getElementById('profile-balance').textContent = balance;
+    
+    // ОБНОВЛЯЕМ ИНДИКАТОР В ШАПКЕ
+    const headerBalance = document.querySelector('.balance-count');
+    if (headerBalance) {
+        headerBalance.textContent = balance;
+    }
+},
     // Показ оплаты за дополнительную функцию
     showPaymentForFeature(featureName, credits) {
         const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
