@@ -4,13 +4,6 @@ const App = {
     async init() {
         console.log('AI Photo Studio: Инициализация...');
 
-        // 0. Инициализируем баланс (делаем это ПЕРВЫМ делом)
-        let initialBalance = localStorage.getItem('ai_photo_balance');
-        if (!initialBalance) {
-            initialBalance = '85';
-            localStorage.setItem('ai_photo_balance', initialBalance);
-        }
-        
         // 1. Ждем, пока Telegram SDK полностью загрузится
         if (!window.Telegram || !window.Telegram.WebApp) {
             this.showTelegramWarning();
@@ -40,7 +33,12 @@ const App = {
         // 7. Настраиваем кнопку покупки
         this.setupBuyButton();
 
-        // 8. Устанавливаем начальный баланс в интерфейсе (после того как DOM загружен)
+        // 8. Устанавливаем начальный баланс
+        let initialBalance = localStorage.getItem('ai_photo_balance');
+        if (!initialBalance) {
+            initialBalance = '85';
+            localStorage.setItem('ai_photo_balance', initialBalance);
+        }
         document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
 
         // 9. Имитируем короткую загрузку, потом показываем главный экран
