@@ -1173,13 +1173,13 @@ setupPaymentModal() {
         }
     },
 
-  // Обработка оплаты (имитация)
+// Обработка оплаты (имитация)
 processPayment(amount, price) {
     // Преобразуем в числа
     const amountNum = parseInt(amount) || 0;
     const priceNum = parseInt(price) || 0;
     
-    console.log(`Оплата: ${amountNum} кредитов за ${priceNum} ₽`);
+    console.log(`Оплата: ${amountNum} звезд за ${priceNum} ₽`);
     
     // Проверяем валидность
     if (amountNum <= 0) {
@@ -1199,7 +1199,7 @@ processPayment(amount, price) {
         this.closePaymentModal();
         
         // Показываем успешное уведомление
-        this.showNotification(`✅ Баланс пополнен на ${amountNum} кредитов!`);
+        this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
         
         // Виброотклик успеха
         if (window.tg) {
@@ -1300,6 +1300,7 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
