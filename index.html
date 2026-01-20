@@ -361,45 +361,54 @@
                     
                     <h2><i class="fas fa-shopping-cart"></i> Пополнение баланса</h2>
                     
-                    <div class="payment-options">
-                        <div class="payment-card selected" data-amount="100" data-price="99">
-                            <div class="payment-header">
-                                <h3>100 кредитов</h3>
-                                <span class="payment-badge">Популярно</span>
-                            </div>
-                            <div class="payment-price">
-                                <span class="price">99 ₽</span>
-                                <span class="per-credit">0.99 ₽/кредит</span>
-                            </div>
-                            <div class="payment-bonus">
-                                <i class="fas fa-gift"></i> +5 бонусных кредитов
-                            </div>
-                        </div>
-                        
-                        <div class="payment-card" data-amount="50" data-price="59">
-                            <div class="payment-header">
-                                <h3>50 кредитов</h3>
-                            </div>
-                            <div class="payment-price">
-                                <span class="price">59 ₽</span>
-                                <span class="per-credit">1.18 ₽/кредит</span>
-                            </div>
-                        </div>
-                        
-                        <div class="payment-card" data-amount="200" data-price="179">
-                            <div class="payment-header">
-                                <h3>200 кредитов</h3>
-                                <span class="payment-badge">Выгодно</span>
-                            </div>
-                            <div class="payment-price">
-                                <span class="price">179 ₽</span>
-                                <span class="per-credit">0.90 ₽/кредит</span>
-                            </div>
-                            <div class="payment-bonus">
-                                <i class="fas fa-gift"></i> +20 бонусных кредитов
-                            </div>
-                        </div>
-                    </div>
+                   <div class="payment-options">
+    <!-- Базовый тариф -->
+    <div class="payment-card selected" data-amount="180" data-price="180">
+        <div class="payment-header">
+            <h3>180 звезд</h3>
+        </div>
+        <div class="payment-price">
+            <span class="price">180 ₽</span>
+            <span class="per-credit">1 ₽/звезда</span>
+        </div>
+        <div class="payment-bonus">
+            <i class="fas fa-star"></i> Стандартная цена
+        </div>
+    </div>
+    
+    <!-- Средний тариф с скидкой 10% -->
+    <div class="payment-card" data-amount="330" data-price="299">
+        <div class="payment-header">
+            <h3>330 звезд</h3>
+            <span class="payment-badge" style="background: linear-gradient(135deg, #ff7eb3, #7e8cff);">-10%</span>
+        </div>
+        <div class="payment-price">
+            <span class="price">299 ₽</span>
+            <span class="per-credit">0.91 ₽/звезда</span>
+        </div>
+        <div class="payment-bonus">
+            <i class="fas fa-gift"></i> +15 бонусных звезд
+        </div>
+    </div>
+    
+    <!-- Премиум тариф с скидкой 20% -->
+    <div class="payment-card" data-amount="1188" data-price="990">
+        <div class="payment-header">
+            <h3>1188 звезд</h3>
+            <span class="payment-badge" style="background: linear-gradient(135deg, #ffd166, #ffb347);">-20%</span>
+        </div>
+        <div class="payment-price">
+            <span class="price">990 ₽</span>
+            <span class="per-credit">0.83 ₽/звезда</span>
+        </div>
+        <div class="payment-bonus">
+            <i class="fas fa-gift"></i> +50 бонусных звезд
+        </div>
+        <div class="payment-bonus">
+            <i class="fas fa-crown"></i> Премиум статус на 30 дней
+        </div>
+    </div>
+</div>
                     
                     <div class="payment-summary">
                         <div class="summary-item">
@@ -614,4 +623,5 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
