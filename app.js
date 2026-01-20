@@ -98,55 +98,47 @@ const App = {
         }
     },
 
-   // Инициализация каталога стилей
-initCatalog() {
-    const styles = [
-        { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
-        { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
-        { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
-        { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
-        { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
-        { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
-        { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
-        { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
-    ];
+    // Инициализация каталога стилей
+    initCatalog() {
+        const styles = [
+            { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
+            { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
+            { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
+            { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
+            { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
+            { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
+            { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
+            { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
+        ];
 
-    const catalogContainer = document.getElementById('catalog-container');
-    catalogContainer.innerHTML = ''; // Очищаем контейнер
-    
-    styles.forEach((style, index) => {
-        const styleCard = document.createElement('div');
-        styleCard.className = 'style-card glass-card';
-        styleCard.style.setProperty('--card-index', index); // Для задержки анимации
-        styleCard.innerHTML = `
-            <div class="style-icon">
-                <i class="${style.icon}"></i>
-            </div>
-            <div class="style-info">
-                <h3>${style.name}</h3>
-                <p class="style-desc">${style.desc}</p>
-            </div>
-            <div class="style-credits">
-                <span class="credits-badge">
-                    <i class="fas fa-star"></i> ${style.credits}
-                </span>
-            </div>
-        `;
+        const catalogContainer = document.getElementById('catalog-container');
+        catalogContainer.innerHTML = ''; // Очищаем контейнер
         
-        styleCard.addEventListener('click', () => {
-            // Убираем выделение со всех карточек
-            document.querySelectorAll('.style-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            // Выделяем выбранную карточку
-            styleCard.classList.add('selected');
+        styles.forEach(style => {
+            const styleCard = document.createElement('div');
+            styleCard.className = 'style-card glass-card';
+            styleCard.innerHTML = `
+                <div class="style-icon">
+                    <i class="${style.icon}"></i>
+                </div>
+                <div class="style-info">
+                    <h3>${style.name}</h3>
+                    <p class="style-desc">${style.desc}</p>
+                </div>
+                <div class="style-credits">
+                    <span class="credits-badge">
+                        <i class="fas fa-star"></i> ${style.credits}
+                    </span>
+                </div>
+            `;
             
-            this.selectStyle(style);
+            styleCard.addEventListener('click', () => {
+                this.selectStyle(style);
+            });
+            
+            catalogContainer.appendChild(styleCard);
         });
-        
-        catalogContainer.appendChild(styleCard);
-    });
-},
+    },
 
     // Обработка выбора стиля
     selectStyle(style) {
@@ -174,44 +166,26 @@ initCatalog() {
         }
     },
 
-  // Показать уведомление
-showNotification(message, duration = 3000) {
-    let notification = document.getElementById('custom-notification');
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'custom-notification';
-        document.querySelector('.app-container').appendChild(notification);
-    }
-    
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-palette"></i> ${message}
-        </div>
-    `;
-    
-    // Убираем классы анимации
-    notification.classList.remove('show', 'hiding');
-    
-    // Принудительный reflow для restart анимации
-    void notification.offsetWidth;
-    
-    // Показываем с анимацией
-    notification.classList.add('show');
-    
-    // Плавное скрытие
-    setTimeout(() => {
-        notification.classList.remove('show');
-        notification.classList.add('hiding');
+    // Показать уведомление
+    showNotification(message, duration = 3000) {
+        let notification = document.getElementById('custom-notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'custom-notification';
+            document.querySelector('.app-container').appendChild(notification);
+        }
         
-        // Удаляем после анимации
+       notification.innerHTML = `
+    <div class="notification-content">
+        <i class="fas fa-palette"></i> ${message}
+    </div>
+`;
+        notification.classList.add('show');
+        
         setTimeout(() => {
-            if (notification.parentNode) {
-                notification.classList.remove('hiding');
-            }
-        }, 500);
-    }, duration);
-},
-
+            notification.classList.remove('show');
+        }, duration);
+    },
     // Переход на экран загрузки фото
     showUploadScreen(style) {
         // Обновляем текст с выбранным стилем
