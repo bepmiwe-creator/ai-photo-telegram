@@ -2542,3 +2542,32 @@ input:checked + .slider:before {
     visibility: visible;
     transform: translateX(-50%) translateY(5px);
 }
+
+/* Стили для описания тарифов */
+.payment-description {
+    font-size: 0.85rem;
+    color: #bbbbbb;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.payment-description i {
+    color: #00d2a0;
+}
+
+.payment-savings {
+    font-size: 0.8rem;
+    color: #ffd166;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+/* Убираем старые бонусные стили если они есть */
+.payment-bonus {
+    display: none;
+}
