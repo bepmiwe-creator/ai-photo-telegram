@@ -124,9 +124,9 @@ initCatalog() {
                 <p class="style-desc">${style.desc}</p>
             </div>
             <div class="style-credits">
-                <span class="credits-badge">
-                    <i class="fas fa-star"></i> ${style.credits}
-                </span>
+               <span class="credits-badge">
+    <i class="fas fa-star"></i> ${style.credits} звезд
+</span>
             </div>
         `;
         
@@ -141,7 +141,7 @@ initCatalog() {
     this.updateBalanceDisplay();
 },
     
-    // Обновление отображения баланса во всех местах
+   // Обновление отображения баланса во всех местах
 updateBalanceDisplay() {
     const balance = localStorage.getItem('ai_photo_balance') || '85';
     
@@ -152,15 +152,20 @@ updateBalanceDisplay() {
     const mainBalanceEl = document.querySelector('.balance-panel .credits-count');
     if (mainBalanceEl) {
         mainBalanceEl.textContent = balance;
+        // Рядом с цифрой добавьте текст "звезд"
+        const label = mainBalanceEl.nextElementSibling;
+        if (label && label.classList.contains('credits-label')) {
+            label.textContent = 'звезд';
+        }
     }
     
-    // 3. В профиле (если он открыт)
+    // 3. В профиле
     const profileBalanceEl = document.getElementById('profile-balance');
     if (profileBalanceEl) {
         profileBalanceEl.textContent = balance;
     }
     
-    console.log('Баланс обновлен:', balance);
+    console.log('Баланс обновлен:', balance, 'звезд');
 },
     // Обработка выбора стиля
 selectStyle(style) {
@@ -169,7 +174,7 @@ selectStyle(style) {
     // Проверяем баланс
     const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
     if (currentBalance < style.credits) {
-        this.showNotification(`Недостаточно кредитов! Нужно: ${style.credits}, у вас: ${currentBalance}`);
+        this.showNotification(`Недостаточно звезд! Нужно: ${style.credits}, у вас: ${currentBalance}`);
         
         // Предлагаем пополнить баланс
         setTimeout(() => {
@@ -1300,6 +1305,7 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
