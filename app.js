@@ -919,11 +919,11 @@ const App = {
             }, 50);
         }, 400);
         
-        // Сохраняем в историю
-        this.saveToHistory();
-        
-        // Обновляем баланс (списываем кредиты)
-        this.updateBalance(-window.selectedStyle.credits);
+       // Сохраняем в историю
+this.saveToHistory();
+
+// Обновляем баланс (списываем кредиты) - ДОБАВЬТЕ МИНУС
+this.updateBalance(-window.selectedStyle.credits);
     },
 
     // Настройка экрана результатов
@@ -1122,11 +1122,10 @@ const App = {
             });
         });
         
-        // Кнопка оплаты
-        payBtn.addEventListener('click', () => {
-            this.processPayment(selectedAmount, selectedPrice);
-        });
-    },
+       // Кнопка оплаты
+payBtn.addEventListener('click', () => {
+    this.processPayment(selectedAmount, selectedPrice);
+});
 
     // Закрытие модального окна оплаты
     closePaymentModal() {
@@ -1139,70 +1138,90 @@ const App = {
         }
     },
 
-    // Обработка оплаты (имитация)
-    processPayment(amount, price) {
-        console.log(`Оплата: ${amount} кредитов за ${price} ₽`);
+  // Обработка оплаты (имитация)
+processPayment(amount, price) {
+    // Преобразуем в числа
+    const amountNum = parseInt(amount) || 0;
+    const priceNum = parseInt(price) || 0;
+    
+    console.log(`Оплата: ${amountNum} кредитов за ${priceNum} ₽`);
+    
+    // Проверяем валидность
+    if (amountNum <= 0) {
+        this.showNotification('Ошибка: неверная сумма пополнения');
+        return;
+    }
+    
+    // Имитация процесса оплаты
+    this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
+    
+    // Через 2 секунды "завершаем" оплату
+    setTimeout(() => {
+        // Обновляем баланс
+        this.updateBalance(amountNum);
         
-        // Имитация процесса оплаты
-        this.showNotification(`Перенаправление на ЮKassa... ${price} ₽`);
+        // Закрываем модальное окно
+        this.closePaymentModal();
         
-        // Через 2 секунды "завершаем" оплату
-        setTimeout(() => {
-            // Обновляем баланс
-            this.updateBalance(amount);
-            
-            // Закрываем модальное окно
-            this.closePaymentModal();
-            
-            // Показываем успешное уведомление
-            this.showNotification(`✅ Баланс пополнен на ${amount} кредитов!`);
-            
-            // Виброотклик успеха
-            if (window.tg) {
-                window.tg.HapticFeedback.notificationOccurred('success');
-            }
-        }, 2000);
-    },
+        // Показываем успешное уведомление
+        this.showNotification(`✅ Баланс пополнен на ${amountNum} кредитов!`);
+        
+        // Виброотклик успеха
+        if (window.tg) {
+            window.tg.HapticFeedback.notificationOccurred('success');
+        }
+    }, 2000);
+},
 
     // Обновление баланса
 updateBalance(change) {
+    // Преобразуем change в число (на случай, если пришла строка)
+    const changeNum = parseInt(change) || 0;
+    
+    // Получаем текущий баланс как число
     let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-    balance += change;
+    
+    // Обновляем баланс
+    balance += changeNum;
     
     // Баланс не может быть отрицательным
     if (balance < 0) balance = 0;
     
+    // Сохраняем
     localStorage.setItem('ai_photo_balance', balance.toString());
     
     // Обновляем отображение баланса ВЕЗДЕ
     document.querySelector('.balance-amount .credits-count').textContent = balance;
     document.getElementById('profile-balance').textContent = balance;
+    
+    console.log(`Баланс обновлен: ${changeNum} кредитов. Новый баланс: ${balance}`);
 },
 
-    // Показ оплаты за дополнительную функцию
-    showPaymentForFeature(featureName, credits) {
-        const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+// Показ оплаты за дополнительную функцию
+showPaymentForFeature(featureName, credits) {
+    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    const creditsNum = parseInt(credits) || 0;
+    
+    if (currentBalance < creditsNum) {
+        this.showNotification(`Недостаточно кредитов. Нужно ${creditsNum}, доступно ${currentBalance}`);
+        this.showPaymentModal();
+        return;
+    }
+    
+    // Подтверждение покупки
+    if (confirm(`Использовать ${creditsNum} кредитов для "${featureName}"?`)) {
+        // Списание кредитов (передаем отрицательное число)
+        this.updateBalance(-creditsNum);
         
-        if (currentBalance < credits) {
-            this.showNotification(`Недостаточно кредитов. Нужно ${credits}, доступно ${currentBalance}`);
-            this.showPaymentModal();
-            return;
-        }
+        // Показываем уведомление
+        this.showNotification(`✅ ${featureName} активировано!`);
         
-        // Подтверждение покупки
-        if (confirm(`Использовать ${credits} кредитов для "${featureName}"?`)) {
-            // Списание кредитов
-            this.updateBalance(-credits);
-            
-            // Показываем уведомление
-            this.showNotification(`✅ ${featureName} активировано!`);
-            
-            // Виброотклик
-            if (window.tg) {
-                window.tg.HapticFeedback.notificationOccurred('success');
-            }
+        // Виброотклик
+        if (window.tg) {
+            window.tg.HapticFeedback.notificationOccurred('success');
         }
-    },
+    }
+},
 
     // Получение текущего экрана
     getCurrentScreen() {
