@@ -110,25 +110,37 @@ updateHeaderBalance() {
         document.body.style.backgroundColor = tg.themeParams.bg_color || '#1a1a1a';
     },
 
-    // Функция для отображения информации о пользователе
-    displayUserInfo(tg) {
-        const user = tg.initDataUnsafe?.user;
-        const userInfoEl = document.getElementById('user-info');
+   // Функция для отображения информации о пользователе
+displayUserInfo(tg) {
+    const user = tg.initDataUnsafe?.user;
+    const userInfoEl = document.getElementById('user-info');
 
-        if (user) {
-            let userName = user.first_name || '';
-            if (user.last_name) userName += ' ' + user.last_name;
-            if (!userName) userName = 'Пользователь';
+    if (user) {
+        let userName = user.first_name || '';
+        if (user.last_name) userName += ' ' + user.last_name;
+        if (!userName) userName = 'Пользователь';
 
-            userInfoEl.innerHTML = `
-                <i class="fas fa-user-circle"></i> ID: <strong>${user.id}</strong> | Имя: <strong>${userName}</strong>
-            `;
-            window.userData = user;
-            window.tg = tg;
-        } else {
-            userInfoEl.textContent = 'Гость (войдите через Telegram)';
-        }
-    },
+        userInfoEl.innerHTML = `
+            <i class="fas fa-user-circle"></i> ID: <strong>${user.id}</strong> | Имя: <strong>${userName}</strong>
+        `;
+        
+        // Сохраняем данные пользователя
+        window.userData = {
+            id: user.id,
+            first_name: user.first_name || 'Пользователь',
+            last_name: user.last_name || '',
+            username: user.username || ''
+        };
+        
+        window.tg = tg;
+        
+        console.log('Данные пользователя сохранены:', window.userData);
+    } else {
+        userInfoEl.textContent = 'Гость (войдите через Telegram)';
+        window.userData = { first_name: 'Гость' };
+        console.warn('Пользователь не определен, работаем в гостевом режиме');
+    }
+},
 
     // Инициализация каталога стилей
     initCatalog() {
@@ -1287,8 +1299,26 @@ if (headerBalance) {
     }
 };
 
+// Отладочная информация
+console.log('=== AI Photo Studio Debug Info ===');
+console.log('URL:', window.location.href);
+console.log('User Agent:', navigator.userAgent);
+console.log('Telegram SDK loaded:', !!window.Telegram);
+console.log('==================================');
+
+// Добавляем обработчик ошибок
+window.addEventListener('error', function(e) {
+    console.error('Ошибка в приложении:', e.error);
+    console.error('В файле:', e.filename, 'строка:', e.lineno);
+});
+
+// Показываем состояние загрузки
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM загружен, запускаем приложение...');
+});
 // Запускаем приложение
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
