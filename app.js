@@ -33,13 +33,13 @@ const App = {
         // 7. Настраиваем кнопку покупки
         this.setupBuyButton();
 
-        // 8. Устанавливаем начальный баланс
-// let initialBalance = localStorage.getItem('ai_photo_balance');
-// if (!initialBalance) {
-//     initialBalance = '85';
-//     localStorage.setItem('ai_photo_balance', initialBalance);
-// }
-// document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
+       // 8. Устанавливаем начальный баланс
+let initialBalance = localStorage.getItem('ai_photo_balance');
+if (!initialBalance) {
+    initialBalance = '85';
+    localStorage.setItem('ai_photo_balance', initialBalance);
+}
+document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
 
         // 9. Имитируем короткую загрузку, потом показываем главный экран
         setTimeout(() => {
@@ -1248,5 +1248,6 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
