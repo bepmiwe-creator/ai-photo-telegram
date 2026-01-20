@@ -361,9 +361,10 @@
                     
                     <h2><i class="fas fa-shopping-cart"></i> Пополнение баланса</h2>
                     
-                   <div class="payment-options">
+                   <!-- Исправленные тарифы с правильными data-amount -->
+<div class="payment-options">
     <!-- Базовый тариф: 180 звезд за 180 рублей -->
-    <div class="payment-card selected" data-amount="180" data-price="180">
+    <div class="payment-card selected" data-amount="180" data-price="180" data-bonus="0">
         <div class="payment-header">
             <h3>180 звезд</h3>
         </div>
@@ -376,8 +377,8 @@
         </div>
     </div>
     
-    <!-- Средний тариф: 330 звезд за 299 рублей (скидка 10% + 15 бонусных звезд) -->
-    <div class="payment-card" data-amount="345" data-price="299">
+    <!-- Средний тариф: 330 звезд за 299 рублей + 15 бонусных -->
+    <div class="payment-card" data-amount="330" data-price="299" data-bonus="15">
         <div class="payment-header">
             <h3>345 звезд</h3>
             <span class="payment-badge" style="background: linear-gradient(135deg, #ff7eb3, #7e8cff);">-10% + бонус</span>
@@ -394,8 +395,8 @@
         </div>
     </div>
     
-    <!-- Премиум тариф: 1188 звезд за 990 рублей (скидка 20% + 50 бонусных звезд) -->
-    <div class="payment-card" data-amount="1238" data-price="990">
+    <!-- Премиум тариф: 1188 звезд за 990 рублей + 50 бонусных -->
+    <div class="payment-card" data-amount="1188" data-price="990" data-bonus="50">
         <div class="payment-header">
             <h3>1238 звезд</h3>
             <span class="payment-badge" style="background: linear-gradient(135deg, #ffd166, #ffb347);">-20% + бонус</span>
@@ -631,6 +632,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
