@@ -460,21 +460,6 @@ const App = {
             return;
         }
         
-        this.showNotification('Генерация AI фото начнется на следующем этапе!');
-        
-        // Виброотклик
-        if (window.tg) {
-            window.tg.HapticFeedback.impactOccurred('heavy');
-        }
-    },
-
-    // Начало генерации AI-фото
-    startGeneration() {
-        if (window.uploadedPhotos.length === 0) {
-            this.showNotification('Сначала загрузите фото');
-            return;
-        }
-        
         // Переходим на экран генерации
         this.showGenerationScreen();
         
@@ -1082,48 +1067,49 @@ this.updateBalance(-window.selectedStyle.credits);
         }
     },
 
-    // Настройка модального окна оплаты
-    setupPaymentModal() {
-        const modal = document.getElementById('payment-modal');
-        const closeBtn = document.getElementById('modal-close');
-        const payBtn = document.getElementById('pay-button');
-        const paymentCards = document.querySelectorAll('.payment-card');
-        
-        // Закрытие модального окна
-        closeBtn.addEventListener('click', () => {
-            this.closePaymentModal();
+   // Настройка модального окна оплаты
+setupPaymentModal() {
+    const modal = document.getElementById('payment-modal');
+    const closeBtn = document.getElementById('modal-close');
+    const payBtn = document.getElementById('pay-button');
+    const paymentCards = document.querySelectorAll('.payment-card');
+    
+    // Закрытие модального окна
+    closeBtn.addEventListener('click', () => {
+        this.closePaymentModal();
+    });
+    
+    modal.querySelector('.modal-overlay').addEventListener('click', () => {
+        this.closePaymentModal();
+    });
+    
+    // Выбор пакета кредитов
+    let selectedAmount = 100;
+    let selectedPrice = 99;
+    
+    paymentCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Убираем выделение со всех карточек
+            paymentCards.forEach(c => c.classList.remove('selected'));
+            
+            // Выделяем выбранную карточку
+            card.classList.add('selected');
+            
+            // Обновляем выбранные значения
+            selectedAmount = parseInt(card.dataset.amount);
+            selectedPrice = parseInt(card.dataset.price);
+            
+            // Обновляем информацию в модальном окне
+            document.getElementById('selected-pack').textContent = `${selectedAmount} кредитов`;
+            document.getElementById('total-price').textContent = `${selectedPrice} ₽`;
         });
-        
-        modal.querySelector('.modal-overlay').addEventListener('click', () => {
-            this.closePaymentModal();
-        });
-        
-        // Выбор пакета кредитов
-        let selectedAmount = 100;
-        let selectedPrice = 99;
-        
-        paymentCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Убираем выделение со всех карточек
-                paymentCards.forEach(c => c.classList.remove('selected'));
-                
-                // Выделяем выбранную карточку
-                card.classList.add('selected');
-                
-                // Обновляем выбранные значения
-                selectedAmount = parseInt(card.dataset.amount);
-                selectedPrice = parseInt(card.dataset.price);
-                
-                // Обновляем информацию в модальном окне
-                document.getElementById('selected-pack').textContent = `${selectedAmount} кредитов`;
-                document.getElementById('total-price').textContent = `${selectedPrice} ₽`;
-            });
-        });
-        
-       // Кнопка оплаты
-payBtn.addEventListener('click', () => {
-    this.processPayment(selectedAmount, selectedPrice);
-});
+    });
+    
+    // Кнопка оплаты
+    payBtn.addEventListener('click', () => {
+        this.processPayment(selectedAmount, selectedPrice);
+    });
+}, 
 
     // Закрытие модального окна оплаты
     closePaymentModal() {
@@ -1262,4 +1248,5 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
