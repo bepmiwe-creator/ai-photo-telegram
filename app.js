@@ -1,86 +1,44 @@
 // app.js - ПОЛНЫЙ РАБОЧИЙ КОД
 const App = {
     // Инициализация приложения
-  // Инициализация приложения
-async init() {
-    console.log('AI Photo Studio: Инициализация...');
-    
-    // 1. Ждем, пока Telegram SDK полностью загрузится
-    if (!window.Telegram || !window.Telegram.WebApp) {
-        console.warn('Telegram WebApp SDK не загружен, пробуем подождать...');
-        
-        // Пробуем подождать 1 секунду и перепроверить
-        setTimeout(() => {
-            if (!window.Telegram || !window.Telegram.WebApp) {
-                this.showTelegramWarning();
-            } else {
-                this.initializeTelegram();
-            }
-        }, 1000);
-        return;
-    }
-    
-    // 2. Если SDK уже загружен, инициализируем
-    this.initializeTelegram();
-},
+    async init() {
+        console.log('AI Photo Studio: Инициализация...');
 
-// Новая функция для инициализации Telegram
-initializeTelegram() {
-    const tg = window.Telegram.WebApp;
-    console.log('Telegram WebApp SDK найден, версия:', tg.version);
-    
-    // Расширяем на весь экран
-    tg.expand();
-    
-    // Включаем подтверждение закрытия
-    tg.enableClosingConfirmation();
-    
-    // Говорим Telegram, что мы готовы
-    tg.ready();
-    
-    console.log('Telegram WebApp готов. Пользователь:', tg.initDataUnsafe?.user);
-    console.log('Цветовая схема:', tg.themeParams);
-    
-    // 3. Настраиваем цветовую схему из Telegram
-    this.setTheme(tg);
-    
-    // 4. Показываем информацию о пользователе
-    this.displayUserInfo(tg);
-    
-    // 5. Инициализируем каталог стилей
-    this.initCatalog();
-    
-    // 6. Инициализируем кнопку профиля
-    this.initProfileButton();
-    
-    // 7. Настраиваем кнопку покупки
-    this.setupBuyButton();
-    
-    // 8. Обновляем баланс в шапке
-    this.updateHeaderBalance();
-    
-    // 9. Имитируем короткую загрузку, потом показываем главный экран
-    setTimeout(() => {
-        this.showMainScreen();
-        if (tg.HapticFeedback) {
-            tg.HapticFeedback.impactOccurred('light');
+        // 1. Ждем, пока Telegram SDK полностью загрузится
+        if (!window.Telegram || !window.Telegram.WebApp) {
+            this.showTelegramWarning();
+            return;
         }
-    }, 1500); // Уменьшили время загрузки для теста
-},
 
-// Функция для обновления баланса в шапке
-updateHeaderBalance() {
-    let balance = localStorage.getItem('ai_photo_balance');
-    if (!balance) {
-        balance = '85'; // Начальный баланс
-        localStorage.setItem('ai_photo_balance', balance);
-    }
-    
-    const headerBalance = document.querySelector('.balance-count');
-    if (headerBalance) {
-        headerBalance.textContent = balance;
-    }
-},
+        // 2. Инициализируем WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+        tg.ready();
+
+        console.log('Telegram WebApp SDK готов. Пользователь:', tg.initDataUnsafe?.user);
+
+        // 3. Настраиваем цветовую схему из Telegram
+        this.setTheme(tg);
+
+        // 4. Показываем информацию о пользователе
+        this.displayUserInfo(tg);
+
+        // 5. Инициализируем каталог стилей
+        this.initCatalog();
+
+        // 6. Инициализируем кнопку профиля
+        this.initProfileButton();
+
+        // 7. Настраиваем кнопку покупки
+        this.setupBuyButton();
+
+        // 8. Имитируем короткую загрузку, потом показываем главный экран
+        setTimeout(() => {
+            this.showMainScreen();
+            tg.HapticFeedback.impactOccurred('light');
+        }, 2000);
+    },
 
     // Предупреждение, если открыто не в Telegram
     showTelegramWarning() {
@@ -110,37 +68,25 @@ updateHeaderBalance() {
         document.body.style.backgroundColor = tg.themeParams.bg_color || '#1a1a1a';
     },
 
-   // Функция для отображения информации о пользователе
-displayUserInfo(tg) {
-    const user = tg.initDataUnsafe?.user;
-    const userInfoEl = document.getElementById('user-info');
+    // Функция для отображения информации о пользователе
+    displayUserInfo(tg) {
+        const user = tg.initDataUnsafe?.user;
+        const userInfoEl = document.getElementById('user-info');
 
-    if (user) {
-        let userName = user.first_name || '';
-        if (user.last_name) userName += ' ' + user.last_name;
-        if (!userName) userName = 'Пользователь';
+        if (user) {
+            let userName = user.first_name || '';
+            if (user.last_name) userName += ' ' + user.last_name;
+            if (!userName) userName = 'Пользователь';
 
-        userInfoEl.innerHTML = `
-            <i class="fas fa-user-circle"></i> ID: <strong>${user.id}</strong> | Имя: <strong>${userName}</strong>
-        `;
-        
-        // Сохраняем данные пользователя
-        window.userData = {
-            id: user.id,
-            first_name: user.first_name || 'Пользователь',
-            last_name: user.last_name || '',
-            username: user.username || ''
-        };
-        
-        window.tg = tg;
-        
-        console.log('Данные пользователя сохранены:', window.userData);
-    } else {
-        userInfoEl.textContent = 'Гость (войдите через Telegram)';
-        window.userData = { first_name: 'Гость' };
-        console.warn('Пользователь не определен, работаем в гостевом режиме');
-    }
-},
+            userInfoEl.innerHTML = `
+                <i class="fas fa-user-circle"></i> ID: <strong>${user.id}</strong> | Имя: <strong>${userName}</strong>
+            `;
+            window.userData = user;
+            window.tg = tg;
+        } else {
+            userInfoEl.textContent = 'Гость (войдите через Telegram)';
+        }
+    },
 
     // Инициализация каталога стилей
     initCatalog() {
@@ -821,12 +767,7 @@ displayUserInfo(tg) {
         
         // Обновляем баланс на главном экране
         document.querySelector('.credits-count').textContent = balance;
-       
- // Обновляем баланс в шапке
-const headerBalance = document.querySelector('.balance-count');
-if (headerBalance) {
-    headerBalance.textContent = balance;
-}
+        
         // Статистика (можно сохранять в localStorage)
         const generated = localStorage.getItem('ai_photos_generated') || '12';
         const styles = localStorage.getItem('ai_styles_used') || '4';
@@ -1227,16 +1168,7 @@ if (headerBalance) {
         document.querySelector('.credits-count').textContent = balance;
         document.getElementById('profile-balance').textContent = balance;
     },
-// Обновляем отображение баланса во всех местах
-    document.querySelector('.credits-count').textContent = balance;
-    document.getElementById('profile-balance').textContent = balance;
-    
-    // ОБНОВЛЯЕМ ИНДИКАТОР В ШАПКЕ
-    const headerBalance = document.querySelector('.balance-count');
-    if (headerBalance) {
-        headerBalance.textContent = balance;
-    }
-},
+
     // Показ оплаты за дополнительную функцию
     showPaymentForFeature(featureName, credits) {
         const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
@@ -1299,26 +1231,7 @@ if (headerBalance) {
     }
 };
 
-// Отладочная информация
-console.log('=== AI Photo Studio Debug Info ===');
-console.log('URL:', window.location.href);
-console.log('User Agent:', navigator.userAgent);
-console.log('Telegram SDK loaded:', !!window.Telegram);
-console.log('==================================');
-
-// Добавляем обработчик ошибок
-window.addEventListener('error', function(e) {
-    console.error('Ошибка в приложении:', e.error);
-    console.error('В файле:', e.filename, 'строка:', e.lineno);
-});
-
-// Показываем состояние загрузки
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM загружен, запускаем приложение...');
-});
 // Запускаем приложение
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
-
-
