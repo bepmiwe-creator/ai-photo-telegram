@@ -1254,7 +1254,7 @@ const App = {
         }
     },
 
-// Настройка модального окна оплаты (упрощенная версия)
+// Настройка модального окна оплаты
 setupPaymentModal() {
     const modal = document.getElementById('payment-modal');
     if (!modal) return;
@@ -1263,32 +1263,37 @@ setupPaymentModal() {
     const payBtn = document.getElementById('pay-button');
     const paymentCards = document.querySelectorAll('.payment-card');
     
-    // Клонируем и заменяем кнопки чтобы сбросить ВСЕ обработчики
-    if (payBtn) {
-        const newPayBtn = payBtn.cloneNode(true);
-        payBtn.parentNode.replaceChild(newPayBtn, payBtn);
-    }
-    
-    // Выбор пакета звезд
-    let selectedAmount = 180;
-    let selectedPrice = 180;
-    
-    // Обновляем текст
-    this.updatePaymentSummary(selectedAmount, selectedPrice);
-    
-    // 1. Закрытие модального окна
+    // Закрытие модального окна
     if (closeBtn) {
-        closeBtn.onclick = () => this.closePaymentModal();
+        closeBtn.addEventListener('click', () => {
+            this.closePaymentModal();
+        });
     }
     
     const overlay = modal.querySelector('.modal-overlay');
     if (overlay) {
-        overlay.onclick = () => this.closePaymentModal();
+        overlay.addEventListener('click', () => {
+            this.closePaymentModal();
+        });
     }
     
-    // 2. Выбор тарифов
+    // Выбор пакета звезд - НАЧАЛЬНЫЕ ЗНАЧЕНИЯ ИЗ ВЫБРАННОЙ КАРТОЧКИ
+    let selectedAmount = 180; // Значение из выбранной по умолчанию карточки
+    let selectedPrice = 180;  // Значение из выбранной по умолчанию карточки
+    
+    // Обновляем начальные значения в тексте
+    const selectedPack = document.getElementById('selected-pack');
+    const totalPrice = document.getElementById('total-price');
+    
+    if (selectedPack) {
+        selectedPack.textContent = '180 звезд';
+    }
+    if (totalPrice) {
+        totalPrice.textContent = '180 ₽';
+    }
+    
     paymentCards.forEach(card => {
-        card.onclick = () => {
+        card.addEventListener('click', () => {
             // Убираем выделение со всех карточек
             paymentCards.forEach(c => c.classList.remove('selected'));
             
@@ -1299,20 +1304,23 @@ setupPaymentModal() {
             selectedAmount = parseInt(card.dataset.amount) || 180;
             selectedPrice = parseInt(card.dataset.price) || 180;
             
-            // Обновляем информацию
-            this.updatePaymentSummary(selectedAmount, selectedPrice);
+            // Обновляем информацию в модальном окне
+            if (selectedPack) {
+                selectedPack.textContent = `${selectedAmount} звезд`;
+            }
+            if (totalPrice) {
+                totalPrice.textContent = `${selectedPrice} ₽`;
+            }
             
             console.log(`Выбран тариф: ${selectedAmount} звезд за ${selectedPrice} ₽`);
-        };
+        });
     });
     
-    // 3. Кнопка оплаты (получаем обновленную кнопку)
-    const updatedPayBtn = document.getElementById('pay-button');
-    if (updatedPayBtn) {
-        updatedPayBtn.onclick = () => {
-            console.log('ОПЛАТА: Звезд =', selectedAmount, 'Цена =', selectedPrice);
+    // Кнопка оплаты
+    if (payBtn) {
+        payBtn.addEventListener('click', () => {
             this.processPayment(selectedAmount, selectedPrice);
-        };
+        });
     }
 },
 
