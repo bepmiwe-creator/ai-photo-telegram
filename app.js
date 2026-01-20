@@ -3,15 +3,13 @@ const App = {
     // Инициализация приложения
     async init() {
         console.log('AI Photo Studio: Инициализация...');
-try {
+        
         // 1. Ждем, пока Telegram SDK полностью загрузится
-        console.log('Шаг 1: Проверка Telegram SDK...');
         if (!window.Telegram || !window.Telegram.WebApp) {
-            console.log('Telegram SDK не найден!');
+            console.log('Telegram WebApp SDK не найден!');
             this.showTelegramWarning();
             return;
         }
-        console.log('Telegram SDK найден!');
 
         // 2. Инициализируем WebApp
         const tg = window.Telegram.WebApp;
@@ -36,18 +34,20 @@ try {
         // 7. Настраиваем кнопку покупки
         this.setupBuyButton();
 
-       // 8. Устанавливаем начальный баланс
-let initialBalance = localStorage.getItem('ai_photo_balance');
-if (!initialBalance) {
-    initialBalance = '85';
-    localStorage.setItem('ai_photo_balance', initialBalance);
-}
-document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
+        // 8. Устанавливаем начальный баланс
+        let initialBalance = localStorage.getItem('ai_photo_balance');
+        if (!initialBalance) {
+            initialBalance = '85';
+            localStorage.setItem('ai_photo_balance', initialBalance);
+        }
+        document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
 
         // 9. Имитируем короткую загрузку, потом показываем главный экран
         setTimeout(() => {
             this.showMainScreen();
-            tg.HapticFeedback.impactOccurred('light');
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
         }, 2000);
     },
 
@@ -100,113 +100,89 @@ document.querySelector('.balance-amount .credits-count').textContent = initialBa
     },
 
     // Инициализация каталога стилей
-initCatalog() {
-    const styles = [
-        { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
-        { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
-        { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
-        { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
-        { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
-        { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
-        { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
-        { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
-    ];
+    initCatalog() {
+        const styles = [
+            { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
+            { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
+            { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
+            { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
+            { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
+            { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
+            { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
+            { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
+        ];
 
-    const catalogContainer = document.getElementById('catalog-container');
-    catalogContainer.innerHTML = ''; // Очищаем контейнер
-    
-    styles.forEach(style => {
-        const styleCard = document.createElement('div');
-        styleCard.className = 'style-card glass-card';
-        styleCard.innerHTML = `
-            <div class="style-icon">
-                <i class="${style.icon}"></i>
-            </div>
-            <div class="style-info">
-                <h3>${style.name}</h3>
-                <p class="style-desc">${style.desc}</p>
-            </div>
-            <div class="style-credits">
-               <span class="credits-badge">
-    <i class="fas fa-star"></i> ${style.credits} звезд
-</span>
-            </div>
-        `;
+        const catalogContainer = document.getElementById('catalog-container');
+        catalogContainer.innerHTML = ''; // Очищаем контейнер
         
-        styleCard.addEventListener('click', () => {
-            this.selectStyle(style);
+        styles.forEach(style => {
+            const styleCard = document.createElement('div');
+            styleCard.className = 'style-card glass-card';
+            styleCard.innerHTML = `
+                <div class="style-icon">
+                    <i class="${style.icon}"></i>
+                </div>
+                <div class="style-info">
+                    <h3>${style.name}</h3>
+                    <p class="style-desc">${style.desc}</p>
+                </div>
+                <div class="style-credits">
+                    <span class="credits-badge">
+                        <i class="fas fa-star"></i> ${style.credits} звезд
+                    </span>
+                </div>
+            `;
+            
+            styleCard.addEventListener('click', () => {
+                this.selectStyle(style);
+            });
+            
+            catalogContainer.appendChild(styleCard);
         });
-        
-        catalogContainer.appendChild(styleCard);
-    });
 
-    // ОБНОВЛЯЕМ БАЛАНС НА ГЛАВНОМ ЭКРАНЕ
-    this.updateBalanceDisplay();
-},
-    
-// Обновление отображения баланса во всех местах
-updateBalanceDisplay() {
-    const balance = localStorage.getItem('ai_photo_balance') || '85';
-    
-    // 1. Верхняя панель
-    const topBalanceEl = document.querySelector('.balance-amount .credits-count');
-    if (topBalanceEl) {
-        topBalanceEl.textContent = balance;
-    }
-    
-    // 2. Карточка баланса на главном экране
-    const mainBalanceEl = document.querySelector('.balance-panel .credits-count');
-    if (mainBalanceEl) {
-        mainBalanceEl.textContent = balance;
-        // Рядом с цифрой добавьте текст "звезд"
-        const label = mainBalanceEl.nextElementSibling;
-        if (label && label.classList.contains('credits-label')) {
+        // Обновляем баланс на главном экране
+        const currentBalance = localStorage.getItem('ai_photo_balance') || '85';
+        document.querySelector('.balance-panel .credits-count').textContent = currentBalance;
+        const label = document.querySelector('.balance-panel .credits-label');
+        if (label) {
             label.textContent = 'звезд';
         }
-    }
-    
-    // 3. В профиле
-    const profileBalanceEl = document.getElementById('profile-balance');
-    if (profileBalanceEl) {
-        profileBalanceEl.textContent = balance;
-    }
-    
-    console.log('Баланс обновлен:', balance, 'звезд');
-},
+    },
+
     // Обработка выбора стиля
-selectStyle(style) {
-    console.log('Выбран стиль:', style);
-    
-    // Проверяем баланс
-    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-    if (currentBalance < style.credits) {
-        this.showNotification(`Недостаточно звезд! Нужно: ${style.credits}, у вас: ${currentBalance}`);
+    selectStyle(style) {
+        console.log('Выбран стиль:', style);
         
-        // Предлагаем пополнить баланс
-        setTimeout(() => {
-            this.showPaymentModal();
-        }, 1500);
+        // Проверяем баланс
+        const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        if (currentBalance < style.credits) {
+            this.showNotification(`Недостаточно звезд! Нужно: ${style.credits}, у вас: ${currentBalance}`);
+            
+            // Предлагаем пополнить баланс
+            setTimeout(() => {
+                this.showPaymentModal();
+            }, 1500);
+            
+            return;
+        }
         
-        return;
-    }
-    
-    if (window.tg) {
-        window.tg.HapticFeedback.impactOccurred('medium');
-    }
-    
-    window.selectedStyle = style;
-    this.showUploadScreen(style);
-},
+        if (window.tg && window.tg.HapticFeedback) {
+            window.tg.HapticFeedback.impactOccurred('medium');
+        }
+        
+        window.selectedStyle = style;
+        this.showUploadScreen(style);
+    },
 
     // Настройка кнопки покупки
     setupBuyButton() {
         const btnBuy = document.getElementById('btn-buy');
         if (btnBuy) {
             btnBuy.addEventListener('click', () => {
-                if (window.tg) {
+                if (window.tg && window.tg.HapticFeedback) {
                     window.tg.HapticFeedback.impactOccurred('light');
                 }
-                this.showNotification('Система оплаты будет подключена на следующем этапе!');
+                this.showPaymentModal();
             });
         }
     },
@@ -220,22 +196,23 @@ selectStyle(style) {
             document.querySelector('.app-container').appendChild(notification);
         }
         
-       notification.innerHTML = `
-    <div class="notification-content">
-        <i class="fas fa-palette"></i> ${message}
-    </div>
-`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-palette"></i> ${message}
+            </div>
+        `;
         notification.classList.add('show');
         
         setTimeout(() => {
             notification.classList.remove('show');
         }, duration);
     },
+
     // Переход на экран загрузки фото
     showUploadScreen(style) {
         // Обновляем текст с выбранным стилем
         document.getElementById('current-style').textContent = style.name;
-        document.getElementById('credits-cost').textContent = `(${style.credits} кредитов)`;
+        document.getElementById('credits-cost').textContent = `(${style.credits} звезд)`;
         
         // Скрываем главный экран, показываем экран загрузки
         const mainScreen = document.getElementById('screen-main');
@@ -406,7 +383,7 @@ selectStyle(style) {
         this.checkGenerateButton();
         
         // Виброотклик
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
         
@@ -473,7 +450,7 @@ selectStyle(style) {
                 });
                 
                 // Виброотклик
-                if (window.tg) {
+                if (window.tg && window.tg.HapticFeedback) {
                     window.tg.HapticFeedback.notificationOccurred('success');
                 }
             }
@@ -495,47 +472,79 @@ selectStyle(style) {
         }, 400);
         
         // Виброотклик
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
     },
 
     // Начало генерации AI-фото
-startGeneration() {
-    if (window.uploadedPhotos.length === 0) {
-        this.showNotification('Сначала загрузите фото');
-        return;
-    }
-    
-    // Проверяем баланс перед генерацией
-    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-    const styleCost = window.selectedStyle.credits;
-    
-    if (currentBalance < styleCost) {
-        this.showNotification(`Недостаточно кредитов! Нужно: ${styleCost}, у вас: ${currentBalance}`);
+    startGeneration() {
+        if (window.uploadedPhotos.length === 0) {
+            this.showNotification('Сначала загрузите фото');
+            return;
+        }
         
-        // Предлагаем пополнить баланс
-        setTimeout(() => {
-            this.showPaymentModal();
-        }, 1500);
+        // Проверяем баланс перед генерацией
+        const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        const styleCost = window.selectedStyle.credits;
         
-        return;
-    }
-    
-    // СПИСЫВАЕМ БАЛАНС ЗДЕСЬ!
-    const newBalance = this.updateBalance(-styleCost);
-    
-    // Показываем уведомление о списании
-    this.showNotification(`Списано ${styleCost} кредитов. Остаток: ${newBalance}`);
-    
-    // Переходим на экран генерации
-    this.showGenerationScreen();
-    
-    // Виброотклик
-    if (window.tg) {
-        window.tg.HapticFeedback.impactOccurred('heavy');
-    }
-},
+        if (currentBalance < styleCost) {
+            this.showNotification(`Недостаточно звезд! Нужно: ${styleCost}, у вас: ${currentBalance}`);
+            
+            // Предлагаем пополнить баланс
+            setTimeout(() => {
+                this.showPaymentModal();
+            }, 1500);
+            
+            return;
+        }
+        
+        // СПИСЫВАЕМ БАЛАНС
+        const newBalance = this.updateBalance(-styleCost);
+        
+        // Показываем уведомление о списании
+        this.showNotification(`Списано ${styleCost} звезд. Остаток: ${newBalance}`);
+        
+        // Переходим на экран генерации
+        this.showGenerationScreen();
+        
+        // Виброотклик
+        if (window.tg && window.tg.HapticFeedback) {
+            window.tg.HapticFeedback.impactOccurred('heavy');
+        }
+    },
+
+    // Обновление баланса
+    updateBalance(change) {
+        // Преобразуем change в число
+        const changeNum = parseInt(change) || 0;
+        
+        // Получаем текущий баланс как число
+        let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        
+        // Обновляем баланс
+        balance += changeNum;
+        
+        // Баланс не может быть отрицательным
+        if (balance < 0) balance = 0;
+        
+        // Сохраняем
+        localStorage.setItem('ai_photo_balance', balance.toString());
+        
+        // Обновляем отображение баланса
+        document.querySelector('.balance-amount .credits-count').textContent = balance;
+        document.querySelector('.balance-panel .credits-count').textContent = balance;
+        
+        // В профиле
+        const profileBalanceEl = document.getElementById('profile-balance');
+        if (profileBalanceEl) {
+            profileBalanceEl.textContent = balance;
+        }
+        
+        console.log(`Баланс обновлен: ${changeNum} звезд. Новый баланс: ${balance}`);
+        
+        return balance;
+    },
 
     // Показ экрана генерации
     showGenerationScreen() {
@@ -646,12 +655,26 @@ startGeneration() {
     resetProgress() {
         // Сбрасываем все прогресс-бары
         for (let i = 1; i <= 4; i++) {
-            document.getElementById(`step-${i}-fill`).style.width = '0%';
+            const fillElement = document.getElementById(`step-${i}-fill`);
+            if (fillElement) {
+                fillElement.style.width = '0%';
+            }
         }
         
-        document.getElementById('main-progress-fill').style.width = '0%';
-        document.querySelector('.progress-glow').style.width = '0%';
-        document.getElementById('progress-percent').textContent = '0%';
+        const mainProgressFill = document.getElementById('main-progress-fill');
+        if (mainProgressFill) {
+            mainProgressFill.style.width = '0%';
+        }
+        
+        const progressGlow = document.querySelector('.progress-glow');
+        if (progressGlow) {
+            progressGlow.style.width = '0%';
+        }
+        
+        const percentElement = document.getElementById('progress-percent');
+        if (percentElement) {
+            percentElement.textContent = '0%';
+        }
         
         // Сбрасываем иконки шагов
         document.querySelectorAll('.step-icon').forEach(icon => {
@@ -659,8 +682,15 @@ startGeneration() {
         });
         
         // Скрываем предпросмотр и завершение
-        document.getElementById('generation-preview').classList.add('hidden');
-        document.getElementById('generation-complete').classList.add('hidden');
+        const generationPreview = document.getElementById('generation-preview');
+        if (generationPreview) {
+            generationPreview.classList.add('hidden');
+        }
+        
+        const generationComplete = document.getElementById('generation-complete');
+        if (generationComplete) {
+            generationComplete.classList.add('hidden');
+        }
     },
 
     // Обновление основного прогресс-бара
@@ -669,15 +699,23 @@ startGeneration() {
         const progressGlow = document.querySelector('.progress-glow');
         const percentElement = document.getElementById('progress-percent');
         
-        progressFill.style.width = percent + '%';
-        progressGlow.style.width = percent + '%';
-        percentElement.textContent = Math.round(percent) + '%';
+        if (progressFill) {
+            progressFill.style.width = percent + '%';
+        }
+        if (progressGlow) {
+            progressGlow.style.width = percent + '%';
+        }
+        if (percentElement) {
+            percentElement.textContent = Math.round(percent) + '%';
+        }
     },
 
     // Показ предпросмотра генерируемых фото
     showGenerationPreview() {
         const previewContainer = document.getElementById('generation-preview');
         const previewGrid = document.getElementById('generation-preview-grid');
+        
+        if (!previewContainer || !previewGrid) return;
         
         // Очищаем предыдущие превью
         previewGrid.innerHTML = '';
@@ -705,6 +743,8 @@ startGeneration() {
         const previewGrid = document.getElementById('generation-preview-grid');
         const completeContainer = document.getElementById('generation-complete');
         
+        if (!processStep || !previewGrid || !completeContainer) return;
+        
         // Обновляем текст
         processStep.textContent = '✅ Генерация завершена!';
         
@@ -727,17 +767,24 @@ startGeneration() {
             completeContainer.classList.remove('hidden');
             
             // Настраиваем кнопки
-            document.getElementById('view-results-btn').addEventListener('click', () => {
-                this.;
-            });
+            const viewResultsBtn = document.getElementById('view-results-btn');
+            const downloadAllBtn = document.getElementById('download-all-btn');
             
-            document.getElementById('download-all-btn').addEventListener('click', () => {
-                this.showNotification('Скачивание будет доступно на следующем этапе!');
-            });
+            if (viewResultsBtn) {
+                viewResultsBtn.addEventListener('click', () => {
+                    this.showResultsScreen();
+                });
+            }
+            
+            if (downloadAllBtn) {
+                downloadAllBtn.addEventListener('click', () => {
+                    this.showNotification('Скачивание будет доступно на следующем этапе!');
+                });
+            }
         }, 1000);
         
         // Виброотклик успеха
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.notificationOccurred('success');
         }
     },
@@ -746,6 +793,8 @@ startGeneration() {
     goBackToUpload() {
         const generationScreen = document.getElementById('screen-generation');
         const uploadScreen = document.getElementById('screen-upload');
+        
+        if (!generationScreen || !uploadScreen) return;
         
         generationScreen.style.opacity = '0';
         setTimeout(() => {
@@ -757,10 +806,11 @@ startGeneration() {
         }, 400);
         
         // Виброотклик
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
     },
+
     // ============================================
     // ФУНКЦИИ ДЛЯ ЭКРАНА РЕЗУЛЬТАТОВ И ПРОФИЛЯ
     // ============================================
@@ -780,6 +830,8 @@ startGeneration() {
         const currentScreen = this.getCurrentScreen();
         const profileScreen = document.getElementById('screen-profile');
         
+        if (!currentScreen || !profileScreen) return;
+        
         // Обновляем данные профиля
         this.updateProfileData();
         
@@ -796,46 +848,65 @@ startGeneration() {
         }, 400);
         
         // Виброотклик
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
     },
 
-   // Обновление данных профиля
-updateProfileData() {
-    const user = window.userData || { first_name: 'Пользователь' };
-    
-    // Имя пользователя
-    document.getElementById('profile-name').textContent = 
-        user.first_name || 'Пользователь';
-    
-    // ID пользователя
-    document.getElementById('profile-id').textContent = 
-        user.id || '000000';
-    
-    // Аватар (можно сделать первую букву имени)
-    const avatar = document.getElementById('user-avatar');
-    const firstName = user.first_name || 'П';
-    avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
-    
-    // Баланс (сохраняем в localStorage)
-    this.updateBalanceDisplay(); // <-- ДОБАВЛЯЕМ ЭТУ СТРОКУ
-    
-    // Статистика (можно сохранять в localStorage)
-    const generated = localStorage.getItem('ai_photos_generated') || '12';
-    const styles = localStorage.getItem('ai_styles_used') || '4';
-    
-    document.getElementById('photos-generated').textContent = generated;
-    document.getElementById('styles-used').textContent = styles;
-    
-    // Загружаем историю
-    this.loadHistory();
-},
+    // Обновление данных профиля
+    updateProfileData() {
+        const user = window.userData || { first_name: 'Пользователь' };
+        
+        // Имя пользователя
+        const profileName = document.getElementById('profile-name');
+        if (profileName) {
+            profileName.textContent = user.first_name || 'Пользователь';
+        }
+        
+        // ID пользователя
+        const profileId = document.getElementById('profile-id');
+        if (profileId) {
+            profileId.textContent = user.id || '000000';
+        }
+        
+        // Аватар
+        const avatar = document.getElementById('user-avatar');
+        if (avatar) {
+            const firstName = user.first_name || 'П';
+            avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
+        }
+        
+        // Баланс
+        const balance = localStorage.getItem('ai_photo_balance') || '85';
+        const profileBalance = document.getElementById('profile-balance');
+        if (profileBalance) {
+            profileBalance.textContent = balance;
+        }
+        
+        // Статистика
+        const generated = localStorage.getItem('ai_photos_generated') || '12';
+        const styles = localStorage.getItem('ai_styles_used') || '4';
+        
+        const photosGenerated = document.getElementById('photos-generated');
+        if (photosGenerated) {
+            photosGenerated.textContent = generated;
+        }
+        
+        const stylesUsed = document.getElementById('styles-used');
+        if (stylesUsed) {
+            stylesUsed.textContent = styles;
+        }
+        
+        // Загружаем историю
+        this.loadHistory();
+    },
 
     // Загрузка истории генераций
     loadHistory() {
         const historyList = document.getElementById('history-list');
         const historyEmpty = document.getElementById('history-empty');
+        
+        if (!historyList || !historyEmpty) return;
         
         // Получаем историю из localStorage
         let history = JSON.parse(localStorage.getItem('ai_generation_history')) || [];
@@ -870,7 +941,7 @@ updateProfileData() {
                     <div class="history-meta">
                         <span>${formattedDate}</span>
                         <span>${item.photos} фото</span>
-                        <span class="history-credits">${item.credits} кредитов</span>
+                        <span class="history-credits">${item.credits} звезд</span>
                     </div>
                 </div>
             `;
@@ -882,19 +953,28 @@ updateProfileData() {
     // Настройка кнопок профиля
     setupProfileButtons() {
         // Кнопка "Назад" в профиле
-        document.getElementById('back-to-main').addEventListener('click', () => {
-            this.goBackFromProfile();
-        });
+        const backToMain = document.getElementById('back-to-main');
+        if (backToMain) {
+            backToMain.addEventListener('click', () => {
+                this.goBackFromProfile();
+            });
+        }
         
         // Кнопка пополнения баланса
-        document.getElementById('add-balance-btn').addEventListener('click', () => {
-            this.showPaymentModal();
-        });
+        const addBalanceBtn = document.getElementById('add-balance-btn');
+        if (addBalanceBtn) {
+            addBalanceBtn.addEventListener('click', () => {
+                this.showPaymentModal();
+            });
+        }
         
         // Кнопка "Создать первую фотосессию"
-        document.getElementById('start-from-profile').addEventListener('click', () => {
-            this.goBackFromProfile();
-        });
+        const startFromProfile = document.getElementById('start-from-profile');
+        if (startFromProfile) {
+            startFromProfile.addEventListener('click', () => {
+                this.goBackFromProfile();
+            });
+        }
         
         // Переключатели в настройках
         document.querySelectorAll('.switch input').forEach(switchEl => {
@@ -902,9 +982,6 @@ updateProfileData() {
                 const setting = e.target.parentElement.parentElement.querySelector('span').textContent;
                 const value = e.target.checked;
                 console.log(`Настройка "${setting}" изменена на: ${value}`);
-                
-                // Можно сохранять в localStorage
-                // localStorage.setItem(`setting_${setting}`, value);
             });
         });
     },
@@ -913,6 +990,8 @@ updateProfileData() {
     goBackFromProfile() {
         const profileScreen = document.getElementById('screen-profile');
         const mainScreen = document.getElementById('screen-main');
+        
+        if (!profileScreen || !mainScreen) return;
         
         profileScreen.style.opacity = '0';
         setTimeout(() => {
@@ -924,7 +1003,7 @@ updateProfileData() {
         }, 400);
         
         // Виброотклик
-        if (window.tg) {
+        if (window.tg && window.tg.HapticFeedback) {
             window.tg.HapticFeedback.impactOccurred('light');
         }
     },
@@ -933,85 +1012,124 @@ updateProfileData() {
     // ФУНКЦИИ ДЛЯ ЭКРАНА РЕЗУЛЬТАТОВ
     // ============================================
 
-   // Показ экрана результатов
-showResultsScreen() {
-    const generationScreen = document.getElementById('screen-generation');
-    const resultsScreen = document.getElementById('screen-results');
-    
-    // Обновляем информацию
-    document.getElementById('results-style').textContent = window.selectedStyle.name;
-    document.getElementById('credits-spent').textContent = window.selectedStyle.credits;
-    
-    // Устанавливаем текущую дату
-    const now = new Date();
-    document.getElementById('order-date').textContent = now.toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-    
-    generationScreen.style.opacity = '0';
-    setTimeout(() => {
-        generationScreen.classList.add('hidden');
-        resultsScreen.classList.remove('hidden');
+    // Показ экрана результатов
+    showResultsScreen() {
+        const generationScreen = document.getElementById('screen-generation');
+        const resultsScreen = document.getElementById('screen-results');
+        
+        if (!generationScreen || !resultsScreen) return;
+        
+        // Обновляем информацию
+        const resultsStyle = document.getElementById('results-style');
+        if (resultsStyle) {
+            resultsStyle.textContent = window.selectedStyle.name;
+        }
+        
+        const creditsSpent = document.getElementById('credits-spent');
+        if (creditsSpent) {
+            creditsSpent.textContent = window.selectedStyle.credits;
+        }
+        
+        // Устанавливаем текущую дату
+        const now = new Date();
+        const orderDate = document.getElementById('order-date');
+        if (orderDate) {
+            orderDate.textContent = now.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+        
+        generationScreen.style.opacity = '0';
         setTimeout(() => {
-            resultsScreen.style.opacity = '1';
-            
-            // Настраиваем экран результатов
-            this.setupResultsScreen();
-        }, 50);
-    }, 400);
-      
-    // Сохраняем в историю
-    this.saveToHistory();
-    
-    // Виброотклик успешной генерации
-    if (window.tg) {
-        window.tg.HapticFeedback.notificationOccurred('success');
-    }
-},
+            generationScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            setTimeout(() => {
+                resultsScreen.style.opacity = '1';
+                
+                // Настраиваем экран результатов
+                this.setupResultsScreen();
+            }, 50);
+        }, 400);
+        
+        // Сохраняем в историю
+        this.saveToHistory();
+        
+        // Виброотклик успешной генерации
+        if (window.tg && window.tg.HapticFeedback) {
+            window.tg.HapticFeedback.notificationOccurred('success');
+        }
+    },
 
     // Настройка экрана результатов
     setupResultsScreen() {
         // Кнопка "Назад"
-        document.getElementById('back-to-generation').addEventListener('click', () => {
-            this.goBackToGenerationFromResults();
-        });
+        const backToGeneration = document.getElementById('back-to-generation');
+        if (backToGeneration) {
+            backToGeneration.addEventListener('click', () => {
+                this.goBackToGenerationFromResults();
+            });
+        }
         
         // Кнопка "Создать новую фотосессию"
-        document.getElementById('new-generation-btn').addEventListener('click', () => {
-            this.goBackToCatalogFromResults();
-        });
+        const newGenerationBtn = document.getElementById('new-generation-btn');
+        if (newGenerationBtn) {
+            newGenerationBtn.addEventListener('click', () => {
+                this.goBackToCatalogFromResults();
+            });
+        }
         
         // Кнопки действий
-        document.getElementById('download-single-btn').addEventListener('click', () => {
-            this.showNotification('Скачивание будет доступно при подключении AI API');
-        });
+        const downloadSingleBtn = document.getElementById('download-single-btn');
+        if (downloadSingleBtn) {
+            downloadSingleBtn.addEventListener('click', () => {
+                this.showNotification('Скачивание будет доступно при подключении AI API');
+            });
+        }
         
-        document.getElementById('download-all-results-btn').addEventListener('click', () => {
-            this.showNotification('Скачивание ZIP архива будет доступно при подключении AI API');
-        });
+        const downloadAllResultsBtn = document.getElementById('download-all-results-btn');
+        if (downloadAllResultsBtn) {
+            downloadAllResultsBtn.addEventListener('click', () => {
+                this.showNotification('Скачивание ZIP архива будет доступно при подключении AI API');
+            });
+        }
         
-        document.getElementById('share-btn').addEventListener('click', () => {
-            this.showNotification('Поделиться результатами можно после генерации реальных фото');
-        });
+        const shareBtn = document.getElementById('share-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                this.showNotification('Поделиться результатами можно после генерации реальных фото');
+            });
+        }
         
         // Дополнительные возможности
-        document.getElementById('enhance-btn').addEventListener('click', () => {
-            this.showPaymentForFeature('Улучшение качества', 3);
-        });
+        const enhanceBtn = document.getElementById('enhance-btn');
+        if (enhanceBtn) {
+            enhanceBtn.addEventListener('click', () => {
+                this.showPaymentForFeature('Улучшение качества', 3);
+            });
+        }
         
-        document.getElementById('variations-btn').addEventListener('click', () => {
-            this.showPaymentForFeature('Создание вариаций', 5);
-        });
+        const variationsBtn = document.getElementById('variations-btn');
+        if (variationsBtn) {
+            variationsBtn.addEventListener('click', () => {
+                this.showPaymentForFeature('Создание вариаций', 5);
+            });
+        }
         
-        document.getElementById('different-style-btn').addEventListener('click', () => {
-            this.showPaymentForFeature('Смена стиля', 7);
-        });
+        const differentStyleBtn = document.getElementById('different-style-btn');
+        if (differentStyleBtn) {
+            differentStyleBtn.addEventListener('click', () => {
+                this.showPaymentForFeature('Смена стиля', 7);
+            });
+        }
         
-        document.getElementById('remove-bg-btn').addEventListener('click', () => {
-            this.showPaymentForFeature('Удаление фона', 2);
-        });
+        const removeBgBtn = document.getElementById('remove-bg-btn');
+        if (removeBgBtn) {
+            removeBgBtn.addEventListener('click', () => {
+                this.showPaymentForFeature('Удаление фона', 2);
+            });
+        }
         
         // Загружаем тестовые изображения
         this.loadTestResults();
@@ -1020,16 +1138,17 @@ showResultsScreen() {
     // Загрузка тестовых результатов
     loadTestResults() {
         const galleryGrid = document.getElementById('results-gallery');
+        if (!galleryGrid) return;
         
         // Очищаем галерею
         galleryGrid.innerHTML = '';
         
-        // Тестовые URL изображений (можно заменить на свои)
+        // Тестовые URL изображений
         const testImages = [
             'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=533&fit=crop',
             'https://images.unsplash.com/photo-1494790108755-2616b786d4d9?w=400&h=533&fit=crop',
             'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=533&fit=crop',
-            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w-400&h=533&fit=crop'
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=533&fit=crop'
         ];
         
         // Создаем карточки с тестовыми изображениями
@@ -1048,7 +1167,7 @@ showResultsScreen() {
                 galleryItem.classList.toggle('selected');
                 
                 // Виброотклик
-                if (window.tg) {
+                if (window.tg && window.tg.HapticFeedback) {
                     window.tg.HapticFeedback.impactOccurred('light');
                 }
             });
@@ -1061,6 +1180,8 @@ showResultsScreen() {
     goBackToGenerationFromResults() {
         const resultsScreen = document.getElementById('screen-results');
         const generationScreen = document.getElementById('screen-generation');
+        
+        if (!resultsScreen || !generationScreen) return;
         
         resultsScreen.style.opacity = '0';
         setTimeout(() => {
@@ -1076,6 +1197,8 @@ showResultsScreen() {
     goBackToCatalogFromResults() {
         const resultsScreen = document.getElementById('screen-results');
         const mainScreen = document.getElementById('screen-main');
+        
+        if (!resultsScreen || !mainScreen) return;
         
         resultsScreen.style.opacity = '0';
         setTimeout(() => {
@@ -1094,7 +1217,7 @@ showResultsScreen() {
         history.push({
             date: new Date().toISOString(),
             style: window.selectedStyle.name,
-            photos: 4, // Количество сгенерированных фото
+            photos: 4,
             credits: window.selectedStyle.credits
         });
         
@@ -1118,157 +1241,152 @@ showResultsScreen() {
     // Показ модального окна оплаты
     showPaymentModal() {
         const modal = document.getElementById('payment-modal');
-        modal.classList.remove('hidden');
-        
-        // Настройка модального окна
-        this.setupPaymentModal();
-        
-        // Виброотклик
-        if (window.tg) {
-            window.tg.HapticFeedback.impactOccurred('medium');
+        if (modal) {
+            modal.classList.remove('hidden');
+            
+            // Настройка модального окна
+            this.setupPaymentModal();
+            
+            // Виброотклик
+            if (window.tg && window.tg.HapticFeedback) {
+                window.tg.HapticFeedback.impactOccurred('medium');
+            }
         }
     },
 
-   // Настройка модального окна оплаты
-setupPaymentModal() {
-    const modal = document.getElementById('payment-modal');
-    const closeBtn = document.getElementById('modal-close');
-    const payBtn = document.getElementById('pay-button');
-    const paymentCards = document.querySelectorAll('.payment-card');
-    
-    // Закрытие модального окна
-    closeBtn.addEventListener('click', () => {
-        this.closePaymentModal();
-    });
-    
-    modal.querySelector('.modal-overlay').addEventListener('click', () => {
-        this.closePaymentModal();
-    });
-    
-    // Выбор пакета кредитов
-    let selectedAmount = 100;
-    let selectedPrice = 99;
-    
-    paymentCards.forEach(card => {
-        card.addEventListener('click', () => {
-            // Убираем выделение со всех карточек
-            paymentCards.forEach(c => c.classList.remove('selected'));
-            
-            // Выделяем выбранную карточку
-            card.classList.add('selected');
-            
-            // Обновляем выбранные значения
-            selectedAmount = parseInt(card.dataset.amount);
-            selectedPrice = parseInt(card.dataset.price);
-            
-            // Обновляем информацию в модальном окне
-            document.getElementById('selected-pack').textContent = `${selectedAmount} кредитов`;
-            document.getElementById('total-price').textContent = `${selectedPrice} ₽`;
+    // Настройка модального окна оплаты
+    setupPaymentModal() {
+        const modal = document.getElementById('payment-modal');
+        if (!modal) return;
+        
+        const closeBtn = document.getElementById('modal-close');
+        const payBtn = document.getElementById('pay-button');
+        const paymentCards = document.querySelectorAll('.payment-card');
+        
+        // Закрытие модального окна
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.closePaymentModal();
+            });
+        }
+        
+        const overlay = modal.querySelector('.modal-overlay');
+        if (overlay) {
+            overlay.addEventListener('click', () => {
+                this.closePaymentModal();
+            });
+        }
+        
+        // Выбор пакета звезд
+        let selectedAmount = 180;
+        let selectedPrice = 180;
+        
+        paymentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // Убираем выделение со всех карточек
+                paymentCards.forEach(c => c.classList.remove('selected'));
+                
+                // Выделяем выбранную карточку
+                card.classList.add('selected');
+                
+                // Обновляем выбранные значения
+                selectedAmount = parseInt(card.dataset.amount) || 180;
+                selectedPrice = parseInt(card.dataset.price) || 180;
+                
+                // Обновляем информацию в модальном окне
+                const selectedPack = document.getElementById('selected-pack');
+                const totalPrice = document.getElementById('total-price');
+                
+                if (selectedPack) {
+                    selectedPack.textContent = `${selectedAmount} звезд`;
+                }
+                if (totalPrice) {
+                    totalPrice.textContent = `${selectedPrice} ₽`;
+                }
+            });
         });
-    });
-    
-    // Кнопка оплаты
-    payBtn.addEventListener('click', () => {
-        this.processPayment(selectedAmount, selectedPrice);
-    });
-}, 
+        
+        // Кнопка оплаты
+        if (payBtn) {
+            payBtn.addEventListener('click', () => {
+                this.processPayment(selectedAmount, selectedPrice);
+            });
+        }
+    },
 
     // Закрытие модального окна оплаты
     closePaymentModal() {
         const modal = document.getElementById('payment-modal');
-        modal.classList.add('hidden');
-        
-        // Виброотклик
-        if (window.tg) {
-            window.tg.HapticFeedback.impactOccurred('light');
+        if (modal) {
+            modal.classList.add('hidden');
+            
+            // Виброотклик
+            if (window.tg && window.tg.HapticFeedback) {
+                window.tg.HapticFeedback.impactOccurred('light');
+            }
         }
     },
 
-// Обработка оплаты (имитация)
-processPayment(amount, price) {
-    // Преобразуем в числа
-    const amountNum = parseInt(amount) || 0;
-    const priceNum = parseInt(price) || 0;
-    
-    console.log(`Оплата: ${amountNum} звезд за ${priceNum} ₽`);
-    
-    // Проверяем валидность
-    if (amountNum <= 0) {
-        this.showNotification('Ошибка: неверная сумма пополнения');
-        return;
-    }
-    
-    // Имитация процесса оплаты
-    this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
-    
-    // Через 2 секунды "завершаем" оплату
-    setTimeout(() => {
-        // Обновляем баланс
-        this.updateBalance(amountNum);
+    // Обработка оплаты (имитация)
+    processPayment(amount, price) {
+        // Преобразуем в числа
+        const amountNum = parseInt(amount) || 0;
+        const priceNum = parseInt(price) || 0;
         
-        // Закрываем модальное окно
-        this.closePaymentModal();
+        console.log(`Оплата: ${amountNum} звезд за ${priceNum} ₽`);
         
-        // Показываем успешное уведомление
-        this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
-        
-        // Виброотклик успеха
-        if (window.tg) {
-            window.tg.HapticFeedback.notificationOccurred('success');
+        // Проверяем валидность
+        if (amountNum <= 0) {
+            this.showNotification('Ошибка: неверная сумма пополнения');
+            return;
         }
-    }, 2000);
-},
-
-  // Обновление баланса
-updateBalance(change) {
-    // Преобразуем change в число (на случай, если пришла строка)
-    const changeNum = parseInt(change) || 0;
-    
-    // Получаем текущий баланс как число
-    let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-    
-    // Обновляем баланс
-    balance += changeNum;
-    
-    // Баланс не может быть отрицательным
-    if (balance < 0) balance = 0;
-    
-    // Сохраняем
-    localStorage.setItem('ai_photo_balance', balance.toString());
-    
-    // Обновляем отображение баланса ВЕЗДЕ
-    this.updateBalanceDisplay();
-    
-    console.log(`Баланс обновлен: ${changeNum} кредитов. Новый баланс: ${balance}`);
-    
-    return balance;
-},
-
-// Показ оплаты за дополнительную функцию
-showPaymentForFeature(featureName, credits) {
-    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-    const creditsNum = parseInt(credits) || 0;
-    
-    if (currentBalance < creditsNum) {
-        this.showNotification(`Недостаточно кредитов. Нужно ${creditsNum}, доступно ${currentBalance}`);
-        this.showPaymentModal();
-        return;
-    }
-    
-    // Подтверждение покупки
-    if (confirm(`Использовать ${creditsNum} кредитов для "${featureName}"?`)) {
-        // Списание кредитов (передаем отрицательное число)
-        this.updateBalance(-creditsNum);
         
-        // Показываем уведомление
-        this.showNotification(`✅ ${featureName} активировано!`);
+        // Имитация процесса оплаты
+        this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
         
-        // Виброотклик
-        if (window.tg) {
-            window.tg.HapticFeedback.notificationOccurred('success');
+        // Через 2 секунды "завершаем" оплату
+        setTimeout(() => {
+            // Обновляем баланс
+            this.updateBalance(amountNum);
+            
+            // Закрываем модальное окно
+            this.closePaymentModal();
+            
+            // Показываем успешное уведомление
+            this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
+            
+            // Виброотклик успеха
+            if (window.tg && window.tg.HapticFeedback) {
+                window.tg.HapticFeedback.notificationOccurred('success');
+            }
+        }, 2000);
+    },
+
+    // Показ оплаты за дополнительную функцию
+    showPaymentForFeature(featureName, credits) {
+        const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+        const creditsNum = parseInt(credits) || 0;
+        
+        if (currentBalance < creditsNum) {
+            this.showNotification(`Недостаточно звезд. Нужно ${creditsNum}, доступно ${currentBalance}`);
+            this.showPaymentModal();
+            return;
         }
-    }
-},
+        
+        // Подтверждение покупки
+        if (confirm(`Использовать ${creditsNum} звезд для "${featureName}"?`)) {
+            // Списание звезд
+            this.updateBalance(-creditsNum);
+            
+            // Показываем уведомление
+            this.showNotification(`✅ ${featureName} активировано!`);
+            
+            // Виброотклик
+            if (window.tg && window.tg.HapticFeedback) {
+                window.tg.HapticFeedback.notificationOccurred('success');
+            }
+        }
+    },
 
     // Получение текущего экрана
     getCurrentScreen() {
@@ -1283,7 +1401,7 @@ showPaymentForFeature(featureName, credits) {
         
         for (const screenId of screens) {
             const screen = document.getElementById(screenId);
-            if (!screen.classList.contains('hidden')) {
+            if (screen && !screen.classList.contains('hidden')) {
                 return screen;
             }
         }
@@ -1295,6 +1413,8 @@ showPaymentForFeature(featureName, credits) {
     showMainScreen() {
         const welcomeScreen = document.getElementById('screen-welcome');
         const mainScreen = document.getElementById('screen-main');
+
+        if (!welcomeScreen || !mainScreen) return;
 
         welcomeScreen.style.opacity = '0';
         setTimeout(() => {
@@ -1311,11 +1431,3 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
-
-
-
-
-
-
-
-
