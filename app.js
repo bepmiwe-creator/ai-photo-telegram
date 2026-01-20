@@ -1254,65 +1254,75 @@ const App = {
         }
     },
 
-    // Настройка модального окна оплаты
-    setupPaymentModal() {
-        const modal = document.getElementById('payment-modal');
-        if (!modal) return;
-        
-        const closeBtn = document.getElementById('modal-close');
-        const payBtn = document.getElementById('pay-button');
-        const paymentCards = document.querySelectorAll('.payment-card');
-        
-        // Закрытие модального окна
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                this.closePaymentModal();
-            });
-        }
-        
-        const overlay = modal.querySelector('.modal-overlay');
-        if (overlay) {
-            overlay.addEventListener('click', () => {
-                this.closePaymentModal();
-            });
-        }
-        
-        // Выбор пакета звезд
-        let selectedAmount = 180;
-        let selectedPrice = 180;
-        
-        paymentCards.forEach(card => {
-            card.addEventListener('click', () => {
-                // Убираем выделение со всех карточек
-                paymentCards.forEach(c => c.classList.remove('selected'));
-                
-                // Выделяем выбранную карточку
-                card.classList.add('selected');
-                
-                // Обновляем выбранные значения
-                selectedAmount = parseInt(card.dataset.amount) || 180;
-                selectedPrice = parseInt(card.dataset.price) || 180;
-                
-                // Обновляем информацию в модальном окне
-                const selectedPack = document.getElementById('selected-pack');
-                const totalPrice = document.getElementById('total-price');
-                
-                if (selectedPack) {
-                    selectedPack.textContent = `${selectedAmount} звезд`;
-                }
-                if (totalPrice) {
-                    totalPrice.textContent = `${selectedPrice} ₽`;
-                }
-            });
+// Настройка модального окна оплаты
+setupPaymentModal() {
+    const modal = document.getElementById('payment-modal');
+    if (!modal) return;
+    
+    const closeBtn = document.getElementById('modal-close');
+    const payBtn = document.getElementById('pay-button');
+    const paymentCards = document.querySelectorAll('.payment-card');
+    
+    // Закрытие модального окна
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            this.closePaymentModal();
         });
-        
-        // Кнопка оплаты
-        if (payBtn) {
-            payBtn.addEventListener('click', () => {
-                this.processPayment(selectedAmount, selectedPrice);
-            });
-        }
-    },
+    }
+    
+    const overlay = modal.querySelector('.modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', () => {
+            this.closePaymentModal();
+        });
+    }
+    
+    // Выбор пакета звезд - НАЧАЛЬНЫЕ ЗНАЧЕНИЯ ИЗ ВЫБРАННОЙ КАРТОЧКИ
+    let selectedAmount = 180; // Значение из выбранной по умолчанию карточки
+    let selectedPrice = 180;  // Значение из выбранной по умолчанию карточки
+    
+    // Обновляем начальные значения в тексте
+    const selectedPack = document.getElementById('selected-pack');
+    const totalPrice = document.getElementById('total-price');
+    
+    if (selectedPack) {
+        selectedPack.textContent = '180 звезд';
+    }
+    if (totalPrice) {
+        totalPrice.textContent = '180 ₽';
+    }
+    
+    paymentCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Убираем выделение со всех карточек
+            paymentCards.forEach(c => c.classList.remove('selected'));
+            
+            // Выделяем выбранную карточку
+            card.classList.add('selected');
+            
+            // Обновляем выбранные значения
+            selectedAmount = parseInt(card.dataset.amount) || 180;
+            selectedPrice = parseInt(card.dataset.price) || 180;
+            
+            // Обновляем информацию в модальном окне
+            if (selectedPack) {
+                selectedPack.textContent = `${selectedAmount} звезд`;
+            }
+            if (totalPrice) {
+                totalPrice.textContent = `${selectedPrice} ₽`;
+            }
+            
+            console.log(`Выбран тариф: ${selectedAmount} звезд за ${selectedPrice} ₽`);
+        });
+    });
+    
+    // Кнопка оплаты
+    if (payBtn) {
+        payBtn.addEventListener('click', () => {
+            this.processPayment(selectedAmount, selectedPrice);
+        });
+    }
+},
 
     // Закрытие модального окна оплаты
     closePaymentModal() {
@@ -1327,40 +1337,60 @@ const App = {
         }
     },
 
-    // Обработка оплаты (имитация)
-    processPayment(amount, price) {
-        // Преобразуем в числа
-        const amountNum = parseInt(amount) || 0;
-        const priceNum = parseInt(price) || 0;
+ // Обработка оплаты (имитация)
+processPayment(amount, price) {
+    // Преобразуем в числа
+    const amountNum = parseInt(amount) || 0;
+    const priceNum = parseInt(price) || 0;
+    
+    console.log(`=== НАЧАЛО ОПЛАТЫ ===`);
+    console.log(`Выбрано звезд: ${amountNum}`);
+    console.log(`Стоимость: ${priceNum} ₽`);
+    
+    // Проверяем валидность
+    if (amountNum <= 0) {
+        this.showNotification('Ошибка: неверная сумма пополнения');
+        return;
+    }
+    
+    // Получаем текущий баланс ДО пополнения
+    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    console.log(`Текущий баланс до пополнения: ${currentBalance} звезд`);
+    
+    // Рассчитываем ожидаемый баланс
+    const expectedBalance = currentBalance + amountNum;
+    console.log(`Ожидаемый баланс после пополнения: ${currentBalance} + ${amountNum} = ${expectedBalance} звезд`);
+    
+    // Имитация процесса оплаты
+    this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
+    
+    // Через 2 секунды "завершаем" оплату
+    setTimeout(() => {
+        // ОБНОВЛЯЕМ БАЛАНС - ТОЛЬКО ОДИН РАЗ!
+        const newBalance = this.updateBalance(amountNum);
         
-        console.log(`Оплата: ${amountNum} звезд за ${priceNum} ₽`);
+        // Проверяем результат
+        console.log(`=== РЕЗУЛЬТАТ ОПЛАТЫ ===`);
+        console.log(`Полученный баланс: ${newBalance} звезд`);
+        console.log(`Ожидалось: ${expectedBalance} звезд`);
+        console.log(`Совпадение: ${newBalance === expectedBalance ? 'ДА' : 'НЕТ'}`);
         
-        // Проверяем валидность
-        if (amountNum <= 0) {
-            this.showNotification('Ошибка: неверная сумма пополнения');
-            return;
+        if (newBalance !== expectedBalance) {
+            console.error(`ОШИБКА: Баланс не совпадает! Разница: ${Math.abs(newBalance - expectedBalance)} звезд`);
         }
         
-        // Имитация процесса оплаты
-        this.showNotification(`Перенаправление на ЮKassa... ${priceNum} ₽`);
+        // Закрываем модальное окно
+        this.closePaymentModal();
         
-        // Через 2 секунды "завершаем" оплату
-        setTimeout(() => {
-            // Обновляем баланс
-            this.updateBalance(amountNum);
-            
-            // Закрываем модальное окно
-            this.closePaymentModal();
-            
-            // Показываем успешное уведомление
-            this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
-            
-            // Виброотклик успеха
-            if (window.tg && window.tg.HapticFeedback) {
-                window.tg.HapticFeedback.notificationOccurred('success');
-            }
-        }, 2000);
-    },
+        // Показываем успешное уведомление
+        this.showNotification(`✅ Баланс пополнен на ${amountNum} звезд!`);
+        
+        // Виброотклик успеха
+        if (window.tg && window.tg.HapticFeedback) {
+            window.tg.HapticFeedback.notificationOccurred('success');
+        }
+    }, 2000);
+},
 
     // Показ оплаты за дополнительную функцию
     showPaymentForFeature(featureName, credits) {
@@ -1427,7 +1457,37 @@ const App = {
     }
 };
 
+// Тестовая функция для проверки математики тарифов
+function testTariffs() {
+    console.log('=== ТЕСТИРОВАНИЕ ТАРИФОВ ===');
+    
+    const tariffs = [
+        { name: 'Базовый', stars: 180, price: 180, bonus: 0 },
+        { name: 'Средний', stars: 330, price: 299, bonus: 15 },
+        { name: 'Премиум', stars: 1188, price: 990, bonus: 50 }
+    ];
+    
+    tariffs.forEach(tariff => {
+        const totalStars = tariff.stars + tariff.bonus;
+        const pricePerStar = tariff.price / totalStars;
+        const discount = tariff.name === 'Базовый' ? 0 : 
+                        tariff.name === 'Средний' ? 10 : 20;
+        
+        console.log(`\n${tariff.name}:`);
+        console.log(`  - Звезд: ${tariff.stars} + ${tariff.bonus} бонусных = ${totalStars}`);
+        console.log(`  - Цена: ${tariff.price} ₽`);
+        console.log(`  - Цена за звезду: ${pricePerStar.toFixed(2)} ₽`);
+        console.log(`  - Скидка: ${discount}%`);
+        console.log(`  - data-amount: ${totalStars}`);
+        console.log(`  - data-price: ${tariff.price}`);
+    });
+};
+
+// Можно вызвать в консоли: testTariffs()
+window.testTariffs = testTariffs;
+
 // Запускаем приложение
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
