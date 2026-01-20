@@ -4,6 +4,13 @@ const App = {
     async init() {
         console.log('AI Photo Studio: Инициализация...');
 
+        // 0. Инициализируем баланс (делаем это ПЕРВЫМ делом)
+        let initialBalance = localStorage.getItem('ai_photo_balance');
+        if (!initialBalance) {
+            initialBalance = '85';
+            localStorage.setItem('ai_photo_balance', initialBalance);
+        }
+        
         // 1. Ждем, пока Telegram SDK полностью загрузится
         if (!window.Telegram || !window.Telegram.WebApp) {
             this.showTelegramWarning();
@@ -33,7 +40,10 @@ const App = {
         // 7. Настраиваем кнопку покупки
         this.setupBuyButton();
 
-        // 8. Имитируем короткую загрузку, потом показываем главный экран
+        // 8. Устанавливаем начальный баланс в интерфейсе (после того как DOM загружен)
+        document.querySelector('.balance-amount .credits-count').textContent = initialBalance;
+
+        // 9. Имитируем короткую загрузку, потом показываем главный экран
         setTimeout(() => {
             this.showMainScreen();
             tg.HapticFeedback.impactOccurred('light');
@@ -765,8 +775,8 @@ const App = {
         }
         document.getElementById('profile-balance').textContent = balance;
         
-        // Обновляем баланс на главном экране
-        document.querySelector('.credits-count').textContent = balance;
+        // ОБНОВЛЯЕМ БАЛАНС В ВЕРХНЕЙ ПАНЕЛИ 
+    document.querySelector('.balance-amount .credits-count').textContent = balance;
         
         // Статистика (можно сохранять в localStorage)
         const generated = localStorage.getItem('ai_photos_generated') || '12';
@@ -1155,19 +1165,19 @@ const App = {
     },
 
     // Обновление баланса
-    updateBalance(change) {
-        let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
-        balance += change;
-        
-        // Баланс не может быть отрицательным
-        if (balance < 0) balance = 0;
-        
-        localStorage.setItem('ai_photo_balance', balance.toString());
-        
-        // Обновляем отображение баланса
-        document.querySelector('.credits-count').textContent = balance;
-        document.getElementById('profile-balance').textContent = balance;
-    },
+updateBalance(change) {
+    let balance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    balance += change;
+    
+    // Баланс не может быть отрицательным
+    if (balance < 0) balance = 0;
+    
+    localStorage.setItem('ai_photo_balance', balance.toString());
+    
+    // Обновляем отображение баланса ВЕЗДЕ
+    document.querySelector('.balance-amount .credits-count').textContent = balance;
+    document.getElementById('profile-balance').textContent = balance;
+},
 
     // Показ оплаты за дополнительную функцию
     showPaymentForFeature(featureName, credits) {
@@ -1235,3 +1245,4 @@ const App = {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
