@@ -1481,7 +1481,7 @@ function testTariffs() {
         console.log(`  - data-amount: ${totalStars}`);
         console.log(`  - data-price: ${tariff.price}`);
     });
-};
+}
 
 // Можно вызвать в консоли: testTariffs()
 window.testTariffs = testTariffs;
@@ -1490,4 +1490,5 @@ window.testTariffs = testTariffs;
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
