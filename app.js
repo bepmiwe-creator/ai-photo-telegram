@@ -97,59 +97,95 @@ document.querySelector('.balance-amount .credits-count').textContent = initialBa
     },
 
     // Инициализация каталога стилей
-    initCatalog() {
-        const styles = [
-            { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
-            { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
-            { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
-            { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
-            { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
-            { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
-            { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
-            { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
-        ];
+initCatalog() {
+    const styles = [
+        { id: 'business', name: 'Бизнес-портрет', icon: 'fas fa-suitcase', desc: 'Профессиональный образ для LinkedIn', credits: 5 },
+        { id: 'cyberpunk', name: 'Киберпанк', icon: 'fas fa-city', desc: 'Неоновые огни будущего', credits: 8 },
+        { id: 'fantasy', name: 'Фэнтези', icon: 'fas fa-dragon', desc: 'Мир магии и замков', credits: 8 },
+        { id: 'vintage', name: 'Винтаж', icon: 'fas fa-film', desc: 'Стиль старого кино', credits: 6 },
+        { id: 'beach', name: 'Пляжный отдых', icon: 'fas fa-umbrella-beach', desc: 'Солнце, море, песок', credits: 7 },
+        { id: 'viking', name: 'Викинг', icon: 'fas fa-shield-alt', desc: 'Суровый северный воин', credits: 9 },
+        { id: 'space', name: 'Космонавт', icon: 'fas fa-user-astronaut', desc: 'Среди звезд и галактик', credits: 10 },
+        { id: 'royal', name: 'Королевский стиль', icon: 'fas fa-crown', desc: 'Роскошь и величие', credits: 12 }
+    ];
 
-        const catalogContainer = document.getElementById('catalog-container');
-        catalogContainer.innerHTML = ''; // Очищаем контейнер
+    const catalogContainer = document.getElementById('catalog-container');
+    catalogContainer.innerHTML = ''; // Очищаем контейнер
+    
+    styles.forEach(style => {
+        const styleCard = document.createElement('div');
+        styleCard.className = 'style-card glass-card';
+        styleCard.innerHTML = `
+            <div class="style-icon">
+                <i class="${style.icon}"></i>
+            </div>
+            <div class="style-info">
+                <h3>${style.name}</h3>
+                <p class="style-desc">${style.desc}</p>
+            </div>
+            <div class="style-credits">
+                <span class="credits-badge">
+                    <i class="fas fa-star"></i> ${style.credits}
+                </span>
+            </div>
+        `;
         
-        styles.forEach(style => {
-            const styleCard = document.createElement('div');
-            styleCard.className = 'style-card glass-card';
-            styleCard.innerHTML = `
-                <div class="style-icon">
-                    <i class="${style.icon}"></i>
-                </div>
-                <div class="style-info">
-                    <h3>${style.name}</h3>
-                    <p class="style-desc">${style.desc}</p>
-                </div>
-                <div class="style-credits">
-                    <span class="credits-badge">
-                        <i class="fas fa-star"></i> ${style.credits}
-                    </span>
-                </div>
-            `;
-            
-            styleCard.addEventListener('click', () => {
-                this.selectStyle(style);
-            });
-            
-            catalogContainer.appendChild(styleCard);
+        styleCard.addEventListener('click', () => {
+            this.selectStyle(style);
         });
-    },
+        
+        catalogContainer.appendChild(styleCard);
+    });
 
+    // ОБНОВЛЯЕМ БАЛАНС НА ГЛАВНОМ ЭКРАНЕ
+    this.updateBalanceDisplay();
+},
+    
+    // Обновление отображения баланса во всех местах
+updateBalanceDisplay() {
+    const balance = localStorage.getItem('ai_photo_balance') || '85';
+    
+    // 1. Верхняя панель
+    document.querySelector('.balance-amount .credits-count').textContent = balance;
+    
+    // 2. Карточка баланса на главном экране
+    const mainBalanceEl = document.querySelector('.balance-panel .credits-count');
+    if (mainBalanceEl) {
+        mainBalanceEl.textContent = balance;
+    }
+    
+    // 3. В профиле (если он открыт)
+    const profileBalanceEl = document.getElementById('profile-balance');
+    if (profileBalanceEl) {
+        profileBalanceEl.textContent = balance;
+    }
+    
+    console.log('Баланс обновлен:', balance);
+},
     // Обработка выбора стиля
-    selectStyle(style) {
-        console.log('Выбран стиль:', style);
+selectStyle(style) {
+    console.log('Выбран стиль:', style);
+    
+    // Проверяем баланс
+    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    if (currentBalance < style.credits) {
+        this.showNotification(`Недостаточно кредитов! Нужно: ${style.credits}, у вас: ${currentBalance}`);
         
-        if (window.tg) {
-            window.tg.HapticFeedback.impactOccurred('medium');
-        }
+        // Предлагаем пополнить баланс
+        setTimeout(() => {
+            this.showPaymentModal();
+        }, 1500);
         
-        window.selectedStyle = style;
-        
-        this.showUploadScreen(style);
-    },
+        return;
+    }
+    
+    if (window.tg) {
+        window.tg.HapticFeedback.impactOccurred('medium');
+    }
+    
+    window.selectedStyle = style;
+    this.showUploadScreen(style);
+},
 
     // Настройка кнопки покупки
     setupBuyButton() {
@@ -733,44 +769,36 @@ document.querySelector('.balance-amount .credits-count').textContent = initialBa
         }
     },
 
-    // Обновление данных профиля
-    updateProfileData() {
-        const user = window.userData || { first_name: 'Пользователь' };
-        
-        // Имя пользователя
-        document.getElementById('profile-name').textContent = 
-            user.first_name || 'Пользователь';
-        
-        // ID пользователя
-        document.getElementById('profile-id').textContent = 
-            user.id || '000000';
-        
-        // Аватар (можно сделать первую букву имени)
-        const avatar = document.getElementById('user-avatar');
-        const firstName = user.first_name || 'П';
-        avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
-        
-        // Баланс (сохраняем в localStorage)
-        let balance = localStorage.getItem('ai_photo_balance');
-        if (!balance) {
-            balance = '85'; // Начальный баланс
-            localStorage.setItem('ai_photo_balance', balance);
-        }
-        document.getElementById('profile-balance').textContent = balance;
-        
-        // ОБНОВЛЯЕМ БАЛАНС В ВЕРХНЕЙ ПАНЕЛИ 
-    document.querySelector('.balance-amount .credits-count').textContent = balance;
-        
-        // Статистика (можно сохранять в localStorage)
-        const generated = localStorage.getItem('ai_photos_generated') || '12';
-        const styles = localStorage.getItem('ai_styles_used') || '4';
-        
-        document.getElementById('photos-generated').textContent = generated;
-        document.getElementById('styles-used').textContent = styles;
-        
-        // Загружаем историю
-        this.loadHistory();
-    },
+   // Обновление данных профиля
+updateProfileData() {
+    const user = window.userData || { first_name: 'Пользователь' };
+    
+    // Имя пользователя
+    document.getElementById('profile-name').textContent = 
+        user.first_name || 'Пользователь';
+    
+    // ID пользователя
+    document.getElementById('profile-id').textContent = 
+        user.id || '000000';
+    
+    // Аватар (можно сделать первую букву имени)
+    const avatar = document.getElementById('user-avatar');
+    const firstName = user.first_name || 'П';
+    avatar.innerHTML = `<span style="font-size: 2rem;">${firstName.charAt(0)}</span>`;
+    
+    // Баланс (сохраняем в localStorage)
+    this.updateBalanceDisplay(); // <-- ДОБАВЛЯЕМ ЭТУ СТРОКУ
+    
+    // Статистика (можно сохранять в localStorage)
+    const generated = localStorage.getItem('ai_photos_generated') || '12';
+    const styles = localStorage.getItem('ai_styles_used') || '4';
+    
+    document.getElementById('photos-generated').textContent = generated;
+    document.getElementById('styles-used').textContent = styles;
+    
+    // Загружаем историю
+    this.loadHistory();
+},
 
     // Загрузка истории генераций
     loadHistory() {
@@ -873,41 +901,46 @@ document.querySelector('.balance-amount .credits-count').textContent = initialBa
     // ФУНКЦИИ ДЛЯ ЭКРАНА РЕЗУЛЬТАТОВ
     // ============================================
 
-    // Показ экрана результатов
-    showResultsScreen() {
-        const generationScreen = document.getElementById('screen-generation');
-        const resultsScreen = document.getElementById('screen-results');
-        
-        // Обновляем информацию
-        document.getElementById('results-style').textContent = window.selectedStyle.name;
-        document.getElementById('credits-spent').textContent = window.selectedStyle.credits;
-        
-        // Устанавливаем текущую дату
-        const now = new Date();
-        document.getElementById('order-date').textContent = now.toLocaleDateString('ru-RU', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        });
-        
-        generationScreen.style.opacity = '0';
+   // Показ экрана результатов
+showResultsScreen() {
+    const generationScreen = document.getElementById('screen-generation');
+    const resultsScreen = document.getElementById('screen-results');
+    
+    // Обновляем информацию
+    document.getElementById('results-style').textContent = window.selectedStyle.name;
+    document.getElementById('credits-spent').textContent = window.selectedStyle.credits;
+    
+    // Устанавливаем текущую дату
+    const now = new Date();
+    document.getElementById('order-date').textContent = now.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+    
+    generationScreen.style.opacity = '0';
+    setTimeout(() => {
+        generationScreen.classList.add('hidden');
+        resultsScreen.classList.remove('hidden');
         setTimeout(() => {
-            generationScreen.classList.add('hidden');
-            resultsScreen.classList.remove('hidden');
-            setTimeout(() => {
-                resultsScreen.style.opacity = '1';
-                
-                // Настраиваем экран результатов
-                this.setupResultsScreen();
-            }, 50);
-        }, 400);
-        
-       // Сохраняем в историю
-this.saveToHistory();
-
-// Обновляем баланс (списываем кредиты) - ДОБАВЬТЕ МИНУС
-this.updateBalance(-window.selectedStyle.credits);
-    },
+            resultsScreen.style.opacity = '1';
+            
+            // Настраиваем экран результатов
+            this.setupResultsScreen();
+        }, 50);
+    }, 400);
+    
+    // Сохраняем в историю
+    this.saveToHistory();
+    
+    // ОБНОВЛЯЕМ БАЛАНС (списываем кредиты) - ВАЖНО!
+    this.updateBalance(-window.selectedStyle.credits);
+    
+    // Виброотклик успешной генерации
+    if (window.tg) {
+        window.tg.HapticFeedback.notificationOccurred('success');
+    }
+},
 
     // Настройка экрана результатов
     setupResultsScreen() {
@@ -1157,7 +1190,7 @@ processPayment(amount, price) {
     }, 2000);
 },
 
-    // Обновление баланса
+  // Обновление баланса
 updateBalance(change) {
     // Преобразуем change в число (на случай, если пришла строка)
     const changeNum = parseInt(change) || 0;
@@ -1175,10 +1208,11 @@ updateBalance(change) {
     localStorage.setItem('ai_photo_balance', balance.toString());
     
     // Обновляем отображение баланса ВЕЗДЕ
-    document.querySelector('.balance-amount .credits-count').textContent = balance;
-    document.getElementById('profile-balance').textContent = balance;
+    this.updateBalanceDisplay();
     
     console.log(`Баланс обновлен: ${changeNum} кредитов. Новый баланс: ${balance}`);
+    
+    return balance;
 },
 
 // Показ оплаты за дополнительную функцию
@@ -1248,6 +1282,7 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
