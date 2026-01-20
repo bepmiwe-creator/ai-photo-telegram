@@ -489,21 +489,42 @@ selectStyle(style) {
         }
     },
 
-    // Начало генерации (заглушка для следующего этапа)
-    startGeneration() {
-        if (window.uploadedPhotos.length === 0) {
-            this.showNotification('Сначала загрузите фото');
-            return;
-        }
+    // Начало генерации AI-фото
+startGeneration() {
+    if (window.uploadedPhotos.length === 0) {
+        this.showNotification('Сначала загрузите фото');
+        return;
+    }
+    
+    // Проверяем баланс перед генерацией
+    const currentBalance = parseInt(localStorage.getItem('ai_photo_balance') || '85');
+    const styleCost = window.selectedStyle.credits;
+    
+    if (currentBalance < styleCost) {
+        this.showNotification(`Недостаточно кредитов! Нужно: ${styleCost}, у вас: ${currentBalance}`);
         
-        // Переходим на экран генерации
-        this.showGenerationScreen();
+        // Предлагаем пополнить баланс
+        setTimeout(() => {
+            this.showPaymentModal();
+        }, 1500);
         
-        // Виброотклик
-        if (window.tg) {
-            window.tg.HapticFeedback.impactOccurred('heavy');
-        }
-    },
+        return;
+    }
+    
+    // СПИСЫВАЕМ БАЛАНС ЗДЕСЬ!
+    const newBalance = this.updateBalance(-styleCost);
+    
+    // Показываем уведомление о списании
+    this.showNotification(`Списано ${styleCost} кредитов. Остаток: ${newBalance}`);
+    
+    // Переходим на экран генерации
+    this.showGenerationScreen();
+    
+    // Виброотклик
+    if (window.tg) {
+        window.tg.HapticFeedback.impactOccurred('heavy');
+    }
+},
 
     // Показ экрана генерации
     showGenerationScreen() {
@@ -696,7 +717,7 @@ selectStyle(style) {
             
             // Настраиваем кнопки
             document.getElementById('view-results-btn').addEventListener('click', () => {
-                this.showResultsScreen();
+                this.;
             });
             
             document.getElementById('download-all-btn').addEventListener('click', () => {
@@ -929,12 +950,9 @@ showResultsScreen() {
             this.setupResultsScreen();
         }, 50);
     }, 400);
-    
+      
     // Сохраняем в историю
     this.saveToHistory();
-    
-    // ОБНОВЛЯЕМ БАЛАНС (списываем кредиты) - ВАЖНО!
-    this.updateBalance(-window.selectedStyle.credits);
     
     // Виброотклик успешной генерации
     if (window.tg) {
@@ -1282,6 +1300,7 @@ showPaymentForFeature(featureName, credits) {
 document.addEventListener('DOMContentLoaded', () => {
     App.init();
 });
+
 
 
 
