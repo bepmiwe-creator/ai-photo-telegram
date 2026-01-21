@@ -86,54 +86,195 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🍌 Nano Banana</h1>
-        <div class="info-card">
-            <p class="user-info" id="user-name">Загрузка данных...</p>
-            <p class="user-info" id="user-id">ID: ...</p>
-            <div class="balance-badge">⭐ Баланс: <span id="user-balance">0</span> звезд</div>
+    <!-- ВЕРХНИЙ HEADER (ШАПКА) -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">🍌 Nano</div>
+            <button class="balance-btn" id="balance-btn">
+                ⭐ <span id="header-balance">0</span>
+            </button>
         </div>
-        <button class="btn" onclick="alert('Раздел в разработке! 🌟')">✨ ФОТО</button>
-        <button class="btn" onclick="alert('Раздел в разработке! 📸')">📸 ФОТОСЕССИЯ</button>
-        <button class="btn" onclick="alert('Раздел в разработке! 🎬')">🎬 ВИДЕО</button>
-        
-        <div class="status" id="connection-status">
-            Подключение к Telegram...
+    </header>
+
+    <!-- ОСНОВНОЕ СОДЕРЖИМОЕ (MAIN CONTENT) -->
+    <main class="app-main" id="app-main">
+        <!-- Здесь будут меняться экраны при нажатии на Tab Bar -->
+        <!-- Сейчас здесь будет Главный экран -->
+        <div class="screen active" id="screen-main">
+            <div class="welcome-card">
+                <h2>Добро пожаловать в мир AI-фото!</h2>
+                <p>Создавайте уникальные изображения и видео с помощью искусственного интеллекта.</p>
+                <div class="quick-grid">
+                    <div class="quick-card" data-screen="photo">
+                        <div class="quick-icon">✨</div>
+                        <div class="quick-text">ФОТО</div>
+                    </div>
+                    <div class="quick-card" data-screen="photosession">
+                        <div class="quick-icon">📸</div>
+                        <div class="quick-text">ФОТОСЕССИЯ</div>
+                    </div>
+                    <div class="quick-card" data-screen="video">
+                        <div class="quick-icon">🎬</div>
+                        <div class="quick-text">ВИДЕО</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+
+        <!-- Экран ФОТО (пока пустой) -->
+        <div class="screen" id="screen-photo">
+            <h2>✨ Фото</h2>
+            <p>Здесь скоро будет каталог стилей...</p>
+        </div>
+
+        <!-- Экран ФОТОСЕССИИ (пока пустой) -->
+        <div class="screen" id="screen-photosession">
+            <h2>📸 Фотосессии</h2>
+            <p>Здесь скоро будут пакеты...</p>
+        </div>
+
+        <!-- Экран ИСТОРИИ (пока пустой) -->
+        <div class="screen" id="screen-history">
+            <h2>📚 История</h2>
+            <p>Здесь будут ваши генерации за 7 дней...</p>
+        </div>
+
+        <!-- Экран ПРОФИЛЯ -->
+        <div class="screen" id="screen-profile">
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <span class="material-icons-round" style="font-size: 64px; color: #ec407a;">person</span>
+                </div>
+                <h2 id="profile-name">Пользователь</h2>
+                <div class="profile-info">
+                    <div class="info-row">
+                        <span class="info-label">ID:</span>
+                        <span class="info-value" id="profile-id">...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Стаж:</span>
+                        <span class="info-value">С сегодняшнего дня 👶</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Баланс:</span>
+                        <span class="info-value"><strong id="profile-balance">0</strong> звёзд</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- НИЖНИЙ TAB BAR (НАВИГАЦИОННОЕ МЕНЮ) -->
+    <nav class="tab-bar">
+        <button class="tab-btn" data-screen="photo">
+            <span class="material-icons-round">photo_camera</span>
+            <span class="tab-label">Фото</span>
+        </button>
+        <button class="tab-btn" data-screen="photosession">
+            <span class="material-icons-round">collections</span>
+            <span class="tab-label">Фотосессии</span>
+        </button>
+        <button class="tab-btn active" data-screen="main">
+            <span class="material-icons-round">home</span>
+            <span class="tab-label">Главная</span>
+        </button>
+        <button class="tab-btn" data-screen="history">
+            <span class="material-icons-round">history</span>
+            <span class="tab-label">История</span>
+        </button>
+        <button class="tab-btn" data-screen="profile">
+            <span class="material-icons-round">person</span>
+            <span class="tab-label">Профиль</span>
+        </button>
+    </nav>
 
     <script>
-        // Инициализируем Telegram Web App
+        // ========== ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP ==========
         const tg = window.Telegram.WebApp;
-        
-        // Расширяем приложение на весь экран
-        tg.expand();
-        
-        // Получаем данные пользователя от Telegram
+        tg.expand(); // Раскрываем на весь экран
+
+        // Получаем данные пользователя
         const user = tg.initDataUnsafe.user;
-        
+        let userBalance = 0; // Здесь позже будем получать баланс с сервера
+
+        // ========== ОБНОВЛЯЕМ ВСЕ ПОЛЯ С ИНФОРМАЦИЕЙ О ПОЛЬЗОВАТЕЛЕ ==========
         if (user) {
-            // Выводим информацию о пользователе
-            document.getElementById('user-name').textContent = `Привет, ${user.first_name || 'Аноним'}!`;
-            document.getElementById('user-id').textContent = `ID: ${user.id}`;
-            // Здесь позже мы будем получать баланс с сервера
-            document.getElementById('user-balance').textContent = '0';
-            document.getElementById('connection-status').innerHTML = '✅ Связь с Telegram установлена!';
-            document.getElementById('connection-status').style.background = 'rgba(76, 175, 80, 0.2)';
-        } else {
-            document.getElementById('connection-status').innerHTML = '⚠️ Данные от Telegram не получены. Открой приложение через бота.';
-            document.getElementById('connection-status').style.background = 'rgba(255, 193, 7, 0.2)';
-            document.getElementById('connection-status').style.color = '#ff8f00';
+            // В шапке
+            document.getElementById('header-balance').textContent = userBalance;
+            
+            // В профиле
+            const profileName = user.first_name || 'Пользователь';
+            document.getElementById('profile-name').textContent = profileName;
+            document.getElementById('profile-id').textContent = user.id;
+            document.getElementById('profile-balance').textContent = userBalance;
         }
-        
-        // Функция для кнопки пополнения баланса (заглушка)
-        function topUpBalance() {
+
+        // ========== НАВИГАЦИЯ (TAB BAR) ==========
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const screens = document.querySelectorAll('.screen');
+        const mainContent = document.getElementById('app-main');
+
+        // Функция переключения экрана
+        function switchScreen(screenId) {
+            // 1. Убираем класс active у всех экранов и кнопок
+            screens.forEach(screen => screen.classList.remove('active'));
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // 2. Находим нужный экран и кнопку
+            const targetScreen = document.getElementById(`screen-${screenId}`);
+            const targetButton = document.querySelector(`.tab-btn[data-screen="${screenId}"]`);
+            
+            // 3. Активируем их
+            if (targetScreen && targetButton) {
+                targetScreen.classList.add('active');
+                targetButton.classList.add('active');
+                
+                // Плавная анимация появления контента
+                mainContent.style.opacity = '0';
+                setTimeout(() => {
+                    mainContent.style.opacity = '1';
+                }, 50);
+            }
+        }
+
+        // Вешаем обработчики на кнопки Tab Bar
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const screenId = button.getAttribute('data-screen');
+                switchScreen(screenId);
+            });
+        });
+
+        // Вешаем обработчики на быстрые карточки Главного экрана
+        const quickCards = document.querySelectorAll('.quick-card');
+        quickCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const screenId = card.getAttribute('data-screen');
+                switchScreen(screenId);
+            });
+        });
+
+        // ========== КНОПКА БАЛАНСА В ШАПКЕ ==========
+        document.getElementById('balance-btn').addEventListener('click', () => {
             tg.showPopup({
                 title: 'Пополнение баланса',
-                message: 'Эта функция скоро будет доступна!',
-                buttons: [{ type: 'ok' }]
+                message: `Ваш текущий баланс: ${userBalance} звёзд. Эта функция скоро будет доступна!`,
+                buttons: [{ type: 'default', text: 'Понятно' }]
             });
-        }
+            // Здесь позже будет переход в бота для пополнения
+            // tg.openTelegramLink('https://t.me/NeuroFlashStudio_bot?start=topup');
+        });
+
+        // ========== ПЛАВНЫЕ АНИМАЦИИ ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '1';
+            }, 100);
+        });
     </script>
 </body>
 </html>
+</html>
+
