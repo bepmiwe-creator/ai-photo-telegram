@@ -121,10 +121,91 @@
             </div>
         </div>
 
-        <!-- Экран ФОТО (пока пустой) -->
+                <!-- ЭКРАН ФОТО (с каталогом категорий) -->
         <div class="screen" id="screen-photo">
-            <h2>✨ Фото</h2>
-            <p>Здесь скоро будет каталог стилей...</p>
+            <div class="screen-header">
+                <h2>✨ Фото</h2>
+                <p class="screen-subtitle">Выберите стиль для генерации</p>
+            </div>
+
+            <!-- КНОПКА ГЕНЕРАЦИИ ПО ПРОМПТУ -->
+            <div class="prompt-card" id="prompt-generate-btn">
+                <div class="prompt-icon">✍️</div>
+                <div class="prompt-text">
+                    <div class="prompt-title">Генерация по описанию</div>
+                    <div class="prompt-desc">Опишите картинку словами, ИИ создаст её</div>
+                </div>
+                <div class="prompt-arrow">→</div>
+            </div>
+
+            <!-- КАТАЛОГ КАТЕГОРИЙ -->
+            <div class="categories-grid" id="categories-container">
+                <!-- Категории будут загружаться через JavaScript -->
+                <!-- Здесь появится сетка "Создать свой", "Зима", "День рождения"... -->
+            </div>
+
+            <!-- КОНТЕЙНЕР ДЛЯ ФОТО В КАТЕГОРИИ -->
+            <div class="styles-grid" id="styles-container" style="display: none;">
+                <!-- Здесь будут фото конкретной категории (например, "Зима") -->
+                <!-- Появится после нажатия на категорию -->
+            </div>
+        </div>
+
+        <!-- ЭКРАН ГЕНЕРАЦИИ (появляется поверх) -->
+        <div class="screen-overlay" id="screen-generate" style="display: none;">
+            <div class="generate-container">
+                <div class="generate-header">
+                    <button class="back-btn" id="generate-back-btn">←</button>
+                    <h3>Генерация фото</h3>
+                    <div style="width: 40px;"></div> <!-- Для выравнивания -->
+                </div>
+
+                <!-- ПРЕВЬЮ ЗАГРУЖЕННЫХ ФОТО -->
+                <div class="upload-section">
+                    <h4>Загрузите до 5 фото</h4>
+                    <div class="upload-grid" id="upload-grid">
+                        <div class="upload-item upload-add" id="upload-add-btn">
+                            <span class="material-icons-round">add</span>
+                            <span>Добавить фото</span>
+                        </div>
+                        <!-- Сюда будут добавляться превью загруженных фото -->
+                    </div>
+                </div>
+
+                <!-- ВЫБОР ФОРМАТА -->
+                <div class="format-section">
+                    <h4>Формат фото</h4>
+                    <div class="format-scroll" id="format-scroll">
+                        <!-- Варианты форматов появятся через JS -->
+                    </div>
+                </div>
+
+                <!-- ВЫБОР МОДЕЛИ -->
+                <div class="model-section">
+                    <h4>Модель ИИ</h4>
+                    <div class="model-options">
+                        <div class="model-card" data-model="nano" data-price="7">
+                            <div class="model-badge">⭐ 7</div>
+                            <div class="model-name">Nano Banana</div>
+                            <div class="model-desc">Стандартное качество</div>
+                        </div>
+                        <div class="model-card" data-model="pro" data-price="25">
+                            <div class="model-badge best">⭐ 25</div>
+                            <div class="model-name">Nano Banana Pro</div>
+                            <div class="model-desc">Высокое качество</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КНОПКА ГЕНЕРАЦИИ -->
+                <div class="generate-action">
+                    <button class="generate-btn" id="start-generate-btn">
+                        <span class="generate-icon">✨</span>
+                        <span>Сгенерировать за <span id="total-price">7</span> звёзд</span>
+                    </button>
+                    <p class="generate-hint">Создание занимает 15-60 секунд</p>
+                </div>
+            </div>
         </div>
 
         <!-- Экран ФОТОСЕССИИ (пока пустой) -->
@@ -277,4 +358,5 @@
 </body>
 </html>
 </html>
+
 
