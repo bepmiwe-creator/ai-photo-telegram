@@ -1,252 +1,139 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<html lang="ru">
-<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Nano Banana - AI Photo & Video</title>
-    <!-- Подключаем Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
-    <!-- ПОДКЛЮЧАЕМ СТИЛИ -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nano Banana AI Photo</title>
+    <!-- Подключаем стиль для нашего будущего дизайна -->
     <link rel="stylesheet" href="style.css">
-    <!-- Если создали новый файл style-nano.css, то: -->
-    <!-- <link rel="stylesheet" href="style-nano.css"> -->
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Для GitHub Pages: базовый путь -->
-    <base href="/ai-photo-telegram/">
+    <!-- Подключаем иконки (Material Icons) -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Подключаем SDK Telegram Web App -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Временные базовые стили для проверки */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #f9c5d1 0%, #fce4ec 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 60px; /* Место для будущего Header */
+            padding-bottom: 80px; /* Место для будущего Tab Bar */
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            color: #ec407a;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+        .info-card {
+            background: rgba(255, 255, 255, 0.7); /* Полупрозрачный белый для glassmorphism */
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .user-info {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #555;
+        }
+        .balance-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #ec407a, #ff80ab);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #42a5f5, #478ed1);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(66, 165, 245, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(66, 165, 245, 0.4);
+        }
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 12px;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+    </style>
 </head>
-    <!-- Основная часть с новой структурой -->
-<main class="app-main">
-    <!-- Экран загрузки/приветствия -->
-    <section class="screen screen-welcome" id="screen-welcome">
-        <div class="loader-container">
-            <div class="glass-card nano-brand">
-                <div class="banana-animation">
-                    <div class="banana"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                    <div class="sparkle"></div>
-                </div>
-                <h2>Nano Banana</h2>
-                <p>Искусственный интеллект для ваших фото и видео</p>
-            </div>
+<body>
+    <div class="container">
+        <h1>🍌 Nano Banana</h1>
+        <div class="info-card">
+            <p class="user-info" id="user-name">Загрузка данных...</p>
+            <p class="user-info" id="user-id">ID: ...</p>
+            <div class="balance-badge">⭐ Баланс: <span id="user-balance">0</span> звезд</div>
         </div>
-    </section>
-
-    <!-- Главный экран с разделами -->
-    <section class="screen screen-main hidden" id="screen-main">
-        <div class="main-header">
-            <div class="balance-mini" id="mini-balance">
-                <i class="fas fa-star"></i>
-                <span class="mini-balance-count">85</span>
-            </div>
-            <h1 class="app-logo">
-                <i class="fas fa-magic"></i> Nano Banana
-            </h1>
-        </div>
-
-        <!-- Быстрый доступ к разделам -->
-        <div class="quick-access">
-            <div class="section-card photo-card" id="photo-section">
-                <div class="section-icon">
-                    <i class="fas fa-camera"></i>
-                </div>
-                <h3>ФОТО</h3>
-                <p>Генерация фото в любом стиле</p>
-                <div class="section-badge">от 7 звёзд</div>
-            </div>
-
-            <div class="section-card photosession-card" id="photosession-section">
-                <div class="section-icon">
-                    <i class="fas fa-images"></i>
-                </div>
-                <h3>ФОТОСЕССИЯ</h3>
-                <p>10 фото в едином стиле</p>
-                <div class="section-badge">159 звёзд</div>
-            </div>
-
-            <div class="section-card video-card" id="video-section">
-                <div class="section-icon">
-                    <i class="fas fa-video"></i>
-                </div>
-                <h3>ВИДЕО</h3>
-                <p>Анимация и оживление фото</p>
-                <div class="section-badge">70+ звёзд</div>
-            </div>
-        </div>
-
-        <!-- Категории для раздела ФОТО (показывается после выбора) -->
-        <div class="categories-grid hidden" id="photo-categories">
-            <div class="category-card" data-category="winter">
-                <div class="category-icon">
-                    <i class="fas fa-snowflake"></i>
-                </div>
-                <span class="category-name">Зима</span>
-            </div>
-            
-            <div class="category-card" data-category="birthday">
-                <div class="category-icon">
-                    <i class="fas fa-birthday-cake"></i>
-                </div>
-                <span class="category-name">День рождения</span>
-            </div>
-            
-            <div class="category-card" data-category="trends">
-                <div class="category-icon">
-                    <i class="fas fa-fire"></i>
-                </div>
-                <span class="category-name">Тренды</span>
-            </div>
-            
-            <div class="category-card" data-category="couples">
-                <div class="category-icon">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <span class="category-name">Парные</span>
-            </div>
-            
-            <div class="category-card" data-category="girls">
-                <div class="category-icon">
-                    <i class="fas fa-female"></i>
-                </div>
-                <span class="category-name">Для девушек</span>
-            </div>
-            
-            <div class="category-card" data-category="guys">
-                <div class="category-icon">
-                    <i class="fas fa-male"></i>
-                </div>
-                <span class="category-name">Для мужчин</span>
-            </div>
-            
-            <div class="category-card" data-category="pets">
-                <div class="category-icon">
-                    <i class="fas fa-paw"></i>
-                </div>
-                <span class="category-name">Питомцы</span>
-            </div>
-            
-            <div class="category-card" data-category="professions">
-                <div class="category-icon">
-                    <i class="fas fa-briefcase"></i>
-                </div>
-                <span class="category-name">Профессии</span>
-            </div>
-            
-            <div class="category-card" data-category="luxury">
-                <div class="category-icon">
-                    <i class="fas fa-gem"></i>
-                </div>
-                <span class="category-name">Luxury</span>
-            </div>
-            
-            <!-- Создать свой стиль -->
-            <div class="category-card create-style" id="create-style">
-                <div class="category-icon">
-                    <i class="fas fa-plus-circle"></i>
-                </div>
-                <span class="category-name">Свой стиль</span>
-            </div>
-        </div>
-
-        <!-- Нижнее меню (Tab Bar) -->
-        <nav class="tab-bar">
-            <button class="tab-item active" data-tab="main">
-                <i class="fas fa-home"></i>
-                <span>Главная</span>
-            </button>
-            
-            <button class="tab-item" data-tab="history">
-                <i class="fas fa-history"></i>
-                <span>История</span>
-            </button>
-            
-            <button class="tab-item" data-tab="profile">
-                <i class="fas fa-user"></i>
-                <span>Профиль</span>
-            </button>
-        </nav>
-    </section>
-
-    <!-- Экран истории (будет скрыт) -->
-    <section class="screen screen-history hidden" id="screen-history">
-        <div class="screen-header">
-            <button class="back-button" id="back-to-main-from-history">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2><i class="fas fa-history"></i> История</h2>
-            <p class="screen-subtitle">Последние 7 дней</p>
-        </div>
+        <button class="btn" onclick="alert('Раздел в разработке! 🌟')">✨ ФОТО</button>
+        <button class="btn" onclick="alert('Раздел в разработке! 📸')">📸 ФОТОСЕССИЯ</button>
+        <button class="btn" onclick="alert('Раздел в разработке! 🎬')">🎬 ВИДЕО</button>
         
-        <div class="history-container" id="history-container">
-            <!-- История будет загружаться динамически -->
+        <div class="status" id="connection-status">
+            Подключение к Telegram...
         </div>
-    </section>
+    </div>
 
-    <!-- Экран профиля (обновленный) -->
-    <section class="screen screen-profile hidden" id="screen-profile">
-        <div class="screen-header">
-            <button class="back-button" id="back-to-main-from-profile">
-                <i class="fas fa-arrow-left"></i>
-            </button>
-            <h2><i class="fas fa-user-circle"></i> Профиль</h2>
-        </div>
+    <script>
+        // Инициализируем Telegram Web App
+        const tg = window.Telegram.WebApp;
         
-        <div class="profile-container">
-            <!-- Информация пользователя -->
-            <div class="profile-info glass-card">
-                <div class="avatar-section">
-                    <div class="avatar" id="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="user-details">
-                        <h3 id="profile-name">Пользователь</h3>
-                        <p class="user-id">ID: <span id="profile-id">---</span></p>
-                        <p class="member-since">Стаж: <span id="member-days">1</span> дней</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Баланс с кнопкой пополнения -->
-            <div class="profile-balance glass-card">
-                <h3><i class="fas fa-wallet"></i> Баланс</h3>
-                <div class="balance-display-large">
-                    <span class="balance-count" id="profile-balance">85</span>
-                    <span class="balance-label">звёзд</span>
-                </div>
-                <button class="btn-add-balance" id="add-balance-btn">
-                    <i class="fas fa-plus-circle"></i> Пополнить
-                </button>
-            </div>
-            
-            <!-- Статистика -->
-            <div class="profile-stats glass-card">
-                <h3><i class="fas fa-chart-line"></i> Статистика</h3>
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <span class="stat-label">Фото создано</span>
-                        <span class="stat-value" id="stat-photos">12</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Видео создано</span>
-                        <span class="stat-value" id="stat-videos">3</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Потрачено звёзд</span>
-                        <span class="stat-value" id="stat-spent">457</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Остальные экраны (оплата, генерация и т.д.) остаются -->
-    <!-- ... -->
-</main>
-
-
+        // Расширяем приложение на весь экран
+        tg.expand();
+        
+        // Получаем данные пользователя от Telegram
+        const user = tg.initDataUnsafe.user;
+        
+        if (user) {
+            // Выводим информацию о пользователе
+            document.getElementById('user-name').textContent = `Привет, ${user.first_name || 'Аноним'}!`;
+            document.getElementById('user-id').textContent = `ID: ${user.id}`;
+            // Здесь позже мы будем получать баланс с сервера
+            document.getElementById('user-balance').textContent = '0';
+            document.getElementById('connection-status').innerHTML = '✅ Связь с Telegram установлена!';
+            document.getElementById('connection-status').style.background = 'rgba(76, 175, 80, 0.2)';
+        } else {
+            document.getElementById('connection-status').innerHTML = '⚠️ Данные от Telegram не получены. Открой приложение через бота.';
+            document.getElementById('connection-status').style.background = 'rgba(255, 193, 7, 0.2)';
+            document.getElementById('connection-status').style.color = '#ff8f00';
+        }
+        
+        // Функция для кнопки пополнения баланса (заглушка)
+        function topUpBalance() {
+            tg.showPopup({
+                title: 'Пополнение баланса',
+                message: 'Эта функция скоро будет доступна!',
+                buttons: [{ type: 'ok' }]
+            });
+        }
+    </script>
+</body>
+</html>
