@@ -218,7 +218,7 @@ function showGenerateScreen() {
         // Проверяем активность кнопки
         checkGenerateButton();
         
-        // Устанавливаем обработчик закрытия
+               // Устанавливаем обработчик закрытия
         const backBtn = document.getElementById('generate-back-btn');
         if (backBtn) {
             backBtn.onclick = hideGenerateScreen;
@@ -402,6 +402,60 @@ function simulateUpload() {
     if (uploadedImages.length >= 5) {
         alert('Можно загрузить не более 5 фото');
         return;
+    }
+    
+    // В реальном приложении здесь будет вызов нативной загрузки файлов
+    // Через <input type="file"> или Telegram Web App SDK
+    
+    // Создаем скрытый input для выбора файлов
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.multiple = true;
+    fileInput.style.display = 'none';
+    
+    fileInput.onchange = function(e) {
+        const files = e.target.files;
+        if (files.length > 0) {
+            // Ограничиваем количество
+            const maxToAdd = 5 - uploadedImages.length;
+            const filesToAdd = Math.min(files.length, maxToAdd);
+            
+            for (let i = 0; i < filesToAdd; i++) {
+                const file = files[i];
+                
+                if (!file.type.startsWith('image/')) {
+                    alert('Пожалуйста, загружайте только изображения');
+                    continue;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`Фото "${file.name}" слишком большое (макс. 5MB)`);
+                    continue;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push({ 
+                        preview: e.target.result,
+                        name: file.name,
+                        size: file.size
+                    });
+                    updateUploadGrid();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    };
+    
+    // Добавляем input в документ и кликаем
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    
+    // Удаляем input после использования
+    setTimeout(() => {
+        document.body.removeChild(fileInput);
+    }, 100);
 }
     
     // Тестовые изображения
@@ -1694,6 +1748,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
