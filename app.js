@@ -218,13 +218,14 @@ function showGenerateScreen() {
         // Проверяем активность кнопки
         checkGenerateButton();
         
-               // Устанавливаем обработчик закрытия
+                       // Устанавливаем обработчик закрытия
         const backBtn = document.getElementById('generate-back-btn');
         if (backBtn) {
             backBtn.onclick = hideGenerateScreen;
         }
     }
 }
+
 // ========== НОВЫЕ ФУНКЦИИ ДЛЯ УЛУЧШЕННОГО ИНТЕРФЕЙСА ==========
 
 // 1. Загрузка форматов с иконками
@@ -418,58 +419,19 @@ function simulateUpload() {
         return;
     }
     
-    // В реальном приложении здесь будет вызов нативной загрузки файлов
-    // Через <input type="file"> или Telegram Web App SDK
+    // Имитируем загрузку (в реальном приложении будет выбор файлов)
+    alert('В реальном приложении здесь откроется выбор файлов с телефона\n\nДля демо добавляем тестовое фото');
     
-    // Создаем скрытый input для выбора файлов
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.multiple = true;
-    fileInput.style.display = 'none';
+    // Добавляем тестовое изображение
+    const testImages = [
+        'https://via.placeholder.com/300/FFC0CB/FFFFFF?text=Фото+1',
+        'https://via.placeholder.com/300/FFB6C1/FFFFFF?text=Фото+2',
+        'https://via.placeholder.com/300/FF69B4/FFFFFF?text=Фото+3'
+    ];
     
-    fileInput.onchange = function(e) {
-        const files = e.target.files;
-        if (files.length > 0) {
-            // Ограничиваем количество
-            const maxToAdd = 5 - uploadedImages.length;
-            const filesToAdd = Math.min(files.length, maxToAdd);
-            
-            for (let i = 0; i < filesToAdd; i++) {
-                const file = files[i];
-                
-                if (!file.type.startsWith('image/')) {
-                    alert('Пожалуйста, загружайте только изображения');
-                    continue;
-                }
-                
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`Фото "${file.name}" слишком большое (макс. 5MB)`);
-                    continue;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImages.push({ 
-                        preview: e.target.result,
-                        name: file.name,
-                        size: file.size
-                    });
-                    updateUploadGrid();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    };
-    
-    // Добавляем input в документ и кликаем
-    document.body.appendChild(fileInput);
-    fileInput.click();
-    
-    // Удаляем input после использования
-    setTimeout(() => {
-        document.body.removeChild(fileInput);
-    }, 100);
+    const randomImg = testImages[Math.floor(Math.random() * testImages.length)];
+    uploadedImages.push({ preview: randomImg });
+    updateUploadGrid();
 }
     
     // Тестовые изображения
@@ -1762,6 +1724,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
