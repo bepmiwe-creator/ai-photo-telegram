@@ -2685,3 +2685,10 @@ input:checked + .slider:before {
     width: 40px;
     height: 60px;
 }
+/* Размеры превью по форматам */
+.preview-box.format-1-1 { width: 60px; height: 60px; }
+.preview-box.format-4-5 { width: 48px; height: 60px; }
+.preview-box.format-16-9 { width: 60px; height: 34px; }
+.preview-box.format-9-16 { width: 34px; height: 60px; }
+.preview-box.format-3-4 { width: 45px; height: 60px; }
+.preview-box.format-2-3 { width: 40px; height: 60px; }
