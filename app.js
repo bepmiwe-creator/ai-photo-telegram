@@ -1671,13 +1671,13 @@ function setupHistoryAndProfile() {
         });
     }
     
-    // Кнопка "Создать первую генерацию"
-    const startBtn = document.getElementById('start-from-history');
-    if (startBtn) {
-        startBtn.addEventListener('click', function() {
-            switchScreen('main');
-        });
-    }
+   // Кнопка "Создать первую генерацию"
+const startBtn = document.getElementById('start-from-history');
+if (startBtn) {
+    startBtn.addEventListener('click', function() {
+        switchScreen('main');
+    });
+}
     
     // Кнопка пополнения баланса в профиле
     const addBalanceBtn = document.getElementById('add-balance-profile');
@@ -1791,7 +1791,42 @@ function setupHistoryAndProfile() {
     window.addToHistory = function(type, title, details, price) {
         addHistoryRecord(type, title, details, price);
     };
+    // Функция для переключения экрана (доступна везде)
+window.switchScreen = function(screenId) {
+    // Находим все нужные элементы
+    const screens = document.querySelectorAll('.screen');
+    const generateOverlay = document.getElementById('screen-generate');
+    const tabButtons = document.querySelectorAll('.tab-btn');
     
+    // 1. Скрываем все обычные экраны
+    screens.forEach(screen => {
+        screen.classList.remove('active');
+    });
+    
+    // 2. Скрываем оверлей генерации (если открыт)
+    if (generateOverlay) {
+        generateOverlay.style.display = 'none';
+    }
+    
+    // 3. Показываем нужный экран
+    const targetScreen = document.getElementById(`screen-${screenId}`);
+    if (targetScreen) {
+        targetScreen.classList.add('active');
+        
+        // 4. Обновляем активную кнопку в Tab Bar
+        tabButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.screen === screenId) {
+                btn.classList.add('active');
+            }
+        });
+        
+        // 5. Если перешли в Фото - загружаем категории
+        if (screenId === 'photo') {
+            loadPhotoCategories();
+        }
+    }
+};
     // Запуск инициализации
     init();
 }
@@ -1799,6 +1834,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
