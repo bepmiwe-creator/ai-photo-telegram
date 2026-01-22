@@ -330,7 +330,18 @@ function startGeneration() {
         // Списание звёзд
         userBalance -= price;
         updateBalance();
+        // Добавляем запись в историю
+        const categoryName = currentCategory === 'create' ? 'Свой стиль' : 
+                            currentCategory === 'prompt' ? 'По промпту' : 
+                            categories.find(c => c.id === currentCategory)?.title || 'Фото';
         
+        if (window.addToHistory) {
+            window.addToHistory('photo', 
+                `Фото: ${categoryName}`,
+                `Модель: ${selectedModel === 'nano' ? 'Nano Banana' : 'Nano Banana Pro'}, Формат: ${selectedFormat}`,
+                price
+            );
+        }
         alert('🎉 Генерация завершена!\nФото добавлены в ваш профиль.');
         
         // Возвращаем кнопку
@@ -673,7 +684,15 @@ function setupPhotosessions() {
                 // Списание звёзд
                 userBalance -= currentPack.price;
                 updateBalance();
-                
+               
+                // Добавляем запись в историю
+        if (window.addToHistory) {
+            window.addToHistory('photosession',
+                `Фотосессия: ${currentPack.name}`,
+                '10 фото + 3 в подарок',
+                currentPack.price
+            );
+        }
                 alert(`🎉 Фотосессия "${currentPack.name}" создана!\n\n13 уникальных фото готовы! Они сохранены в вашей Истории.`);
                 
                 // Возвращаем кнопку
@@ -855,7 +874,14 @@ function setupVideo() {
                 // Списание звёзд
                 userBalance -= price;
                 updateBalance();
-                
+                  // ДОБАВЛЯЕМ ЗАПИСЬ В ИСТОРИЮ 
+            if (window.addToHistory) {
+                window.addToHistory('video',
+                    `Video: Text-to-Video`,
+                    `Длительность: ${duration} сек, Качество: ${quality}`,
+                    price
+                );
+            }
                 alert(`🎬 Видео создано!\n\n"${prompt.substring(0, 50)}..."\n\nВидео сохранено в вашей Истории.`);
                 
                 // Возвращаем кнопку
@@ -1049,7 +1075,14 @@ function setupVideo() {
                 // Списание звёзд
                 userBalance -= price;
                 updateBalance();
-                
+                 // ДОБАВЛЯЕМ ЗАПИСЬ В ИСТОРИЮ 
+            if (window.addToHistory) {
+                window.addToHistory('video',
+                    `Video: Image-to-Video`,
+                    `Переход: ${getTransitionName(transitionType)}, Длительность: ${duration} сек`,
+                    price
+                );
+            }
                 alert(`🔄 Анимация создана!\n\nПлавный переход между кадрами (${duration} сек)\n\nВидео сохранено в вашей Истории.`);
                 
                 // Возвращаем кнопку
@@ -1106,8 +1139,17 @@ function setupVideo() {
         }
     `;
     document.head.appendChild(style);
-}
 
+// Вспомогательная функция для получения названия перехода
+    function getTransitionName(type) {
+        const transitions = {
+            'smooth': 'Плавный',
+            'morph': 'Морфинг',
+            'zoom': 'Приближение',
+            'rotate': 'Вращение'
+        };
+        return transitions[type] || type;
+    }
 // Инициализация видео при загрузке
 setupVideo();
 
@@ -1406,9 +1448,117 @@ function setupHistoryAndProfile() {
                     buttons: [{ type: 'default', text: 'Понятно' }]
                 });
             } else {
-                alert(`Ваш баланс: ${userBalance} звёзд\n\nДля пополнения от
+                alert(`Ваш баланс: ${userBalance} звёзд\n\nДля пополнения откройте приложение в Telegram боте.`);
+            }
+        });
+    }
+    
+    // Настройки профиля
+    function setupProfileSettings() {
+        // Темная тема
+        const darkModeToggle = document.getElementById('dark-mode');
+        if (darkModeToggle) {
+            darkModeToggle.checked = localStorage.getItem('nano_dark_mode') !== 'false';
+            darkModeToggle.addEventListener('change', function() {
+                localStorage.setItem('nano_dark_mode', this.checked);
+                applyTheme();
+            });
+        }
+        
+        // Автосохранение
+        const autoSaveToggle = document.getElementById('auto-save');
+        if (autoSaveToggle) {
+            autoSaveToggle.checked = localStorage.getItem('nano_auto_save') !== 'false';
+            autoSaveToggle.addEventListener('change', function() {
+                localStorage.setItem('nano_auto_save', this.checked);
+            });
+        }
+        
+        // Уведомления
+        const notificationsToggle = document.getElementById('notifications');
+        if (notificationsToggle) {
+            notificationsToggle.checked = localStorage.getItem('nano_notifications') !== 'false';
+            notificationsToggle.addEventListener('change', function() {
+                localStorage.setItem('nano_notifications', this.checked);
+            });
+        }
+    }
+    
+    // Применение темы
+    function applyTheme() {
+        const darkMode = localStorage.getItem('nano_dark_mode') !== 'false';
+        if (darkMode) {
+            document.body.classList.add('tg-theme-dark');
+        } else {
+            document.body.classList.remove('tg-theme-dark');
+        }
+    }
+    
+    // Инициализация
+    function init() {
+        // Сохраняем дату начала использования
+        if (!localStorage.getItem('nano_start_date')) {
+            localStorage.setItem('nano_start_date', new Date().toISOString());
+        }
+        
+        // Настройки по умолчанию
+        if (!localStorage.getItem('nano_dark_mode')) {
+            localStorage.setItem('nano_dark_mode', 'true');
+        }
+        if (!localStorage.getItem('nano_auto_save')) {
+            localStorage.setItem('nano_auto_save', 'true');
+        }
+        if (!localStorage.getItem('nano_notifications')) {
+            localStorage.setItem('nano_notifications', 'true');
+        }
+        
+        setupHistoryFilters();
+        setupProfileSettings();
+        applyTheme();
+        updateHistoryDisplay();
+        updateRecentList();
+        updateProfileStats();
+        
+        // Обновляем баланс в профиле
+        updateBalance();
+    }
+    
+    // Глобальные функции для истории
+    window.clearHistory = function() {
+        if (confirm('Очистить всю историю? Это действие нельзя отменить.')) {
+            history = [];
+            saveHistory();
+            updateHistoryDisplay();
+            updateRecentList();
+            alert('История очищена');
+        }
+    };
+    
+    window.downloadHistoryItem = function(id) {
+        alert('Скачивание будет доступно при подключении AI API');
+    };
+    
+    window.deleteHistoryItem = function(id) {
+        history = history.filter(record => record.id !== id);
+        saveHistory();
+        updateHistoryDisplay();
+        updateRecentList();
+    };
+    
+    // Функция для добавления записи из других модулей
+    window.addToHistory = function(type, title, details, price) {
+        addHistoryRecord(type, title, details, price);
+    };
+    
+    // Запуск инициализации
+    init();
+}
+
+// Инициализация истории и профиля
+setupHistoryAndProfile();
 
 console.log('Nano Banana App готов!');
+
 
 
 
