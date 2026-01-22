@@ -125,48 +125,91 @@
             </div>
         </div>
 
-        <!-- ЭКРАН ФОТОСЕССИИ -->
+              <!-- ЭКРАН ФОТОСЕССИИ -->
         <div class="screen" id="screen-photosession">
             <div class="screen-header">
                 <h2>📸 Фотосессии</h2>
-                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле</p>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
             </div>
             
             <div class="photosession-grid">
-                <div class="photosession-card">
+                <!-- ПАКЕТ "ЗИМНЯЯ СКАЗКА" -->
+                <div class="photosession-card" data-pack="winter">
                     <div class="photosession-icon">❄️</div>
                     <div class="photosession-title">Зимняя сказка</div>
-                    <div class="photosession-desc">10 фото в зимнем стиле</div>
-                    <div class="photosession-price">159 звёзд</div>
-                    <button class="photosession-btn">Выбрать</button>
+                    <div class="photosession-desc">10 фото в зимнем стиле с разными позами</div>
+                    <div class="photosession-count">🎯 10 фото</div>
+                    <div class="photosession-price">
+                        <span class="price-old">199 звёзд</span>
+                        <span class="price-new">159 звёзд</span>
+                    </div>
+                    <button class="photosession-btn" data-pack="winter">Выбрать пакет</button>
                 </div>
                 
-                <div class="photosession-card">
+                <!-- ПАКЕТ "СВАДЕБНАЯ" -->
+                <div class="photosession-card" data-pack="wedding">
                     <div class="photosession-icon">💍</div>
                     <div class="photosession-title">Свадебная</div>
-                    <div class="photosession-desc">10 фото для пары</div>
-                    <div class="photosession-price">159 звёзд</div>
-                    <button class="photosession-btn">Выбрать</button>
+                    <div class="photosession-desc">10 романтических фото для пары</div>
+                    <div class="photosession-count">👫 Для пар</div>
+                    <div class="photosession-price">
+                        <span class="price-old">199 звёзд</span>
+                        <span class="price-new">159 звёзд</span>
+                    </div>
+                    <button class="photosession-btn" data-pack="wedding">Выбрать пакет</button>
                 </div>
                 
-                <div class="photosession-card">
+                <!-- ПАКЕТ "ПЛЯЖНЫЙ ОТДЫХ" -->
+                <div class="photosession-card" data-pack="beach">
                     <div class="photosession-icon">🏖️</div>
                     <div class="photosession-title">Пляжный отдых</div>
-                    <div class="photosession-desc">10 летних фото</div>
-                    <div class="photosession-price">159 звёзд</div>
-                    <button class="photosession-btn">Выбрать</button>
+                    <div class="photosession-desc">10 летних фото с морской тематикой</div>
+                    <div class="photosession-count">☀️ Летний стиль</div>
+                    <div class="photosession-price">
+                        <span class="price-old">199 звёзд</span>
+                        <span class="price-new">159 звёзд</span>
+                    </div>
+                    <button class="photosession-btn" data-pack="beach">Выбрать пакет</button>
                 </div>
                 
-                <div class="photosession-card create-card">
+                <!-- ПАКЕТ "РОСКОШЬ LUXURY" -->
+                <div class="photosession-card" data-pack="luxury">
+                    <div class="photosession-icon">💎</div>
+                    <div class="photosession-title">Роскошь Luxury</div>
+                    <div class="photosession-desc">10 фото в premium-стиле</div>
+                    <div class="photosession-count">⭐ Премиум</div>
+                    <div class="photosession-price">
+                        <span class="price-old">199 звёзд</span>
+                        <span class="price-new">159 звёзд</span>
+                    </div>
+                    <button class="photosession-btn" data-pack="luxury">Выбрать пакет</button>
+                </div>
+                
+                <!-- СВОЯ ФОТОСЕССИЯ -->
+                <div class="photosession-card create-card" data-pack="custom">
                     <div class="photosession-icon">🎨</div>
                     <div class="photosession-title">Своя фотосессия</div>
-                    <div class="photosession-desc">10+3 фото в подарок</div>
-                    <div class="photosession-price">200 звёзд</div>
-                    <button class="photosession-btn">Создать</button>
+                    <div class="photosession-desc">Создайте уникальный стиль на основе вашего фото</div>
+                    <div class="photosession-count">🎁 10+3 фото в подарок</div>
+                    <div class="photosession-price">
+                        <span class="price-special">200 звёзд</span>
+                    </div>
+                    <button class="photosession-btn create-btn" data-pack="custom">Создать свою</button>
+                </div>
+            </div>
+            
+            <!-- ИНФОРМАЦИОННЫЙ БЛОК -->
+            <div class="photosession-info glass-card">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                    <h4>Как это работает?</h4>
+                    <p>1. Выберите стиль фотосессии</p>
+                    <p>2. Загрузите 3-5 своих фото</p>
+                    <p>3. ИИ создаст 10 уникальных фото в выбранном стиле + 3 фото в подарок!</p>
+                    <p>4. Все фото будут сохранены в вашей Истории на 7 дней</p>
                 </div>
             </div>
         </div>
-
         <!-- ЭКРАН ВИДЕО -->
         <div class="screen" id="screen-video">
             <div class="screen-header">
@@ -278,4 +321,5 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
