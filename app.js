@@ -487,7 +487,6 @@ function simulateUpload() {
     const randomImg = testImages[Math.floor(Math.random() * testImages.length)];
     uploadedImages.push({ preview: randomImg });
     updateUploadGrid();
-}
 
 function updateUploadGrid() {
     const container = document.getElementById('upload-grid');
@@ -1767,6 +1766,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
