@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nano Banana AI Photo</title>
-    <!-- Подключаем стиль для нашего будущего дизайна -->
+    <!-- Подключаем стиль -->
     <link rel="stylesheet" href="style.css">
     <!-- Подключаем иконки (Material Icons) -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <!-- Подключаем SDK Telegram Web App -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <!-- Подключаем наш основной скрипт -->
-    <script src="app.js"></script>
 </head>
 <body>
     <!-- ВЕРХНИЙ HEADER (ШАПКА) -->
@@ -19,15 +17,14 @@
         <div class="header-content">
             <div class="logo">🍌 Nano</div>
             <button class="balance-btn" id="balance-btn">
-                ⭐ <span id="header-balance">0</span>
+                ⭐ <span id="header-balance">85</span>
             </button>
         </div>
     </header>
 
-    <!-- ОСНОВНОЕ СОДЕРЖИМОЕ (MAIN CONTENT) -->
+    <!-- ОСНОВНОЕ СОДЕРЖИМОЕ -->
     <main class="app-main" id="app-main">
-        <!-- Здесь будут меняться экраны при нажатии на Tab Bar -->
-        <!-- Сейчас здесь будет Главный экран -->
+        <!-- ГЛАВНЫЙ ЭКРАН -->
         <div class="screen active" id="screen-main">
             <div class="welcome-card">
                 <h2>Добро пожаловать в мир AI-фото!</h2>
@@ -49,7 +46,7 @@
             </div>
         </div>
 
-                <!-- ЭКРАН ФОТО (с каталогом категорий) -->
+        <!-- ЭКРАН ФОТО -->
         <div class="screen" id="screen-photo">
             <div class="screen-header">
                 <h2>✨ Фото</h2>
@@ -68,27 +65,20 @@
 
             <!-- КАТАЛОГ КАТЕГОРИЙ -->
             <div class="categories-grid" id="categories-container">
-                <!-- Категории будут загружаться через JavaScript -->
-                <!-- Здесь появится сетка "Создать свой", "Зима", "День рождения"... -->
-            </div>
-
-            <!-- КОНТЕЙНЕР ДЛЯ ФОТО В КАТЕГОРИИ -->
-            <div class="styles-grid" id="styles-container" style="display: none;">
-                <!-- Здесь будут фото конкретной категории (например, "Зима") -->
-                <!-- Появится после нажатия на категорию -->
+                <!-- Категории загружаются через JavaScript -->
             </div>
         </div>
 
-        <!-- ЭКРАН ГЕНЕРАЦИИ (появляется поверх) -->
-        <div class="screen-overlay" id="screen-generate" style="display: none;">
+        <!-- ЭКРАН ГЕНЕРАЦИИ -->
+        <div class="screen-overlay" id="screen-generate">
             <div class="generate-container">
                 <div class="generate-header">
                     <button class="back-btn" id="generate-back-btn">←</button>
                     <h3>Генерация фото</h3>
-                    <div style="width: 40px;"></div> <!-- Для выравнивания -->
+                    <div style="width: 40px;"></div>
                 </div>
 
-                <!-- ПРЕВЬЮ ЗАГРУЖЕННЫХ ФОТО -->
+                <!-- ЗАГРУЗКА ФОТО -->
                 <div class="upload-section">
                     <h4>Загрузите до 5 фото</h4>
                     <div class="upload-grid" id="upload-grid">
@@ -96,7 +86,6 @@
                             <span class="material-icons-round">add</span>
                             <span>Добавить фото</span>
                         </div>
-                        <!-- Сюда будут добавляться превью загруженных фото -->
                     </div>
                 </div>
 
@@ -104,7 +93,7 @@
                 <div class="format-section">
                     <h4>Формат фото</h4>
                     <div class="format-scroll" id="format-scroll">
-                        <!-- Варианты форматов появятся через JS -->
+                        <!-- Форматы загружаются через JS -->
                     </div>
                 </div>
 
@@ -136,19 +125,107 @@
             </div>
         </div>
 
-        <!-- Экран ФОТОСЕССИИ (пока пустой) -->
+        <!-- ЭКРАН ФОТОСЕССИИ -->
         <div class="screen" id="screen-photosession">
-            <h2>📸 Фотосессии</h2>
-            <p>Здесь скоро будут пакеты...</p>
+            <div class="screen-header">
+                <h2>📸 Фотосессии</h2>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле</p>
+            </div>
+            
+            <div class="photosession-grid">
+                <div class="photosession-card">
+                    <div class="photosession-icon">❄️</div>
+                    <div class="photosession-title">Зимняя сказка</div>
+                    <div class="photosession-desc">10 фото в зимнем стиле</div>
+                    <div class="photosession-price">159 звёзд</div>
+                    <button class="photosession-btn">Выбрать</button>
+                </div>
+                
+                <div class="photosession-card">
+                    <div class="photosession-icon">💍</div>
+                    <div class="photosession-title">Свадебная</div>
+                    <div class="photosession-desc">10 фото для пары</div>
+                    <div class="photosession-price">159 звёзд</div>
+                    <button class="photosession-btn">Выбрать</button>
+                </div>
+                
+                <div class="photosession-card">
+                    <div class="photosession-icon">🏖️</div>
+                    <div class="photosession-title">Пляжный отдых</div>
+                    <div class="photosession-desc">10 летних фото</div>
+                    <div class="photosession-price">159 звёзд</div>
+                    <button class="photosession-btn">Выбрать</button>
+                </div>
+                
+                <div class="photosession-card create-card">
+                    <div class="photosession-icon">🎨</div>
+                    <div class="photosession-title">Своя фотосессия</div>
+                    <div class="photosession-desc">10+3 фото в подарок</div>
+                    <div class="photosession-price">200 звёзд</div>
+                    <button class="photosession-btn">Создать</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Экран ИСТОРИИ (пока пустой) -->
+        <!-- ЭКРАН ВИДЕО -->
+        <div class="screen" id="screen-video">
+            <div class="screen-header">
+                <h2>🎬 Видео</h2>
+                <p class="screen-subtitle">AI-генерация видео из фото и текста</p>
+            </div>
+            
+            <div class="video-options">
+                <div class="video-card">
+                    <div class="video-icon">✍️</div>
+                    <div class="video-title">Text-to-Video</div>
+                    <div class="video-desc">Видео по текстовому описанию</div>
+                    <div class="video-price">70 звёзд</div>
+                    <button class="video-btn">Создать</button>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-icon">🔄</div>
+                    <div class="video-title">Image-to-Video</div>
+                    <div class="video-desc">Анимация между кадрами</div>
+                    <div class="video-price">70 звёзд</div>
+                    <button class="video-btn">Создать</button>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-icon">🎞️</div>
+                    <div class="video-title">Reference Video</div>
+                    <div class="video-desc">Видео в стиле картинки</div>
+                    <div class="video-price">70 звёзд</div>
+                    <button class="video-btn">Создать</button>
+                </div>
+                
+                <div class="video-card">
+                    <div class="video-icon">🖼️</div>
+                    <div class="video-title">Оживить фото</div>
+                    <div class="video-desc">Слайд-шоу с музыкой</div>
+                    <div class="video-price">300 звёзд</div>
+                    <button class="video-btn premium">Создать</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
-            <h2>📚 История</h2>
-            <p>Здесь будут ваши генерации за 7 дней...</p>
+            <div class="screen-header">
+                <h2>📚 История</h2>
+                <p class="screen-subtitle">Ваши генерации за последние 7 дней</p>
+            </div>
+            
+            <div class="history-list" id="history-list">
+                <div class="history-empty">
+                    <div class="empty-icon">📭</div>
+                    <p>У вас пока нет созданных фото</p>
+                    <p class="empty-hint">Начните с раздела "Фото" или "Фотосессия"</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Экран ПРОФИЛЯ -->
+        <!-- ЭКРАН ПРОФИЛЯ -->
         <div class="screen" id="screen-profile">
             <div class="profile-card">
                 <div class="profile-avatar">
@@ -166,14 +243,14 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Баланс:</span>
-                        <span class="info-value"><strong id="profile-balance">0</strong> звёзд</span>
+                        <span class="info-value"><strong id="profile-balance">85</strong> звёзд</span>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- НИЖНИЙ TAB BAR (НАВИГАЦИОННОЕ МЕНЮ) -->
+    <!-- НИЖНИЙ TAB BAR -->
     <nav class="tab-bar">
         <button class="tab-btn" data-screen="photo">
             <span class="material-icons-round">photo_camera</span>
@@ -197,96 +274,7 @@
         </button>
     </nav>
 
-    <script>
-        // ========== ИНИЦИАЛИЗАЦИЯ TELEGRAM WEB APP ==========
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Раскрываем на весь экран
-
-        // Получаем данные пользователя
-        const user = tg.initDataUnsafe.user;
-        let userBalance = 0; // Здесь позже будем получать баланс с сервера
-
-        // ========== ОБНОВЛЯЕМ ВСЕ ПОЛЯ С ИНФОРМАЦИЕЙ О ПОЛЬЗОВАТЕЛЕ ==========
-        if (user) {
-            // В шапке
-            document.getElementById('header-balance').textContent = userBalance;
-            
-            // В профиле
-            const profileName = user.first_name || 'Пользователь';
-            document.getElementById('profile-name').textContent = profileName;
-            document.getElementById('profile-id').textContent = user.id;
-            document.getElementById('profile-balance').textContent = userBalance;
-        }
-
-        // ========== НАВИГАЦИЯ (TAB BAR) ==========
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const screens = document.querySelectorAll('.screen');
-        const mainContent = document.getElementById('app-main');
-
-        // Функция переключения экрана
-        function switchScreen(screenId) {
-            // 1. Убираем класс active у всех экранов и кнопок
-            screens.forEach(screen => screen.classList.remove('active'));
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // 2. Находим нужный экран и кнопку
-            const targetScreen = document.getElementById(`screen-${screenId}`);
-            const targetButton = document.querySelector(`.tab-btn[data-screen="${screenId}"]`);
-            
-            // 3. Активируем их
-            if (targetScreen && targetButton) {
-                targetScreen.classList.add('active');
-                targetButton.classList.add('active');
-                
-                // Плавная анимация появления контента
-                mainContent.style.opacity = '0';
-                setTimeout(() => {
-                    mainContent.style.opacity = '1';
-                }, 50);
-            }
-        }
-
-        // Вешаем обработчики на кнопки Tab Bar
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const screenId = button.getAttribute('data-screen');
-                switchScreen(screenId);
-            });
-        });
-
-        // Вешаем обработчики на быстрые карточки Главного экрана
-        const quickCards = document.querySelectorAll('.quick-card');
-        quickCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const screenId = card.getAttribute('data-screen');
-                switchScreen(screenId);
-            });
-        });
-
-        // ========== КНОПКА БАЛАНСА В ШАПКЕ ==========
-        document.getElementById('balance-btn').addEventListener('click', () => {
-            tg.showPopup({
-                title: 'Пополнение баланса',
-                message: `Ваш текущий баланс: ${userBalance} звёзд. Эта функция скоро будет доступна!`,
-                buttons: [{ type: 'default', text: 'Понятно' }]
-            });
-            // Здесь позже будет переход в бота для пополнения
-            // tg.openTelegramLink('https://t.me/NeuroFlashStudio_bot?start=topup');
-        });
-
-        // ========== ПЛАВНЫЕ АНИМАЦИИ ==========
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.style.opacity = '0';
-            setTimeout(() => {
-                document.body.style.transition = 'opacity 0.5s ease';
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-    </script>
+    <!-- ПОДКЛЮЧАЕМ НАШ СКРИПТ -->
+    <script src="app.js"></script>
 </body>
 </html>
-</html>
-
-
-
-
