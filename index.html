@@ -310,48 +310,240 @@
             </div>
         </div>
         
-        <!-- ЭКРАН ВИДЕО -->
+               <!-- ЭКРАН ВИДЕО -->
         <div class="screen" id="screen-video">
             <div class="screen-header">
                 <h2>🎬 Видео</h2>
-                <p class="screen-subtitle">AI-генерация видео из фото и текста</p>
+                <p class="screen-subtitle">AI-генерация видео из фото и текста. Длительность: 3-10 секунд</p>
             </div>
             
             <div class="video-options">
-                <div class="video-card">
+                <!-- TEXT-TO-VIDEO -->
+                <div class="video-card" data-video-type="text">
                     <div class="video-icon">✍️</div>
                     <div class="video-title">Text-to-Video</div>
-                    <div class="video-desc">Видео по текстовому описанию</div>
+                    <div class="video-desc">Опишите сцену словами, ИИ создаст видео</div>
+                    <div class="video-details">
+                        <span class="detail">🎞️ 3-5 сек</span>
+                        <span class="detail">🔄 AI SVD</span>
+                    </div>
                     <div class="video-price">70 звёзд</div>
-                    <button class="video-btn">Создать</button>
+                    <button class="video-btn" data-video-type="text">Создать</button>
                 </div>
                 
-                <div class="video-card">
+                <!-- IMAGE-TO-VIDEO -->
+                <div class="video-card" data-video-type="image">
                     <div class="video-icon">🔄</div>
                     <div class="video-title">Image-to-Video</div>
-                    <div class="video-desc">Анимация между кадрами</div>
+                    <div class="video-desc">Анимация перехода между двумя кадрами</div>
+                    <div class="video-details">
+                        <span class="detail">📸 Start/End frames</span>
+                        <span class="detail">🎬 5-7 сек</span>
+                    </div>
                     <div class="video-price">70 звёзд</div>
-                    <button class="video-btn">Создать</button>
+                    <button class="video-btn" data-video-type="image">Создать</button>
                 </div>
                 
-                <div class="video-card">
+                <!-- REFERENCE VIDEO -->
+                <div class="video-card" data-video-type="reference">
                     <div class="video-icon">🎞️</div>
                     <div class="video-title">Reference Video</div>
-                    <div class="video-desc">Видео в стиле картинки</div>
+                    <div class="video-desc">Видео в стиле загруженной картинки</div>
+                    <div class="video-details">
+                        <span class="detail">🎨 Стиль картинки</span>
+                        <span class="detail">⏱️ 4-6 сек</span>
+                    </div>
                     <div class="video-price">70 звёзд</div>
-                    <button class="video-btn">Создать</button>
+                    <button class="video-btn" data-video-type="reference">Создать</button>
                 </div>
                 
-                <div class="video-card">
+                <!-- ОЖИВИТЬ ФОТО -->
+                <div class="video-card premium" data-video-type="animate">
+                    <div class="video-badge">ПРЕМИУМ</div>
                     <div class="video-icon">🖼️</div>
                     <div class="video-title">Оживить фото</div>
-                    <div class="video-desc">Слайд-шоу с музыкой</div>
+                    <div class="video-desc">Слайд-шоу из фото с музыкой и эффектами</div>
+                    <div class="video-details">
+                        <span class="detail">🎵 С музыкой</span>
+                        <span class="detail">✨ Эффекты</span>
+                    </div>
                     <div class="video-price">300 звёзд</div>
-                    <button class="video-btn premium">Создать</button>
+                    <button class="video-btn premium" data-video-type="animate">Создать</button>
+                </div>
+            </div>
+            
+            <!-- ИНФОРМАЦИЯ О ВИДЕО -->
+            <div class="video-info glass-card">
+                <div class="info-icon">📹</div>
+                <div class="info-content">
+                    <h4>Технические детали</h4>
+                    <p>• Формат видео: MP4, 720p или 1080p</p>
+                    <p>• Частота кадров: 24-30 FPS</p>
+                    <p>• Длительность: 3-10 секунд</p>
+                    <p>• Поддерживаемые модели: Stable Video Diffusion, AnimateDiff</p>
+                    <p>• Время генерации: 30-90 секунд</p>
                 </div>
             </div>
         </div>
-
+        <!-- ЭКРАН ГЕНЕРАЦИИ TEXT-TO-VIDEO -->
+        <div class="screen-overlay" id="screen-video-text" style="display: none;">
+            <div class="video-generate-container">
+                <div class="generate-header">
+                    <button class="back-btn" id="video-text-back-btn">←</button>
+                    <h3>Text-to-Video</h3>
+                    <div style="width: 40px;"></div>
+                </div>
+                
+                <div class="video-generate-content">
+                    <div class="video-input-section">
+                        <h4>Опишите сцену для видео</h4>
+                        <p class="input-hint">Чем подробнее описание, тем лучше результат</p>
+                        
+                        <textarea class="video-textarea" id="video-prompt" placeholder="Пример: Девушка в розовом платье танцует под дождем в неоновом городе, медленная съемка, кинематографично, атмосферно, детализированные капли дождя, отражения в лужах..." rows="6"></textarea>
+                        
+                        <div class="prompt-examples">
+                            <p class="examples-title">Примеры промптов:</p>
+                            <div class="example-chip" data-example="Космонавт в открытом космосе, Земля на фоне, звезды мерцают, медленное вращение, эпичная музыка">Космос</div>
+                            <div class="example-chip" data-example="Кот в костюме супергероя летит над ночным городом, неоновые огни, динамичный полет">Суперкот</div>
+                            <div class="example-chip" data-example="Водопад в волшебном лесу, светлячки, магическое сияние, фэнтези атмосфера">Волшебный лес</div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-settings">
+                        <h4>Настройки видео</h4>
+                        
+                        <div class="setting-row">
+                            <label>Длительность:</label>
+                            <select id="video-duration">
+                                <option value="3">3 секунды</option>
+                                <option value="5" selected>5 секунд</option>
+                                <option value="7">7 секунд</option>
+                                <option value="10">10 секунд</option>
+                            </select>
+                        </div>
+                        
+                        <div class="setting-row">
+                            <label>Качество:</label>
+                            <div class="quality-options">
+                                <label class="quality-option">
+                                    <input type="radio" name="quality" value="720p" checked>
+                                    <span>720p (стандарт)</span>
+                                </label>
+                                <label class="quality-option">
+                                    <input type="radio" name="quality" value="1080p">
+                                    <span>1080p (+20 звёзд)</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-row">
+                            <label>Стиль анимации:</label>
+                            <select id="video-style">
+                                <option value="realistic">Реалистичный</option>
+                                <option value="cinematic">Кинематографичный</option>
+                                <option value="animated">Анимационный</option>
+                                <option value="artistic">Художественный</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="video-preview">
+                        <h4>Предпросмотр параметров</h4>
+                        <div class="preview-card">
+                            <div class="preview-placeholder">
+                                <div class="placeholder-icon">🎬</div>
+                                <div class="placeholder-text">Здесь будет превью видео</div>
+                            </div>
+                            <div class="preview-details">
+                                <p><strong>Длительность:</strong> <span id="preview-duration">5</span> сек</p>
+                                <p><strong>Качество:</strong> <span id="preview-quality">720p</span></p>
+                                <p><strong>Стоимость:</strong> <span id="video-text-price">70</span> звёзд</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-action">
+                        <button class="generate-btn large" id="start-video-text-btn">
+                            <span class="generate-icon">🎬</span>
+                            <span>Сгенерировать видео за <span id="video-text-final-price">70</span> звёзд</span>
+                        </button>
+                        <p class="generate-hint">Генерация займет 45-90 секунд</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ЭКРАН ГЕНЕРАЦИИ IMAGE-TO-VIDEO -->
+        <div class="screen-overlay" id="screen-video-image" style="display: none;">
+            <div class="video-generate-container">
+                <div class="generate-header">
+                    <button class="back-btn" id="video-image-back-btn">←</button>
+                    <h3>Image-to-Video</h3>
+                    <div style="width: 40px;"></div>
+                </div>
+                
+                <div class="video-generate-content">
+                    <div class="image-video-section">
+                        <h4>Загрузите два кадра</h4>
+                        <p class="input-hint">ИИ создаст плавную анимацию перехода между ними</p>
+                        
+                        <div class="image-frames">
+                            <div class="frame-container">
+                                <div class="frame-label">Начальный кадр</div>
+                                <div class="frame-upload" id="start-frame-upload">
+                                    <div class="upload-icon">📷</div>
+                                    <div class="upload-text">Загрузить фото</div>
+                                    <input type="file" id="start-frame-input" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="frame-preview" id="start-frame-preview"></div>
+                            </div>
+                            
+                            <div class="frame-arrow">→</div>
+                            
+                            <div class="frame-container">
+                                <div class="frame-label">Конечный кадр</div>
+                                <div class="frame-upload" id="end-frame-upload">
+                                    <div class="upload-icon">📷</div>
+                                    <div class="upload-text">Загрузить фото</div>
+                                    <input type="file" id="end-frame-input" accept="image/*" style="display: none;">
+                                </div>
+                                <div class="frame-preview" id="end-frame-preview"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="transition-settings">
+                            <h4>Настройки перехода</h4>
+                            <div class="setting-row">
+                                <label>Тип перехода:</label>
+                                <select id="transition-type">
+                                    <option value="smooth">Плавный</option>
+                                    <option value="morph">Морфинг</option>
+                                    <option value="zoom">Приближение</option>
+                                    <option value="rotate">Вращение</option>
+                                </select>
+                            </div>
+                            
+                            <div class="setting-row">
+                                <label>Длительность:</label>
+                                <select id="transition-duration">
+                                    <option value="3">3 секунды</option>
+                                    <option value="5" selected>5 секунд</option>
+                                    <option value="7">7 секунд</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="video-action">
+                        <button class="generate-btn large" id="start-video-image-btn">
+                            <span class="generate-icon">🔄</span>
+                            <span>Создать анимацию за <span id="video-image-price">70</span> звёзд</span>
+                        </button>
+                        <p class="generate-hint">Анимация будет создана за 30-60 секунд</p>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
             <div class="screen-header">
@@ -421,6 +613,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
