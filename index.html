@@ -7,6 +7,161 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* Временные стили для видимости элементов */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .app-header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ec407a;
+        }
+        
+        .balance-btn {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .app-main {
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+        
+        .screen {
+            display: none;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        .screen-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .tab-btn.active {
+            color: #ec407a;
+        }
+        
+        .tab-btn .material-icons-round {
+            font-size: 24px;
+        }
+        
+        /* Основные стили для видимости */
+        button {
+            background: #ec407a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #ec407a 0%, #d81b60 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .generate-btn.large {
+            padding: 20px 40px;
+            font-size: 20px;
+        }
+        
+        .material-icons-round {
+            font-family: 'Material Icons Round';
+        }
+    </style>
 </head>
 <body>
     <!-- ВЕРХНИЙ HEADER -->
@@ -53,7 +208,9 @@
             
             <p class="screen-subtitle">Выберите пример стиля для генерации</p>
             
-            <div class="styles-grid" id="styles-container"></div>
+            <div class="styles-grid" id="styles-container">
+                <!-- Стили будут загружаться через JavaScript -->
+            </div>
             
             <div class="style-info glass-card">
                 <div class="info-icon">💡</div>
@@ -83,7 +240,9 @@
                 <div class="prompt-arrow">→</div>
             </div>
 
-            <div class="categories-grid" id="categories-container"></div>
+            <div class="categories-grid" id="categories-container">
+                <!-- Категории загружаются через JavaScript -->
+            </div>
         </div>
 
         <!-- ЭКРАН "СОЗДАТЬ СВОЙ" -->
@@ -220,7 +379,7 @@
             </div>
         </div>
 
-        <!-- ЭКРАН ГЕНЕРАЦИИ -->
+        <!-- ЭКРАН ГЕНЕРАЦИИ (для обычных категорий) -->
         <div class="screen-overlay" id="screen-generate" style="display: none;">
             <div class="generate-container">
                 <div class="generate-header">
@@ -233,6 +392,7 @@
                     <div class="type-badge" id="type-badge">✨ По описанию</div>
                 </div>
                 
+                <!-- ПОЛЕ ДЛЯ ПРОМПТА (только для генерации по описанию) -->
                 <div class="prompt-section" id="prompt-section" style="display: none;">
                     <h4>Опишите изображение</h4>
                     <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
@@ -251,6 +411,7 @@
                     </div>
                 </div>
                 
+                <!-- ЗАГРУЗКА ФОТО (для обычных категорий) -->
                 <div class="upload-section" id="upload-section" style="display: none;">
                     <div class="upload-header">
                         <h4>Загрузите свои фото</h4>
@@ -272,6 +433,7 @@
                     </div>
                 </div>
                 
+                <!-- ВЫБОР ФОРМАТА (только для обычных категорий) -->
                 <div class="format-section" id="format-section" style="display: none;">
                     <h4>Формат фото</h4>
                     <p class="input-hint">Выберите соотношение сторон</p>
@@ -286,6 +448,7 @@
                     </select>
                 </div>
                 
+                <!-- ВЫБОР МОДЕЛИ (только для обычных категорий) -->
                 <div class="model-section" id="model-section" style="display: none;">
                     <h4>Модель ИИ</h4>
                     <p class="input-hint">Выберите качество генерации</p>
@@ -306,6 +469,7 @@
                     </div>
                 </div>
                 
+                <!-- КНОПКА ГЕНЕРАЦИИ -->
                 <div class="generate-action">
                     <button class="generate-btn" id="start-generate-btn" disabled>
                         <span class="generate-icon">📝</span>
@@ -316,10 +480,58 @@
             </div>
         </div>
 
-        <!-- ОСТАЛЬНЫЕ ЭКРАНЫ (ФОТОСЕССИИ, ВИДЕО, ИСТОРИЯ, ПРОФИЛЬ) -->
-        <!-- Код остается таким же, как в предыдущей версии -->
-        <!-- Для краткости не дублирую, так как он не менялся -->
-        
+        <!-- ЭКРАН ФОТОСЕССИЙ (упрощенный) -->
+        <div class="screen" id="screen-photosession">
+            <div class="screen-header">
+                <h2>📸 Фотосессии</h2>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
+            </div>
+            
+            <div style="padding: 20px; text-align: center;">
+                <p>Раздел в разработке...</p>
+                <button onclick="switchScreen('main')">Вернуться на главную</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ВИДЕО (упрощенный) -->
+        <div class="screen" id="screen-video">
+            <div class="screen-header">
+                <h2>🎬 Видео</h2>
+                <p class="screen-subtitle">AI-генерация видео из фото и текста</p>
+            </div>
+            
+            <div style="padding: 20px; text-align: center;">
+                <p>Раздел в разработке...</p>
+                <button onclick="switchScreen('main')">Вернуться на главную</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИСТОРИИ (упрощенный) -->
+        <div class="screen" id="screen-history">
+            <div class="screen-header">
+                <h2>📚 История</h2>
+                <p class="screen-subtitle">Ваши генерации за последние 7 дней</p>
+            </div>
+            
+            <div style="padding: 20px; text-align: center;">
+                <p>История пока пуста...</p>
+                <button id="start-from-history">Создать первую генерацию</button>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ПРОФИЛЯ (упрощенный) -->
+        <div class="screen" id="screen-profile">
+            <div class="screen-header">
+                <h2>👤 Профиль</h2>
+                <p class="screen-subtitle">Ваша статистика и настройки</p>
+            </div>
+            
+            <div style="padding: 20px; text-align: center;">
+                <p>Профиль пользователя...</p>
+                <p>Баланс: <span id="profile-balance">85</span> ⭐</p>
+                <button onclick="switchScreen('main')">Вернуться на главную</button>
+            </div>
+        </div>
     </main>
 
     <!-- НИЖНИЙ TAB BAR -->
@@ -347,5 +559,49 @@
     </nav>
 
     <script src="app.js"></script>
+    <script>
+        // Простая реализация для быстрого тестирования
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            const targetScreen = document.getElementById(`screen-${screenId}`);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+            }
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.screen === screenId) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Добавляем обработчики для быстрых кнопок
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.quick-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const screenId = this.getAttribute('data-screen');
+                    switchScreen(screenId);
+                });
+            });
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const screenId = this.getAttribute('data-screen');
+                    switchScreen(screenId);
+                });
+            });
+            
+            document.getElementById('start-from-history')?.addEventListener('click', function() {
+                switchScreen('photo');
+            });
+            
+            // Добавляем глобальную функцию
+            window.switchScreen = switchScreen;
+        });
+    </script>
 </body>
 </html>
