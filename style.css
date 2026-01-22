@@ -2723,7 +2723,6 @@ input:checked + .slider:before {
     padding: 12px;
     font-size: 16px;
 }
-/* Дополнительные стили для экрана выбора стиля */
 
 /* Экран выбора стиля */
 #screen-styles {
