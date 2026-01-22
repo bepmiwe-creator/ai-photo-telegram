@@ -1139,7 +1139,7 @@ function setupVideo() {
         }
     `;
     document.head.appendChild(style);
-
+}
 // Вспомогательная функция для получения названия перехода
     function getTransitionName(type) {
         const transitions = {
@@ -1558,6 +1558,7 @@ function setupHistoryAndProfile() {
 setupHistoryAndProfile();
 
 console.log('Nano Banana App готов!');
+
 
 
 
