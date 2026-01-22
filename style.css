@@ -2723,3 +2723,211 @@ input:checked + .slider:before {
     padding: 12px;
     font-size: 16px;
 }
+
+/* Дополнительные стили для экрана выбора стиля */
+
+/* Экран выбора стиля */
+#screen-styles {
+    display: none;
+}
+
+#screen-styles.active {
+    display: block;
+}
+
+#screen-styles .screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#screen-styles .back-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #ec407a;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+
+/* Сетка стилей */
+.styles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.style-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.style-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: #ec407a;
+}
+
+.style-card.random-style {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    grid-column: span 2;
+}
+
+.style-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin: 0 auto 15px;
+}
+
+.style-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.style-card.random-style .style-name {
+    color: white;
+}
+
+.style-info {
+    margin-top: 20px;
+}
+
+/* Улучшения для загрузки фото */
+.upload-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.upload-item:hover {
+    transform: scale(1.02);
+}
+
+.upload-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.upload-item:hover .upload-remove {
+    opacity: 1;
+}
+
+.upload-count {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.required-badge {
+    background: #ff5722;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.optional-badge {
+    background: #607d8b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.category-card, .style-card {
+    animation: fadeIn 0.5s ease forwards;
+    opacity: 0;
+}
+
+.category-card:nth-child(1) { animation-delay: 0.1s; }
+.category-card:nth-child(2) { animation-delay: 0.2s; }
+.category-card:nth-child(3) { animation-delay: 0.3s; }
+.category-card:nth-child(4) { animation-delay: 0.4s; }
+.category-card:nth-child(5) { animation-delay: 0.5s; }
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 480px) {
+    .styles-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .style-card {
+        padding: 15px;
+    }
+    
+    .style-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+    
+    .style-name {
+        font-size: 14px;
+    }
+    
+    .upload-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+/* Темная тема поддержка */
+@media (prefers-color-scheme: dark) {
+    .tg-theme-dark .style-card:not(.random-style) {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    
+    .tg-theme-dark .style-card .style-name {
+        color: white;
+    }
+    
+    .tg-theme-dark .upload-item {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
