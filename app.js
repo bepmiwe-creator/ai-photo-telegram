@@ -185,49 +185,47 @@ function loadPhotoCategories() {
 // ========== ЭКРАН ГЕНЕРАЦИИ ==========
 function showGenerateScreen() {
     const generateScreen = document.getElementById('screen-generate');
-    if (!generateScreen) return;
-    
-    generateScreen.style.display = 'flex';
-    
-    // Устанавливаем заголовок в зависимости от типа генерации
-    const titleElement = document.getElementById('generate-title');
-    const typeBadge = document.getElementById('type-badge');
-    
-    if (currentCategory === 'prompt') {
-        if (titleElement) titleElement.textContent = 'Генерация по описанию';
-        if (typeBadge) typeBadge.textContent = '✨ По описанию';
-        document.getElementById('prompt-section').style.display = 'block';
-    } else if (currentCategory === 'create') {
-        if (titleElement) titleElement.textContent = 'Создать свой стиль';
-        if (typeBadge) typeBadge.textContent = '🆕 Свой стиль';
-        document.getElementById('prompt-section').style.display = 'none';
-    } else {
-        if (titleElement) titleElement.textContent = 'Генерация фото';
-        if (typeBadge) typeBadge.textContent = '📷 Из фото';
-        document.getElementById('prompt-section').style.display = 'none';
-    }
-    
-    // Настраиваем выбор формата
-    setupFormatSelect();
-    
-    // Обновляем цену
-    updateTotalPrice();
-    
-    // Настраиваем поле промпта
-    setupPromptField();
-    
-    // Проверяем активность кнопки
-    checkGenerateButton();
-    
-    // Устанавливаем обработчик закрытия
-    const backBtn = document.getElementById('generate-back-btn');
-    if (backBtn) {
-        backBtn.onclick = hideGenerateScreen;
-    }
-}
-}
+    if (generateScreen) {
+        generateScreen.style.display = 'flex';
+        
+        // Устанавливаем заголовок в зависимости от типа генерации
+        const titleElement = document.getElementById('generate-title');
+        const typeBadge = document.getElementById('type-badge');
+        
+        if (currentCategory === 'prompt') {
+            if (titleElement) titleElement.textContent = 'Генерация по описанию';
+            if (typeBadge) typeBadge.textContent = '✨ По описанию';
+            document.getElementById('prompt-section').style.display = 'block';
+        } else if (currentCategory === 'create') {
+            if (titleElement) titleElement.textContent = 'Создать свой стиль';
+            if (typeBadge) typeBadge.textContent = '🆕 Свой стиль';
+            document.getElementById('prompt-section').style.display = 'none';
+        } else {
+            if (titleElement) titleElement.textContent = 'Генерация фото';
+            if (typeBadge) typeBadge.textContent = '📷 Из фото';
+            document.getElementById('prompt-section').style.display = 'none';
+        }
+        
+        // Просто настраиваем выбор формата
+        setupFormatSelect();
+        
+        // Обновляем цену
+        updateTotalPrice();
+        
+        // Настраиваем поле промпта
+        setupPromptField();
+        
+        // Проверяем активность кнопки
+        checkGenerateButton();
+        
+        // Устанавливаем обработчик закрытия
+        const backBtn = document.getElementById('generate-back-btn');
+        if (backBtn) {
+            backBtn.onclick = hideGenerateScreen;
+        }
+    }  
+}      
 
-// Функция скрытия экрана генерации (ВЫНЕСЕНА ОТДЕЛЬНО)
 function hideGenerateScreen() {
     const generateScreen = document.getElementById('screen-generate');
     if (generateScreen) {
@@ -1769,6 +1767,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
