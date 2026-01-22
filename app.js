@@ -552,7 +552,7 @@ function handleFileUpload(files) {
         };
         reader.readAsDataURL(file); // Конвертируем в base64
     }
-}
+
 
 function updateUploadGrid() {
     const container = document.getElementById('upload-grid');
@@ -1868,6 +1868,7 @@ window.switchScreen = function(screenId) {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
