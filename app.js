@@ -225,6 +225,7 @@ function showGenerateScreen() {
         backBtn.onclick = hideGenerateScreen;
     }
 }
+}
 
 // Функция скрытия экрана генерации (ВЫНЕСЕНА ОТДЕЛЬНО)
 function hideGenerateScreen() {
@@ -269,7 +270,7 @@ function hideGenerateScreen() {
         console.log('Экран генерации закрыт');
     }
 }
-
+    
 // ========== НОВЫЕ ФУНКЦИИ ДЛЯ УЛУЧШЕННОГО ИНТЕРФЕЙСА ==========
 
 // 1. Загрузка форматов с иконками
@@ -1768,6 +1769,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
