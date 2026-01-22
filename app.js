@@ -271,13 +271,16 @@ function setupButtons() {
             alert('Генерация видео скоро будет доступна!');
         });
     });
+     
+    // Инициализация фотосессий
+    setupPhotosessions();
 }
 
 function simulateUpload() {
     if (uploadedImages.length >= 5) {
         alert('Можно загрузить не более 5 фото');
         return;
-    }
+}
     
     // Тестовые изображения
     const testImages = [
@@ -378,4 +381,329 @@ function updateBalance() {
 document.body.style.opacity = '0';
 document.body.style.transition = 'opacity 0.5s ease';
 
+// ========== ФОТОСЕССИИ ==========
+function setupPhotosessions() {
+    // Данные пакетов
+    const photosessionPacks = {
+        winter: { name: 'Зимняя сказка', price: 159, icon: '❄️' },
+        wedding: { name: 'Свадебная', price: 159, icon: '💍' },
+        beach: { name: 'Пляжный отдых', price: 159, icon: '🏖️' },
+        luxury: { name: 'Роскошь Luxury', price: 159, icon: '💎' },
+        custom: { name: 'Своя фотосессия', price: 200, icon: '🎨' }
+    };
+    
+    let currentPack = null;
+    let currentStep = 1;
+    let uploadedSessionPhotos = [];
+    
+    // Обработчики для карточек пакетов
+    document.querySelectorAll('.photosession-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Если кликнули не на кнопку внутри карточки
+            if (!e.target.closest('.photosession-btn')) {
+                const packId = this.dataset.pack;
+                selectPhotosessionPack(packId);
+            }
+        });
+    });
+    
+    // Обработчики для кнопок выбора пакета
+    document.querySelectorAll('.photosession-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Чтобы не срабатывал клик по карточке
+            const packId = this.dataset.pack;
+            selectPhotosessionPack(packId);
+        });
+    });
+    
+    function selectPhotosessionPack(packId) {
+        currentPack = photosessionPacks[packId];
+        if (!currentPack) return;
+        
+        console.log('Выбран пакет:', currentPack.name);
+        
+        // Обновляем информацию в экране генерации
+        document.getElementById('selected-pack-name').textContent = currentPack.name;
+        document.getElementById('summary-pack-name').textContent = currentPack.name;
+        
+        // Устанавливаем цену
+        const priceElement = document.getElementById('photosession-total-price');
+        const finalPriceElement = document.getElementById('photosession-final-price');
+        if (priceElement) priceElement.textContent = currentPack.price + ' звёзд';
+        if (finalPriceElement) finalPriceElement.textContent = currentPack.price;
+        
+        // Показываем экран генерации
+        showPhotosessionGenerate();
+    }
+    
+    function showPhotosessionGenerate() {
+        const generateScreen = document.getElementById('screen-photosession-generate');
+        if (generateScreen) {
+            generateScreen.style.display = 'flex';
+            resetPhotosessionSteps();
+            
+            // Кнопка "Назад"
+            const backBtn = document.getElementById('photosession-back-btn');
+            if (backBtn) {
+                backBtn.onclick = hidePhotosessionGenerate;
+            }
+            
+            // Навигация по шагам
+            setupPhotosessionSteps();
+            
+            // Загрузка фото
+            setupPhotosessionUpload();
+            
+            // Кнопка генерации
+            const generateBtn = document.getElementById('start-photosession-btn');
+            if (generateBtn) {
+                generateBtn.onclick = startPhotosessionGeneration;
+            }
+        }
+    }
+    
+    function hidePhotosessionGenerate() {
+        const generateScreen = document.getElementById('screen-photosession-generate');
+        if (generateScreen) {
+            generateScreen.style.display = 'none';
+            resetPhotosessionSteps();
+        }
+    }
+    
+    function resetPhotosessionSteps() {
+        currentStep = 1;
+        uploadedSessionPhotos = [];
+        updatePhotosessionSteps();
+        
+        // Сбрасываем загруженные фото
+        const uploadedContainer = document.getElementById('photosession-uploaded');
+        if (uploadedContainer) {
+            uploadedContainer.innerHTML = '';
+            document.getElementById('summary-photos-count').textContent = '0';
+        }
+    }
+    
+    function setupPhotosessionSteps() {
+        const nextBtn = document.getElementById('next-step-btn');
+        const prevBtn = document.getElementById('prev-step-btn');
+        
+        if (nextBtn) {
+            nextBtn.onclick = function() {
+                if (currentStep < 3) {
+                    currentStep++;
+                    updatePhotosessionSteps();
+                }
+            };
+        }
+        
+        if (prevBtn) {
+            prevBtn.onclick = function() {
+                if (currentStep > 1) {
+                    currentStep--;
+                    updatePhotosessionSteps();
+                }
+            };
+        }
+    }
+    
+    function updatePhotosessionSteps() {
+        // Обновляем шаги
+        document.querySelectorAll('.step').forEach(step => {
+            step.classList.remove('active');
+            if (parseInt(step.dataset.step) === currentStep) {
+                step.classList.add('active');
+            }
+        });
+        
+        // Показываем/скрываем контент шагов
+        for (let i = 1; i <= 3; i++) {
+            const stepContent = document.getElementById(`step-${i}`);
+            if (stepContent) {
+                stepContent.style.display = i === currentStep ? 'block' : 'none';
+            }
+        }
+        
+        // Управляем кнопками навигации
+        const prevBtn = document.getElementById('prev-step-btn');
+        const nextBtn = document.getElementById('next-step-btn');
+        
+        if (prevBtn) {
+            prevBtn.style.display = currentStep > 1 ? 'block' : 'none';
+        }
+        
+        if (nextBtn) {
+            if (currentStep === 3) {
+                nextBtn.style.display = 'none';
+            } else if (currentStep === 2) {
+                nextBtn.textContent = 'Подтвердить →';
+                // Проверяем, загружены ли фото
+                if (uploadedSessionPhotos.length < 3) {
+                    nextBtn.disabled = true;
+                    nextBtn.style.opacity = '0.6';
+                } else {
+                    nextBtn.disabled = false;
+                    nextBtn.style.opacity = '1';
+                }
+            } else {
+                nextBtn.textContent = 'Далее →';
+                nextBtn.disabled = false;
+                nextBtn.style.opacity = '1';
+            }
+        }
+    }
+    
+    function setupPhotosessionUpload() {
+        const uploadArea = document.getElementById('photosession-upload-area');
+        const fileInput = document.getElementById('photosession-file-input');
+        
+        if (!uploadArea || !fileInput) return;
+        
+        // Клик по области загрузки
+        uploadArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+        
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.background = 'rgba(236, 64, 122, 0.1)';
+            this.style.borderColor = 'rgba(236, 64, 122, 0.5)';
+        });
+        
+        uploadArea.addEventListener('dragleave', function() {
+            this.style.background = '';
+            this.style.borderColor = '';
+        });
+        
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.background = '';
+            this.style.borderColor = '';
+            
+            const files = e.dataTransfer.files;
+            handlePhotosessionFiles(files);
+        });
+        
+        // Выбор файлов через input
+        fileInput.addEventListener('change', function(e) {
+            const files = e.target.files;
+            handlePhotosessionFiles(files);
+        });
+    }
+    
+    function handlePhotosessionFiles(files) {
+        const maxPhotos = 5;
+        const remainingSlots = maxPhotos - uploadedSessionPhotos.length;
+        
+        if (files.length > remainingSlots) {
+            alert(`Можно загрузить не более ${maxPhotos} фото. Осталось мест: ${remainingSlots}`);
+            return;
+        }
+        
+        for (let i = 0; i < Math.min(files.length, remainingSlots); i++) {
+            const file = files[i];
+            
+            if (!file.type.startsWith('image/')) {
+                alert('Пожалуйста, загружайте только изображения');
+                continue;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) {
+                alert(`Фото "${file.name}" слишком большое (макс. 5MB)`);
+                continue;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedSessionPhotos.push({
+                    preview: e.target.result,
+                    name: file.name
+                });
+                
+                updatePhotosessionUploadDisplay();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function updatePhotosessionUploadDisplay() {
+        const container = document.getElementById('photosession-uploaded');
+        const countElement = document.getElementById('summary-photos-count');
+        const nextBtn = document.getElementById('next-step-btn');
+        
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        uploadedSessionPhotos.forEach((photo, index) => {
+            const photoElement = document.createElement('div');
+            photoElement.className = 'uploaded-photo';
+            photoElement.innerHTML = `
+                <img src="${photo.preview}" alt="Фото ${index + 1}">
+            `;
+            container.appendChild(photoElement);
+        });
+        
+        // Обновляем счетчик
+        if (countElement) {
+            countElement.textContent = uploadedSessionPhotos.length;
+        }
+        
+        // Активируем кнопку "Далее" если загружено минимум 3 фото
+        if (nextBtn && currentStep === 2) {
+            nextBtn.disabled = uploadedSessionPhotos.length < 3;
+            nextBtn.style.opacity = uploadedSessionPhotos.length < 3 ? '0.6' : '1';
+        }
+    }
+    
+    function startPhotosessionGeneration() {
+        if (!currentPack) {
+            alert('Пожалуйста, выберите пакет фотосессии');
+            return;
+        }
+        
+        if (uploadedSessionPhotos.length < 3) {
+            alert('Для создания фотосессии нужно загрузить минимум 3 фото');
+            return;
+        }
+        
+        // Проверяем баланс
+        if (userBalance < currentPack.price) {
+            alert(`Недостаточно звёзд!\nНужно: ${currentPack.price}, у вас: ${userBalance}`);
+            return;
+        }
+        
+        const generateBtn = document.getElementById('start-photosession-btn');
+        if (generateBtn) {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<span class="generate-icon">⏳</span><span>Создание 13 фото...</span>`;
+            
+            // Имитация процесса (5 секунд)
+            setTimeout(() => {
+                // Списание звёзд
+                userBalance -= currentPack.price;
+                updateBalance();
+                
+                alert(`🎉 Фотосессия "${currentPack.name}" создана!\n\n13 уникальных фото готовы! Они сохранены в вашей Истории.`);
+                
+                // Возвращаем кнопку
+                setTimeout(() => {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = `<span class="generate-icon">✨</span><span>Создать фотосессию за <span id="photosession-final-price">${currentPack.price}</span> звёзд</span>`;
+                    
+                    // Закрываем экран
+                    hidePhotosessionGenerate();
+                    
+                    // Переходим в историю
+                    switchScreen('history');
+                }, 500);
+            }, 5000);
+        }
+    }
+}
+
+// Инициализация фотосессий при загрузке
+setupPhotosessions();
+
 console.log('Nano Banana App готов!');
+
