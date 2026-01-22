@@ -210,6 +210,106 @@
                 </div>
             </div>
         </div>
+               <!-- ЭКРАН ГЕНЕРАЦИИ ФОТОСЕССИИ -->
+        <div class="screen-overlay" id="screen-photosession-generate" style="display: none;">
+            <div class="photosession-generate-container">
+                <div class="generate-header">
+                    <button class="back-btn" id="photosession-back-btn">←</button>
+                    <h3>Создание фотосессии</h3>
+                    <div style="width: 40px;"></div>
+                </div>
+                
+                <!-- ПРОГРЕСС-ШАГИ -->
+                <div class="photosession-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Выбор стиля</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Загрузка фото</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Генерация</div>
+                    </div>
+                </div>
+                
+                <!-- ШАГ 1: ВЫБОР СТИЛЯ -->
+                <div class="photosession-step active" id="step-1">
+                    <h4>Выбранный стиль: <span id="selected-pack-name">Зимняя сказка</span></h4>
+                    <div class="style-preview">
+                        <div class="preview-grid">
+                            <div class="preview-item">❄️</div>
+                            <div class="preview-item">⛄</div>
+                            <div class="preview-item">🧥</div>
+                            <div class="preview-item">🧣</div>
+                            <div class="preview-item">🎄</div>
+                            <div class="preview-item">🦌</div>
+                        </div>
+                        <p class="preview-hint">ИИ создаст 10 фото в этом стиле с разными позами</p>
+                    </div>
+                </div>
+                
+                <!-- ШАГ 2: ЗАГРУЗКА ФОТО -->
+                <div class="photosession-step" id="step-2" style="display: none;">
+                    <h4>Загрузите 3-5 своих фото</h4>
+                    <p class="step-description">Чем больше фото вы загрузите, тем лучше ИИ поймёт ваши черты лица</p>
+                    
+                    <div class="photosession-upload">
+                        <div class="upload-area" id="photosession-upload-area">
+                            <div class="upload-icon">📤</div>
+                            <div class="upload-text">Перетащите сюда фото или нажмите</div>
+                            <div class="upload-hint">Рекомендуем: портреты с хорошим освещением</div>
+                            <input type="file" id="photosession-file-input" accept="image/*" multiple style="display: none;">
+                        </div>
+                        
+                        <div class="uploaded-photos" id="photosession-uploaded">
+                            <!-- Здесь появятся загруженные фото -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ШАГ 3: ПОДТВЕРЖДЕНИЕ -->
+                <div class="photosession-step" id="step-3" style="display: none;">
+                    <h4>Подтверждение заказа</h4>
+                    
+                    <div class="order-summary">
+                        <div class="summary-item">
+                            <span>Стиль фотосессии:</span>
+                            <span id="summary-pack-name">Зимняя сказка</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Количество фото:</span>
+                            <span>10 + 3 в подарок</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Загружено фото:</span>
+                            <span id="summary-photos-count">0</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Итого к оплате:</span>
+                            <span class="total-price" id="photosession-total-price">159 звёзд</span>
+                        </div>
+                    </div>
+                    
+                    <div class="photosession-action">
+                        <button class="generate-btn large" id="start-photosession-btn">
+                            <span class="generate-icon">✨</span>
+                            <span>Создать фотосессию за <span id="photosession-final-price">159</span> звёзд</span>
+                        </button>
+                        <p class="generate-hint">Создание 13 фото займет 2-3 минуты</p>
+                    </div>
+                </div>
+                
+                <!-- КНОПКИ НАВИГАЦИИ -->
+                <div class="photosession-navigation">
+                    <button class="nav-btn prev" id="prev-step-btn" style="display: none;">← Назад</button>
+                    <button class="nav-btn next" id="next-step-btn">Далее →</button>
+                </div>
+            </div>
+        </div>
+        
         <!-- ЭКРАН ВИДЕО -->
         <div class="screen" id="screen-video">
             <div class="screen-header">
@@ -321,5 +421,6 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
