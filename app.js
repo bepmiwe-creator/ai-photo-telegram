@@ -206,7 +206,7 @@ function showGenerateScreen() {
             document.getElementById('prompt-section').style.display = 'none';
         }
         
-       // Настраиваем выбор формата
+     // Просто настраиваем выбор формата
         setupFormatSelect();
         
         // Обновляем цену
@@ -363,7 +363,21 @@ function checkGenerateButton() {
         icon.textContent = isEnabled ? '✨' : '📝';
     }
 }
-
+// Простая настройка выбора формата
+function setupFormatSelect() {
+    const formatSelect = document.getElementById('format-select');
+    
+    if (!formatSelect) return;
+    
+    // Устанавливаем начальное значение
+    formatSelect.value = selectedFormat;
+    
+    // Обработчик изменения
+    formatSelect.addEventListener('change', function() {
+        selectedFormat = this.value;
+        console.log('Выбран формат:', selectedFormat);
+    });
+}
 // ========== КНОПКИ ==========
 function setupButtons() {
     // Выбор модели ИИ
@@ -1748,6 +1762,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
