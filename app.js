@@ -206,8 +206,8 @@ function showGenerateScreen() {
             document.getElementById('prompt-section').style.display = 'none';
         }
         
-        // Загружаем форматы с иконками
-        loadFormatIcons();
+       // Настраиваем выбор формата
+        setupFormatSelect();
         
         // Обновляем цену
         updateTotalPrice();
@@ -1748,6 +1748,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
