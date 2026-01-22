@@ -67,6 +67,22 @@ const styleExamples = {
     ]
 };
 
+// ========== ОБЪЯВЛЕНИЕ ФУНКЦИЙ (чтобы избежать ошибок ReferenceError) ==========
+function setupPhotosessions() {
+    console.log('Фотосессии инициализированы (заглушка)');
+    // Реализация функции будет позже
+}
+
+function setupVideo() {
+    console.log('Видео инициализировано (заглушка)');
+    // Реализация функции будет позже
+}
+
+function setupHistoryAndProfile() {
+    console.log('История и профиль инициализированы (заглушка)');
+    // Реализация функции будет позже
+}
+
 // ========== ЗАПУСК ПРИЛОЖЕНИЯ ==========
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Nano Banana запускается...');
@@ -970,14 +986,13 @@ function setupButtons() {
         });
     }
     
+    // Эти функции уже объявлены в начале файла
     setupRealUpload();
     setupPhotosessions();
     setupVideo();
+    
+    // Инициализация остальных модулей
+    setupHistoryAndProfile();
 }
-
-// ========== ИНИЦИАЛИЗАЦИЯ ДОПОЛНИТЕЛЬНЫХ МОДУЛЕЙ ==========
-setupPhotosessions();
-setupVideo();
-setupHistoryAndProfile();
 
 console.log('Nano Banana App готов!');
