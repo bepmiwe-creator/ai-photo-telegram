@@ -187,49 +187,181 @@ function showGenerateScreen() {
     const generateScreen = document.getElementById('screen-generate');
     if (generateScreen) {
         generateScreen.style.display = 'flex';
-        loadFormats();
+        
+        // Устанавливаем заголовок в зависимости от типа генерации
+        const titleElement = document.getElementById('generate-title');
+        const typeBadge = document.getElementById('type-badge');
+        
+        if (currentCategory === 'prompt') {
+            if (titleElement) titleElement.textContent = 'Генерация по описанию';
+            if (typeBadge) typeBadge.textContent = '✨ По описанию';
+            document.getElementById('prompt-section').style.display = 'block';
+        } else if (currentCategory === 'create') {
+            if (titleElement) titleElement.textContent = 'Создать свой стиль';
+            if (typeBadge) typeBadge.textContent = '🆕 Свой стиль';
+            document.getElementById('prompt-section').style.display = 'none';
+        } else {
+            if (titleElement) titleElement.textContent = 'Генерация фото';
+            if (typeBadge) typeBadge.textContent = '📷 Из фото';
+            document.getElementById('prompt-section').style.display = 'none';
+        }
+        
+        // Загружаем форматы с иконками
+        loadFormatIcons();
+        
+        // Обновляем цену
         updateTotalPrice();
         
-        // Кнопка "Назад" в генерации
+        // Настраиваем поле промпта
+        setupPromptField();
+        
+        // Проверяем активность кнопки
+        checkGenerateButton();
+        
+        // Устанавливаем обработчик закрытия
         const backBtn = document.getElementById('generate-back-btn');
         if (backBtn) {
             backBtn.onclick = hideGenerateScreen;
         }
     }
 }
+// ========== НОВЫЕ ФУНКЦИИ ДЛЯ УЛУЧШЕННОГО ИНТЕРФЕЙСА ==========
 
-function hideGenerateScreen() {
-    const generateScreen = document.getElementById('screen-generate');
-    if (generateScreen) {
-        generateScreen.style.display = 'none';
-    }
-}
-
-function loadFormats() {
-    const container = document.getElementById('format-scroll');
+// 1. Загрузка форматов с иконками
+function loadFormatIcons() {
+    const container = document.getElementById('format-icons');
     if (!container) return;
     
     container.innerHTML = '';
     
-    formats.forEach(format => {
-        const card = document.createElement('div');
-        card.className = 'format-card';
-        if (format.id === selectedFormat) card.classList.add('selected');
-        card.dataset.formatId = format.id;
+    const formatsWithIcons = [
+        { id: '1:1', name: 'Квадрат', icon: '⬜', class: 'square' },
+        { id: '4:5', name: 'Портрет', icon: '📱', class: 'portrait' },
+        { id: '16:9', name: 'Широкий', icon: '📺', class: 'wide' },
+        { id: '9:16', name: 'Сторис', icon: '📲', class: 'story' },
+        { id: '3:4', name: 'Классика', icon: '🖼️', class: 'classic' },
+        { id: '2:3', name: 'Постер', icon: '🎬', class: 'poster' }
+    ];
+    
+    formatsWithIcons.forEach(format => {
+        const item = document.createElement('div');
+        item.className = `format-icon-item ${format.id === selectedFormat ? 'selected' : ''}`;
+        item.dataset.formatId = format.id;
+        item.dataset.formatName = format.name;
         
-        card.innerHTML = `
-            <div class="format-name">${format.name}</div>
-            <div class="format-ratio">${format.ratio}</div>
+        item.innerHTML = `
+            <div class="format-icon-box ${format.class}">
+                <div class="icon-inside">${format.icon}</div>
+            </div>
+            <span class="format-icon-label">${format.name}</span>
         `;
         
-        card.addEventListener('click', () => {
-            document.querySelectorAll('.format-card').forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.format-icon-item').forEach(c => c.classList.remove('selected'));
+            item.classList.add('selected');
             selectedFormat = format.id;
         });
         
-        container.appendChild(card);
+        container.appendChild(item);
     });
+}
+
+// 2. Настройка поля промпта
+function setupPromptField() {
+    const promptTextarea = document.getElementById('ai-prompt');
+    const charCount = document.getElementById('char-count');
+    const exampleChips = document.querySelectorAll('.example-chip');
+    
+    if (promptTextarea && charCount) {
+        // Счетчик символов
+        promptTextarea.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = count;
+            
+            // Меняем цвет при приближении к лимиту
+            if (count > 1800) {
+                charCount.style.color = '#ff5722';
+            } else if (count > 1500) {
+                charCount.style.color = '#ff9800';
+            } else {
+                charCount.style.color = '#777';
+            }
+            
+            // Проверяем кнопку генерации
+            checkGenerateButton();
+        });
+        
+        // Примеры промптов
+        exampleChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                const example = this.dataset.example;
+                promptTextarea.value = example;
+                promptTextarea.dispatchEvent(new Event('input'));
+                promptTextarea.focus();
+            });
+        });
+        
+        // Автофокус при открытии
+        if (currentCategory === 'prompt') {
+            setTimeout(() => {
+                promptTextarea.focus();
+            }, 300);
+        }
+    }
+}
+
+// 3. Проверка активности кнопки генерации
+function checkGenerateButton() {
+    const generateBtn = document.getElementById('start-generate-btn');
+    const btnText = document.getElementById('generate-btn-text');
+    const hintText = document.getElementById('generate-hint');
+    
+    if (!generateBtn || !btnText || !hintText) return;
+    
+    const prompt = document.getElementById('ai-prompt')?.value.trim() || '';
+    const hasPrompt = prompt.length > 0;
+    const hasPhotos = uploadedImages.length > 0;
+    
+    let isEnabled = false;
+    let text = 'Введите промпт';
+    let hint = 'Заполните поле "Опишите изображение" для генерации';
+    
+    if (currentCategory === 'prompt') {
+        // Для генерации по описанию нужен либо промпт, либо фото
+        isEnabled = hasPrompt || hasPhotos;
+        text = hasPrompt ? `Сгенерировать за ${calculatePrice()} звёзд` : 'Введите промпт';
+        hint = hasPrompt ? 'Готово к генерации!' : 
+               hasPhotos ? 'Готово к генерации по фото!' : 
+               'Заполните поле "Опишите изображение" для генерации';
+    } else if (currentCategory === 'create') {
+        // Для "Создать свой" нужны фото
+        isEnabled = hasPhotos;
+        text = hasPhotos ? `Создать за ${calculatePrice()} звёзд` : 'Загрузите фото';
+        hint = hasPhotos ? 'Готово к созданию стиля!' : 'Загрузите хотя бы одно фото';
+    } else {
+        // Для обычных категорий нужны фото
+        isEnabled = hasPhotos;
+        text = hasPhotos ? `Сгенерировать за ${calculatePrice()} звёзд` : 'Загрузите фото';
+        hint = hasPhotos ? 'Готово к генерации!' : 'Загрузите хотя бы одно фото';
+    }
+    
+    // Обновляем кнопку
+    generateBtn.disabled = !isEnabled;
+    btnText.textContent = text;
+    hintText.textContent = hint;
+    
+    // Меняем цвет подсказки
+    if (isEnabled) {
+        hintText.style.color = '#4CAF50';
+    } else {
+        hintText.style.color = '#ff9800';
+    }
+    
+    // Обновляем иконку
+    const icon = generateBtn.querySelector('.generate-icon');
+    if (icon) {
+        icon.textContent = isEnabled ? '✨' : '📝';
+    }
 }
 
 // ========== КНОПКИ ==========
@@ -302,8 +434,12 @@ function updateUploadGrid() {
         container.insertBefore(item, container.firstChild);
     });
     
-    // Обновляем обработчик
-    document.getElementById('upload-add-btn').addEventListener('click', simulateUpload);
+    // Вешаем обработчик на кнопку добавления
+    const uploadBtn = document.getElementById('upload-add-btn');
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', simulateUpload);
+    }
+    checkGenerateButton();
 }
 
 function startGeneration() {
@@ -361,16 +497,15 @@ function calculatePrice() {
 
 function updateTotalPrice() {
     const price = calculatePrice();
-    document.getElementById('total-price').textContent = price;
     
-    const btn = document.getElementById('start-generate-btn');
-    if (price > userBalance) {
-        btn.disabled = true;
-        btn.innerHTML = `<span class="generate-icon">⚠️</span><span>Недостаточно звёзд</span>`;
-    } else {
-        btn.disabled = false;
-        btn.innerHTML = `<span class="generate-icon">✨</span><span>Сгенерировать за <span id="total-price">${price}</span> звёзд</span>`;
+    // Обновляем цену в кнопке (если она активна)
+    const btnText = document.getElementById('generate-btn-text');
+    if (btnText && !document.getElementById('start-generate-btn').disabled) {
+        btnText.textContent = `Сгенерировать за ${price} звёзд`;
     }
+    
+    // Проверяем кнопку генерации
+    checkGenerateButton();
 }
 
 function updateBalance() {
@@ -1559,6 +1694,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
