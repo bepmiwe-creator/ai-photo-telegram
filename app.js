@@ -1111,6 +1111,304 @@ function setupVideo() {
 // Инициализация видео при загрузке
 setupVideo();
 
+// ========== ИСТОРИЯ И ПРОФИЛЬ ==========
+function setupHistoryAndProfile() {
+    // Инициализация истории из localStorage
+    let history = JSON.parse(localStorage.getItem('nano_history')) || [];
+    let stats = JSON.parse(localStorage.getItem('nano_stats')) || {
+        photos: 0,
+        videos: 0,
+        spent: 0,
+        saved: 0
+    };
+    
+    // Сохранение истории
+    function saveHistory() {
+        localStorage.setItem('nano_history', JSON.stringify(history));
+        localStorage.setItem('nano_stats', JSON.stringify(stats));
+        updateProfileStats();
+    }
+    
+    // Добавление записи в историю
+    function addHistoryRecord(type, title, details, price) {
+        const record = {
+            id: Date.now(),
+            type: type, // 'photo', 'photosession', 'video'
+            title: title,
+            details: details,
+            price: price,
+            date: new Date().toISOString(),
+            status: 'completed'
+        };
+        
+        history.push(record);
+        
+        // Обновляем статистику
+        if (type === 'photo' || type === 'photosession') {
+            stats.photos += (type === 'photosession' ? 13 : 1);
+        } else if (type === 'video') {
+            stats.videos += 1;
+        }
+        stats.spent += price;
+        
+        // Ограничиваем историю 7 днями
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        history = history.filter(record => {
+            const recordDate = new Date(record.date);
+            return recordDate >= sevenDaysAgo;
+        });
+        
+        // Ограничиваем максимум 50 записей
+        if (history.length > 50) {
+            history = history.slice(-50);
+        }
+        
+        saveHistory();
+        updateHistoryDisplay();
+        updateRecentList();
+    }
+    
+    // Обновление отображения истории
+    function updateHistoryDisplay(filter = 'all') {
+        const container = document.getElementById('history-container');
+        const emptyElement = document.getElementById('history-empty');
+        const countElement = document.getElementById('history-count');
+        
+        if (!container) return;
+        
+        // Фильтрация записей
+        let filteredHistory = history;
+        if (filter !== 'all') {
+            filteredHistory = history.filter(record => record.type === filter);
+        }
+        
+        // Обновление счетчика
+        if (countElement) {
+            countElement.textContent = filteredHistory.length;
+        }
+        
+        // Если история пуста
+        if (filteredHistory.length === 0) {
+            container.innerHTML = '';
+            if (emptyElement) {
+                emptyElement.style.display = 'block';
+                container.appendChild(emptyElement);
+            }
+            return;
+        }
+        
+        // Скрываем пустой блок
+        if (emptyElement) {
+            emptyElement.style.display = 'none';
+        }
+        
+        // Сортируем по дате (новые сверху)
+        filteredHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Очищаем и добавляем записи
+        container.innerHTML = '';
+        
+        filteredHistory.forEach(record => {
+            const historyItem = createHistoryItem(record);
+            container.appendChild(historyItem);
+        });
+    }
+    
+    // Создание элемента истории
+    function createHistoryItem(record) {
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        
+        // Иконка в зависимости от типа
+        let icon = '📷';
+        let iconColor = '#ec407a';
+        if (record.type === 'photosession') {
+            icon = '📸';
+            iconColor = '#42a5f5';
+        } else if (record.type === 'video') {
+            icon = '🎬';
+            iconColor = '#9c27b0';
+        }
+        
+        // Форматирование даты
+        const date = new Date(record.date);
+        const formattedDate = formatDate(date);
+        
+        item.innerHTML = `
+            <div class="history-item-icon" style="background: ${iconColor}20; color: ${iconColor}">
+                ${icon}
+            </div>
+            <div class="history-item-content">
+                <div class="history-item-title">${record.title}</div>
+                <div class="history-item-desc">${record.details}</div>
+                <div class="history-item-meta">
+                    <span class="history-item-date">
+                        <span class="material-icons-round" style="font-size: 14px;">schedule</span>
+                        ${formattedDate}
+                    </span>
+                    <span class="history-item-price">${record.price} звёзд</span>
+                </div>
+            </div>
+            <div class="history-item-actions">
+                <button class="history-btn download" onclick="downloadHistoryItem(${record.id})">
+                    <span class="material-icons-round" style="font-size: 18px;">download</span>
+                </button>
+                <button class="history-btn" onclick="deleteHistoryItem(${record.id})">
+                    <span class="material-icons-round" style="font-size: 18px;">delete</span>
+                </button>
+            </div>
+        `;
+        
+        return item;
+    }
+    
+    // Форматирование даты
+    function formatDate(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'только что';
+        if (diffMins < 60) return `${diffMins} мин назад`;
+        if (diffHours < 24) return `${diffHours} ч назад`;
+        if (diffDays < 7) return `${diffDays} дн назад`;
+        
+        return date.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'short'
+        });
+    }
+    
+    // Обновление недавних записей в профиле
+    function updateRecentList() {
+        const container = document.getElementById('recent-list');
+        const emptyElement = document.getElementById('recent-empty');
+        
+        if (!container) return;
+        
+        // Берем последние 3 записи
+        const recent = history.slice(-3).reverse();
+        
+        if (recent.length === 0) {
+            if (emptyElement) {
+                emptyElement.style.display = 'block';
+            }
+            container.innerHTML = '';
+            container.appendChild(emptyElement);
+            return;
+        }
+        
+        if (emptyElement) {
+            emptyElement.style.display = 'none';
+        }
+        
+        container.innerHTML = '';
+        
+        recent.forEach(record => {
+            const recentItem = document.createElement('div');
+            recentItem.className = 'recent-item';
+            recentItem.style.cssText = `
+                padding: 12px;
+                border-bottom: 1px solid rgba(0,0,0,0.05);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            `;
+            
+            let icon = '📷';
+            if (record.type === 'photosession') icon = '📸';
+            if (record.type === 'video') icon = '🎬';
+            
+            recentItem.innerHTML = `
+                <div style="font-size: 20px;">${icon}</div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: #333; font-size: 14px;">${record.title}</div>
+                    <div style="color: #777; font-size: 12px;">${formatDate(new Date(record.date))}</div>
+                </div>
+                <div style="color: #ec407a; font-weight: 700; font-size: 16px;">${record.price}⭐</div>
+            `;
+            
+            container.appendChild(recentItem);
+        });
+    }
+    
+    // Обновление статистики в профиле
+    function updateProfileStats() {
+        // Обновляем цифры статистики
+        document.getElementById('stats-photos').textContent = stats.photos;
+        document.getElementById('stats-videos').textContent = stats.videos;
+        document.getElementById('stats-spent').textContent = stats.spent;
+        document.getElementById('stats-saved').textContent = stats.saved;
+        
+        // Обновляем стаж
+        const startDate = localStorage.getItem('nano_start_date') || new Date().toISOString();
+        const start = new Date(startDate);
+        const now = new Date();
+        const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+        
+        let daysText = 'сегодня';
+        if (diffDays === 1) daysText = '1 день';
+        else if (diffDays > 1 && diffDays < 5) daysText = `${diffDays} дня`;
+        else if (diffDays >= 5) daysText = `${diffDays} дней`;
+        
+        document.getElementById('profile-days').textContent = daysText;
+        
+        // Обновляем уровень
+        let level = '👶 Новичок';
+        const totalItems = stats.photos + stats.videos;
+        
+        if (totalItems >= 50) level = '👑 Профи';
+        else if (totalItems >= 20) level = '⭐ Любитель';
+        else if (totalItems >= 5) level = '🚀 Начинающий';
+        
+        document.getElementById('profile-level').textContent = level;
+    }
+    
+    // Фильтры истории
+    function setupHistoryFilters() {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Убираем активный класс у всех кнопок
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                
+                // Добавляем активный класс текущей кнопке
+                this.classList.add('active');
+                
+                // Применяем фильтр
+                const filter = this.dataset.filter;
+                updateHistoryDisplay(filter);
+            });
+        });
+    }
+    
+    // Кнопка "Создать первую генерацию"
+    const startBtn = document.getElementById('start-from-history');
+    if (startBtn) {
+        startBtn.addEventListener('click', function() {
+            switchScreen('main');
+        });
+    }
+    
+    // Кнопка пополнения баланса в профиле
+    const addBalanceBtn = document.getElementById('add-balance-profile');
+    if (addBalanceBtn) {
+        addBalanceBtn.addEventListener('click', function() {
+            if (window.tg) {
+                window.tg.showPopup({
+                    title: 'Пополнение баланса',
+                    message: `Ваш баланс: ${userBalance} звёзд\n\nДля пополнения напишите @NeuroFlashStudio_bot`,
+                    buttons: [{ type: 'default', text: 'Понятно' }]
+                });
+            } else {
+                alert(`Ваш баланс: ${userBalance} звёзд\n\nДля пополнения от
+
 console.log('Nano Banana App готов!');
+
 
 
