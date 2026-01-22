@@ -257,24 +257,14 @@ function setupButtons() {
             startGeneration();
         });
     }
-    
-    // Кнопки в Фотосессиях
-    document.querySelectorAll('.photosession-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            alert('Фотосессия скоро будет доступна!');
-        });
-    });
-    
-    // Кнопки в Видео
-    document.querySelectorAll('.video-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            alert('Генерация видео скоро будет доступна!');
-        });
-    });
-     
+ 
     // Инициализация фотосессий
     setupPhotosessions();
+    
+    // Инициализация видео
+    setupVideo();
 }
+ 
 
 function simulateUpload() {
     if (uploadedImages.length >= 5) {
@@ -705,5 +695,422 @@ function setupPhotosessions() {
 // Инициализация фотосессий при загрузке
 setupPhotosessions();
 
+// ========== ВИДЕО ==========
+function setupVideo() {
+    // Типы видео и их цены
+    const videoTypes = {
+        text: { name: 'Text-to-Video', price: 70, icon: '✍️' },
+        image: { name: 'Image-to-Video', price: 70, icon: '🔄' },
+        reference: { name: 'Reference Video', price: 70, icon: '🎞️' },
+        animate: { name: 'Оживить фото', price: 300, icon: '🖼️' }
+    };
+    
+    let currentVideoType = null;
+    let startFrame = null;
+    let endFrame = null;
+    
+    // Обработчики для карточек видео
+    document.querySelectorAll('.video-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            // Если кликнули не на кнопку внутри карточки
+            if (!e.target.closest('.video-btn')) {
+                const videoType = this.dataset.videoType;
+                selectVideoType(videoType);
+            }
+        });
+    });
+    
+    // Обработчики для кнопок создания видео
+    document.querySelectorAll('.video-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Чтобы не срабатывал клик по карточке
+            const videoType = this.dataset.videoType;
+            selectVideoType(videoType);
+        });
+    });
+    
+    function selectVideoType(videoType) {
+        currentVideoType = videoTypes[videoType];
+        if (!currentVideoType) return;
+        
+        console.log('Выбран тип видео:', currentVideoType.name);
+        
+        // Показываем соответствующий экран генерации
+        if (videoType === 'text') {
+            showVideoTextScreen();
+        } else if (videoType === 'image') {
+            showVideoImageScreen();
+        } else {
+            // Для остальных типов - заглушка
+            alert(`Генерация "${currentVideoType.name}" скоро будет доступна!`);
+        }
+    }
+    
+    // ========== TEXT-TO-VIDEO ==========
+    function showVideoTextScreen() {
+        const screen = document.getElementById('screen-video-text');
+        if (screen) {
+            screen.style.display = 'flex';
+            setupVideoText();
+            
+            // Кнопка "Назад"
+            const backBtn = document.getElementById('video-text-back-btn');
+            if (backBtn) {
+                backBtn.onclick = function() {
+                    screen.style.display = 'none';
+                };
+            }
+            
+            // Кнопка генерации
+            const generateBtn = document.getElementById('start-video-text-btn');
+            if (generateBtn) {
+                generateBtn.onclick = startVideoTextGeneration;
+            }
+        }
+    }
+    
+    function setupVideoText() {
+        // Примеры промптов
+        document.querySelectorAll('.example-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                const example = this.dataset.example;
+                document.getElementById('video-prompt').value = example;
+            });
+        });
+        
+        // Обновление предпросмотра при изменении настроек
+        const durationSelect = document.getElementById('video-duration');
+        const qualityRadios = document.querySelectorAll('input[name="quality"]');
+        
+        function updateVideoPreview() {
+            const duration = durationSelect.value;
+            let quality = '720p';
+            let price = 70;
+            
+            qualityRadios.forEach(radio => {
+                if (radio.checked) {
+                    quality = radio.value;
+                    if (quality === '1080p') {
+                        price += 20;
+                    }
+                }
+            });
+            
+            // Обновляем предпросмотр
+            document.getElementById('preview-duration').textContent = duration;
+            document.getElementById('preview-quality').textContent = quality;
+            document.getElementById('video-text-price').textContent = price;
+            document.getElementById('video-text-final-price').textContent = price;
+        }
+        
+        durationSelect.addEventListener('change', updateVideoPreview);
+        qualityRadios.forEach(radio => {
+            radio.addEventListener('change', updateVideoPreview);
+        });
+        
+        // Изначальное обновление
+        updateVideoPreview();
+    }
+    
+    function startVideoTextGeneration() {
+        const prompt = document.getElementById('video-prompt').value.trim();
+        if (!prompt) {
+            alert('Пожалуйста, опишите сцену для видео');
+            return;
+        }
+        
+        const duration = document.getElementById('video-duration').value;
+        let quality = '720p';
+        let price = 70;
+        
+        document.querySelectorAll('input[name="quality"]').forEach(radio => {
+            if (radio.checked) {
+                quality = radio.value;
+                if (quality === '1080p') {
+                    price += 20;
+                }
+            }
+        });
+        
+        // Проверка баланса
+        if (userBalance < price) {
+            alert(`Недостаточно звёзд!\nНужно: ${price}, у вас: ${userBalance}`);
+            return;
+        }
+        
+        const generateBtn = document.getElementById('start-video-text-btn');
+        if (generateBtn) {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<span class="generate-icon">⏳</span><span>Генерация видео...</span>`;
+            
+            console.log('Начинаем генерацию видео:', {
+                prompt: prompt,
+                duration: duration,
+                quality: quality,
+                price: price
+            });
+            
+            // Имитация процесса (4 секунды)
+            setTimeout(() => {
+                // Списание звёзд
+                userBalance -= price;
+                updateBalance();
+                
+                alert(`🎬 Видео создано!\n\n"${prompt.substring(0, 50)}..."\n\nВидео сохранено в вашей Истории.`);
+                
+                // Возвращаем кнопку
+                setTimeout(() => {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = `<span class="generate-icon">🎬</span><span>Сгенерировать видео за <span id="video-text-final-price">${price}</span> звёзд</span>`;
+                    
+                    // Закрываем экран
+                    document.getElementById('screen-video-text').style.display = 'none';
+                    
+                    // Очищаем текстовое поле
+                    document.getElementById('video-prompt').value = '';
+                }, 500);
+            }, 4000);
+        }
+    }
+    
+    // ========== IMAGE-TO-VIDEO ==========
+    function showVideoImageScreen() {
+        const screen = document.getElementById('screen-video-image');
+        if (screen) {
+            screen.style.display = 'flex';
+            setupVideoImage();
+            
+            // Кнопка "Назад"
+            const backBtn = document.getElementById('video-image-back-btn');
+            if (backBtn) {
+                backBtn.onclick = function() {
+                    screen.style.display = 'none';
+                    resetVideoImage();
+                };
+            }
+            
+            // Кнопка генерации
+            const generateBtn = document.getElementById('start-video-image-btn');
+            if (generateBtn) {
+                generateBtn.onclick = startVideoImageGeneration;
+            }
+        }
+    }
+    
+    function setupVideoImage() {
+        // Загрузка начального кадра
+        const startUpload = document.getElementById('start-frame-upload');
+        const startInput = document.getElementById('start-frame-input');
+        const startPreview = document.getElementById('start-frame-preview');
+        
+        if (startUpload && startInput) {
+            startUpload.addEventListener('click', function() {
+                startInput.click();
+            });
+            
+            startInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    loadImageFrame(file, startPreview, 'start');
+                }
+            });
+            
+            // Drag & Drop
+            setupDragAndDrop(startUpload, startPreview, 'start');
+        }
+        
+        // Загрузка конечного кадра
+        const endUpload = document.getElementById('end-frame-upload');
+        const endInput = document.getElementById('end-frame-input');
+        const endPreview = document.getElementById('end-frame-preview');
+        
+        if (endUpload && endInput) {
+            endUpload.addEventListener('click', function() {
+                endInput.click();
+            });
+            
+            endInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    loadImageFrame(file, endPreview, 'end');
+                }
+            });
+            
+            // Drag & Drop
+            setupDragAndDrop(endUpload, endPreview, 'end');
+        }
+    }
+    
+    function setupDragAndDrop(uploadElement, previewElement, frameType) {
+        uploadElement.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.background = 'rgba(156, 39, 176, 0.1)';
+            this.style.borderColor = 'rgba(156, 39, 176, 0.5)';
+        });
+        
+        uploadElement.addEventListener('dragleave', function() {
+            this.style.background = '';
+            this.style.borderColor = '';
+        });
+        
+        uploadElement.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.background = '';
+            this.style.borderColor = '';
+            
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImageFrame(file, previewElement, frameType);
+            }
+        });
+    }
+    
+    function loadImageFrame(file, previewElement, frameType) {
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Фото слишком большое (макс. 5MB)');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            
+            // Очищаем preview и добавляем новое изображение
+            previewElement.innerHTML = '';
+            previewElement.appendChild(img);
+            
+            // Сохраняем в переменную
+            if (frameType === 'start') {
+                startFrame = { file: file, preview: e.target.result };
+            } else {
+                endFrame = { file: file, preview: e.target.result };
+            }
+            
+            // Показываем сообщение об успешной загрузке
+            showNotification('Фото загружено!');
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function resetVideoImage() {
+        startFrame = null;
+        endFrame = null;
+        
+        const startPreview = document.getElementById('start-frame-preview');
+        const endPreview = document.getElementById('end-frame-preview');
+        
+        if (startPreview) startPreview.innerHTML = '';
+        if (endPreview) endPreview.innerHTML = '';
+        
+        const startInput = document.getElementById('start-frame-input');
+        const endInput = document.getElementById('end-frame-input');
+        
+        if (startInput) startInput.value = '';
+        if (endInput) endInput.value = '';
+    }
+    
+    function startVideoImageGeneration() {
+        // Проверка загруженных кадров
+        if (!startFrame) {
+            alert('Пожалуйста, загрузите начальный кадр');
+            return;
+        }
+        
+        if (!endFrame) {
+            alert('Пожалуйста, загрузите конечный кадр');
+            return;
+        }
+        
+        const price = 70;
+        
+        // Проверка баланса
+        if (userBalance < price) {
+            alert(`Недостаточно звёзд!\nНужно: ${price}, у вас: ${userBalance}`);
+            return;
+        }
+        
+        const transitionType = document.getElementById('transition-type').value;
+        const duration = document.getElementById('transition-duration').value;
+        
+        const generateBtn = document.getElementById('start-video-image-btn');
+        if (generateBtn) {
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = `<span class="generate-icon">⏳</span><span>Создание анимации...</span>`;
+            
+            console.log('Начинаем создание анимации:', {
+                transition: transitionType,
+                duration: duration,
+                price: price
+            });
+            
+            // Имитация процесса (3 секунды)
+            setTimeout(() => {
+                // Списание звёзд
+                userBalance -= price;
+                updateBalance();
+                
+                alert(`🔄 Анимация создана!\n\nПлавный переход между кадрами (${duration} сек)\n\nВидео сохранено в вашей Истории.`);
+                
+                // Возвращаем кнопку
+                setTimeout(() => {
+                    generateBtn.disabled = false;
+                    generateBtn.innerHTML = `<span class="generate-icon">🔄</span><span>Создать анимацию за <span id="video-image-price">${price}</span> звёзд</span>`;
+                    
+                    // Закрываем экран
+                    document.getElementById('screen-video-image').style.display = 'none';
+                    resetVideoImage();
+                }, 500);
+            }, 3000);
+        }
+    }
+    
+    // Вспомогательная функция для уведомлений
+    function showNotification(message) {
+        // Создаем временное уведомление
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+        `;
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 2000);
+    }
+    
+    // Добавляем стили для анимации уведомлений
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Инициализация видео при загрузке
+setupVideo();
+
 console.log('Nano Banana App готов!');
+
 
