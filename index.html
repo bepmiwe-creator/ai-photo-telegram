@@ -124,53 +124,23 @@
                     </div>
                 </div>
                 
-                <!-- ВЫБОР ФОРМАТА -->
+                                <!-- ВЫБОР ФОРМАТА -->
                 <div class="format-section">
                     <h4>Формат фото</h4>
                     <p class="input-hint">Выберите соотношение сторон</p>
                     
-                    <div class="format-icons-grid" id="format-icons">
-                        <!-- Форматы с иконками -->
-                        <div class="format-icon-item" data-format="1:1" data-name="Квадрат">
-                            <div class="format-icon-box square">
-                                <div class="icon-inside">⬜</div>
-                            </div>
-                            <span class="format-icon-label">Квадрат</span>
-                        </div>
-                        
-                        <div class="format-icon-item" data-format="4:5" data-name="Портрет">
-                            <div class="format-icon-box portrait">
-                                <div class="icon-inside">📱</div>
-                            </div>
-                            <span class="format-icon-label">Портрет</span>
-                        </div>
-                        
-                        <div class="format-icon-item" data-format="16:9" data-name="Широкий">
-                            <div class="format-icon-box wide">
-                                <div class="icon-inside">📺</div>
-                            </div>
-                            <span class="format-icon-label">Широкий</span>
-                        </div>
-                        
-                        <div class="format-icon-item" data-format="9:16" data-name="Сторис">
-                            <div class="format-icon-box story">
-                                <div class="icon-inside">📲</div>
-                            </div>
-                            <span class="format-icon-label">Сторис</span>
-                        </div>
-                        
-                        <div class="format-icon-item" data-format="3:4" data-name="Классика">
-                            <div class="format-icon-box classic">
-                                <div class="icon-inside">🖼️</div>
-                            </div>
-                            <span class="format-icon-label">Классика</span>
-                        </div>
-                        
-                        <div class="format-icon-item" data-format="2:3" data-name="Постер">
-                            <div class="format-icon-box poster">
-                                <div class="icon-inside">🎬</div>
-                            </div>
-                            <span class="format-icon-label">Постер</span>
+                    <div class="format-select-container">
+                        <select class="format-select" id="format-select">
+                            <option value="1:1" data-preview="⬜">Квадрат (1:1)</option>
+                            <option value="4:5" data-preview="📱">Портрет (4:5)</option>
+                            <option value="16:9" data-preview="📺">Широкий (16:9)</option>
+                            <option value="9:16" data-preview="📲">Сторис (9:16)</option>
+                            <option value="3:4" data-preview="🖼️">Классика (3:4)</option>
+                            <option value="2:3" data-preview="🎬">Постер (2:3)</option>
+                        </select>
+                        <div class="format-preview" id="format-preview">
+                            <div class="preview-box" id="preview-box"></div>
+                            <span class="preview-text" id="preview-text">1:1</span>
                         </div>
                     </div>
                 </div>
@@ -883,6 +853,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
