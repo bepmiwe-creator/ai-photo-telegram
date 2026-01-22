@@ -69,58 +69,140 @@
             </div>
         </div>
 
-               <!-- ЭКРАН ГЕНЕРАЦИИ -->
+                        <!-- ЭКРАН ГЕНЕРАЦИИ -->
         <div class="screen-overlay" id="screen-generate" style="display: none;">
             <div class="generate-container">
                 <div class="generate-header">
                     <button class="back-btn" id="generate-back-btn">←</button>
-                    <h3>Генерация фото</h3>
+                    <h3 id="generate-title">Генерация фото</h3>
                     <div style="width: 40px;"></div>
                 </div>
-
-                <!-- ЗАГРУЗКА ФОТО -->
+                
+                <!-- ТИП ГЕНЕРАЦИИ -->
+                <div class="generate-type" id="generate-type-info">
+                    <div class="type-badge" id="type-badge">✨ По описанию</div>
+                </div>
+                
+                <!-- ПОЛЕ ДЛЯ ПРОМПТА -->
+                <div class="prompt-section" id="prompt-section">
+                    <h4>Опишите изображение</h4>
+                    <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
+                    
+                    <textarea class="prompt-textarea" id="ai-prompt" placeholder="Пример: Девушка в розовом платье стоит на берегу океана на закате, волны, песок, золотистый свет, фотореалистично, высокая детализация..." rows="4" maxlength="2000"></textarea>
+                    
+                    <div class="prompt-counter">
+                        <span id="char-count">0</span> / 2000 знаков
+                    </div>
+                    
+                    <div class="prompt-examples">
+                        <p class="examples-title">Примеры для вдохновения:</p>
+                        <div class="example-chip" data-example="Кот в костюме супергероя летит над ночным городом, неоновые огни, динамичный кадр">Суперкот</div>
+                        <div class="example-chip" data-example="Девушка в свадебном платье в волшебном лесу, светлячки, магическое сияние, фэнтези">Свадьба в лесу</div>
+                        <div class="example-chip" data-example="Космонавт в открытом космосе, Земля на фоне, звездное небо, эпично">Космонавт</div>
+                    </div>
+                </div>
+                
+                <!-- ЗАГРУЗКА ФОТО (ОПЦИОНАЛЬНО) -->
                 <div class="upload-section">
-                    <h4>Загрузите до 5 фото</h4>
+                    <div class="upload-header">
+                        <h4>Добавить фото (опционально)</h4>
+                        <span class="optional-badge">Необязательно</span>
+                    </div>
+                    <p class="input-hint">Загрузите фото для редактирования или оставьте пустым для генерации с нуля</p>
+                    
                     <div class="upload-grid" id="upload-grid">
                         <div class="upload-item upload-add" id="upload-add-btn">
                             <span class="material-icons-round">add</span>
                             <span>Добавить фото</span>
                         </div>
+                        <!-- Сюда будут добавляться превью загруженных фото -->
+                    </div>
+                    
+                    <div class="upload-info">
+                        <span class="material-icons-round">info</span>
+                        <span>Максимум 5 фото. ИИ учтёт черты лица и стиль</span>
                     </div>
                 </div>
-
+                
                 <!-- ВЫБОР ФОРМАТА -->
                 <div class="format-section">
                     <h4>Формат фото</h4>
-                    <div class="format-scroll" id="format-scroll">
-                        <!-- Форматы загружаются через JS -->
+                    <p class="input-hint">Выберите соотношение сторон</p>
+                    
+                    <div class="format-icons-grid" id="format-icons">
+                        <!-- Форматы с иконками -->
+                        <div class="format-icon-item" data-format="1:1" data-name="Квадрат">
+                            <div class="format-icon-box square">
+                                <div class="icon-inside">⬜</div>
+                            </div>
+                            <span class="format-icon-label">Квадрат</span>
+                        </div>
+                        
+                        <div class="format-icon-item" data-format="4:5" data-name="Портрет">
+                            <div class="format-icon-box portrait">
+                                <div class="icon-inside">📱</div>
+                            </div>
+                            <span class="format-icon-label">Портрет</span>
+                        </div>
+                        
+                        <div class="format-icon-item" data-format="16:9" data-name="Широкий">
+                            <div class="format-icon-box wide">
+                                <div class="icon-inside">📺</div>
+                            </div>
+                            <span class="format-icon-label">Широкий</span>
+                        </div>
+                        
+                        <div class="format-icon-item" data-format="9:16" data-name="Сторис">
+                            <div class="format-icon-box story">
+                                <div class="icon-inside">📲</div>
+                            </div>
+                            <span class="format-icon-label">Сторис</span>
+                        </div>
+                        
+                        <div class="format-icon-item" data-format="3:4" data-name="Классика">
+                            <div class="format-icon-box classic">
+                                <div class="icon-inside">🖼️</div>
+                            </div>
+                            <span class="format-icon-label">Классика</span>
+                        </div>
+                        
+                        <div class="format-icon-item" data-format="2:3" data-name="Постер">
+                            <div class="format-icon-box poster">
+                                <div class="icon-inside">🎬</div>
+                            </div>
+                            <span class="format-icon-label">Постер</span>
+                        </div>
                     </div>
                 </div>
-
+                
                 <!-- ВЫБОР МОДЕЛИ -->
                 <div class="model-section">
                     <h4>Модель ИИ</h4>
+                    <p class="input-hint">Выберите качество генерации</p>
+                    
                     <div class="model-options">
                         <div class="model-card" data-model="nano" data-price="7">
                             <div class="model-badge">⭐ 7</div>
                             <div class="model-name">Nano Banana</div>
                             <div class="model-desc">Стандартное качество</div>
+                            <div class="model-hint">Быстро, для соцсетей</div>
                         </div>
                         <div class="model-card" data-model="pro" data-price="25">
                             <div class="model-badge best">⭐ 25</div>
                             <div class="model-name">Nano Banana Pro</div>
                             <div class="model-desc">Высокое качество</div>
+                            <div class="model-hint">Детализация, для печати</div>
                         </div>
                     </div>
                 </div>
-
+                
                 <!-- КНОПКА ГЕНЕРАЦИИ -->
                 <div class="generate-action">
-                    <button class="generate-btn" id="start-generate-btn">
-                        <span class="generate-icon">✨</span>
-                        <span>Сгенерировать за <span id="total-price">7</span> звёзд</span>
+                    <button class="generate-btn" id="start-generate-btn" disabled>
+                        <span class="generate-icon">📝</span>
+                        <span id="generate-btn-text">Введите промпт</span>
                     </button>
-                    <p class="generate-hint">Создание занимает 15-60 секунд</p>
+                    <p class="generate-hint" id="generate-hint">Заполните поле "Опишите изображение" для генерации</p>
                 </div>
             </div>
         </div>
@@ -801,6 +883,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
