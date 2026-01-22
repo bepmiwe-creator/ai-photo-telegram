@@ -1126,7 +1126,7 @@ function setupVideo() {
         }, 2000);
     }
     
-    // Добавляем стили для анимации уведомлений
+       // Добавляем стили для анимации уведомлений
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
@@ -1140,16 +1140,18 @@ function setupVideo() {
     `;
     document.head.appendChild(style);
 }
+
 // Вспомогательная функция для получения названия перехода
-    function getTransitionName(type) {
-        const transitions = {
-            'smooth': 'Плавный',
-            'morph': 'Морфинг',
-            'zoom': 'Приближение',
-            'rotate': 'Вращение'
-        };
-        return transitions[type] || type;
-    }
+function getTransitionName(type) {
+    const transitions = {
+        'smooth': 'Плавный',
+        'morph': 'Морфинг',
+        'zoom': 'Приближение',
+        'rotate': 'Вращение'
+    };
+    return transitions[type] || type;
+}
+
 // Инициализация видео при загрузке
 setupVideo();
 
@@ -1556,8 +1558,8 @@ function setupHistoryAndProfile() {
 
 // Инициализация истории и профиля
 setupHistoryAndProfile();
-
 console.log('Nano Banana App готов!');
+
 
 
 
