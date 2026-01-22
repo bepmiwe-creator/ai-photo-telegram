@@ -46,6 +46,32 @@
             </div>
         </div>
 
+        <!-- ЭКРАН ВЫБОРА СТИЛЯ -->
+        <div class="screen" id="screen-styles">
+            <div class="screen-header">
+                <button class="back-btn" id="styles-back-btn">←</button>
+                <h2 id="styles-category-title">Выбор стиля</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            
+            <p class="screen-subtitle">Выберите пример стиля для генерации</p>
+            
+            <div class="styles-grid" id="styles-container">
+                <!-- Стили будут загружаться через JavaScript -->
+            </div>
+            
+            <div class="style-info glass-card">
+                <div class="info-icon">💡</div>
+                <div class="info-content">
+                    <h4>Как это работает?</h4>
+                    <p>1. Выберите понравившийся стиль</p>
+                    <p>2. Загрузите 1-5 своих фото</p>
+                    <p>3. ИИ создаст фото в выбранном стиле с вашей внешностью</p>
+                    <p>4. Результат сохранится в Истории на 7 дней</p>
+                </div>
+            </div>
+        </div>
+
         <!-- ЭКРАН ФОТО -->
         <div class="screen" id="screen-photo">
             <div class="screen-header">
@@ -69,7 +95,7 @@
             </div>
         </div>
 
-                        <!-- ЭКРАН ГЕНЕРАЦИИ -->
+        <!-- ЭКРАН ГЕНЕРАЦИИ -->
         <div class="screen-overlay" id="screen-generate" style="display: none;">
             <div class="generate-container">
                 <div class="generate-header">
@@ -84,7 +110,7 @@
                 </div>
                 
                 <!-- ПОЛЕ ДЛЯ ПРОМПТА -->
-                <div class="prompt-section" id="prompt-section">
+                <div class="prompt-section" id="prompt-section" style="display: none;">
                     <h4>Опишите изображение</h4>
                     <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
                     
@@ -102,30 +128,29 @@
                     </div>
                 </div>
                 
-                <!-- ЗАГРУЗКА ФОТО (ОПЦИОНАЛЬНО) -->
+                <!-- ЗАГРУЗКА ФОТО -->
                 <div class="upload-section">
                     <div class="upload-header">
-                        <h4>Добавить фото (опционально)</h4>
-                        <span class="optional-badge">Необязательно</span>
+                        <h4>Загрузите свои фото</h4>
+                        <span class="required-badge">Обязательно</span>
                     </div>
-                    <p class="input-hint">Загрузите фото для редактирования или оставьте пустым для генерации с нуля</p>
+                    <p class="input-hint">Загрузите 1-5 своих фото для генерации. ИИ учтёт черты лица.</p>
                     
                     <div class="upload-grid" id="upload-grid">
                         <div class="upload-item upload-add" id="upload-add-btn">
                             <span class="material-icons-round">add</span>
                             <span>Добавить фото</span>
+                            <div class="upload-count">0/5</div>
                         </div>
-                        <!-- Сюда будут добавляться превью загруженных фото -->
                     </div>
                     
                     <div class="upload-info">
                         <span class="material-icons-round">info</span>
-                        <span>Максимум 5 фото. ИИ учтёт черты лица и стиль</span>
+                        <span>Рекомендуем: портреты с хорошим освещением, вид лица анфас</span>
                     </div>
                 </div>
                 
-                                <!-- ВЫБОР ФОРМАТА -->
-                               <!-- ВЫБОР ФОРМАТА -->
+                <!-- ВЫБОР ФОРМАТА -->
                 <div class="format-section">
                     <h4>Формат фото</h4>
                     <p class="input-hint">Выберите соотношение сторон</p>
@@ -146,7 +171,7 @@
                     <p class="input-hint">Выберите качество генерации</p>
                     
                     <div class="model-options">
-                        <div class="model-card" data-model="nano" data-price="7">
+                        <div class="model-card selected" data-model="nano" data-price="7">
                             <div class="model-badge">⭐ 7</div>
                             <div class="model-name">Nano Banana</div>
                             <div class="model-desc">Стандартное качество</div>
@@ -165,14 +190,14 @@
                 <div class="generate-action">
                     <button class="generate-btn" id="start-generate-btn" disabled>
                         <span class="generate-icon">📝</span>
-                        <span id="generate-btn-text">Введите промпт</span>
+                        <span id="generate-btn-text">Загрузите фото</span>
                     </button>
-                    <p class="generate-hint" id="generate-hint">Заполните поле "Опишите изображение" для генерации</p>
+                    <p class="generate-hint" id="generate-hint">Загрузите хотя бы одно фото для генерации</p>
                 </div>
             </div>
         </div>
 
-              <!-- ЭКРАН ФОТОСЕССИИ -->
+        <!-- ЭКРАН ФОТОСЕССИИ -->
         <div class="screen" id="screen-photosession">
             <div class="screen-header">
                 <h2>📸 Фотосессии</h2>
@@ -257,107 +282,8 @@
                 </div>
             </div>
         </div>
-               <!-- ЭКРАН ГЕНЕРАЦИИ ФОТОСЕССИИ -->
-        <div class="screen-overlay" id="screen-photosession-generate" style="display: none;">
-            <div class="photosession-generate-container">
-                <div class="generate-header">
-                    <button class="back-btn" id="photosession-back-btn">←</button>
-                    <h3>Создание фотосессии</h3>
-                    <div style="width: 40px;"></div>
-                </div>
-                
-                <!-- ПРОГРЕСС-ШАГИ -->
-                <div class="photosession-steps">
-                    <div class="step active" data-step="1">
-                        <div class="step-number">1</div>
-                        <div class="step-text">Выбор стиля</div>
-                    </div>
-                    <div class="step" data-step="2">
-                        <div class="step-number">2</div>
-                        <div class="step-text">Загрузка фото</div>
-                    </div>
-                    <div class="step" data-step="3">
-                        <div class="step-number">3</div>
-                        <div class="step-text">Генерация</div>
-                    </div>
-                </div>
-                
-                <!-- ШАГ 1: ВЫБОР СТИЛЯ -->
-                <div class="photosession-step active" id="step-1">
-                    <h4>Выбранный стиль: <span id="selected-pack-name">Зимняя сказка</span></h4>
-                    <div class="style-preview">
-                        <div class="preview-grid">
-                            <div class="preview-item">❄️</div>
-                            <div class="preview-item">⛄</div>
-                            <div class="preview-item">🧥</div>
-                            <div class="preview-item">🧣</div>
-                            <div class="preview-item">🎄</div>
-                            <div class="preview-item">🦌</div>
-                        </div>
-                        <p class="preview-hint">ИИ создаст 10 фото в этом стиле с разными позами</p>
-                    </div>
-                </div>
-                
-                <!-- ШАГ 2: ЗАГРУЗКА ФОТО -->
-                <div class="photosession-step" id="step-2" style="display: none;">
-                    <h4>Загрузите 3-5 своих фото</h4>
-                    <p class="step-description">Чем больше фото вы загрузите, тем лучше ИИ поймёт ваши черты лица</p>
-                    
-                    <div class="photosession-upload">
-                        <div class="upload-area" id="photosession-upload-area">
-                            <div class="upload-icon">📤</div>
-                            <div class="upload-text">Перетащите сюда фото или нажмите</div>
-                            <div class="upload-hint">Рекомендуем: портреты с хорошим освещением</div>
-                            <input type="file" id="photosession-file-input" accept="image/*" multiple style="display: none;">
-                        </div>
-                        
-                        <div class="uploaded-photos" id="photosession-uploaded">
-                            <!-- Здесь появятся загруженные фото -->
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- ШАГ 3: ПОДТВЕРЖДЕНИЕ -->
-                <div class="photosession-step" id="step-3" style="display: none;">
-                    <h4>Подтверждение заказа</h4>
-                    
-                    <div class="order-summary">
-                        <div class="summary-item">
-                            <span>Стиль фотосессии:</span>
-                            <span id="summary-pack-name">Зимняя сказка</span>
-                        </div>
-                        <div class="summary-item">
-                            <span>Количество фото:</span>
-                            <span>10 + 3 в подарок</span>
-                        </div>
-                        <div class="summary-item">
-                            <span>Загружено фото:</span>
-                            <span id="summary-photos-count">0</span>
-                        </div>
-                        <div class="summary-item total">
-                            <span>Итого к оплате:</span>
-                            <span class="total-price" id="photosession-total-price">159 звёзд</span>
-                        </div>
-                    </div>
-                    
-                    <div class="photosession-action">
-                        <button class="generate-btn large" id="start-photosession-btn">
-                            <span class="generate-icon">✨</span>
-                            <span>Создать фотосессию за <span id="photosession-final-price">159</span> звёзд</span>
-                        </button>
-                        <p class="generate-hint">Создание 13 фото займет 2-3 минуты</p>
-                    </div>
-                </div>
-                
-                <!-- КНОПКИ НАВИГАЦИИ -->
-                <div class="photosession-navigation">
-                    <button class="nav-btn prev" id="prev-step-btn" style="display: none;">← Назад</button>
-                    <button class="nav-btn next" id="next-step-btn">Далее →</button>
-                </div>
-            </div>
-        </div>
-        
-               <!-- ЭКРАН ВИДЕО -->
+
+        <!-- ЭКРАН ВИДЕО -->
         <div class="screen" id="screen-video">
             <div class="screen-header">
                 <h2>🎬 Видео</h2>
@@ -432,166 +358,8 @@
                 </div>
             </div>
         </div>
-        <!-- ЭКРАН ГЕНЕРАЦИИ TEXT-TO-VIDEO -->
-        <div class="screen-overlay" id="screen-video-text" style="display: none;">
-            <div class="video-generate-container">
-                <div class="generate-header">
-                    <button class="back-btn" id="video-text-back-btn">←</button>
-                    <h3>Text-to-Video</h3>
-                    <div style="width: 40px;"></div>
-                </div>
-                
-                <div class="video-generate-content">
-                    <div class="video-input-section">
-                        <h4>Опишите сцену для видео</h4>
-                        <p class="input-hint">Чем подробнее описание, тем лучше результат</p>
-                        
-                        <textarea class="video-textarea" id="video-prompt" placeholder="Пример: Девушка в розовом платье танцует под дождем в неоновом городе, медленная съемка, кинематографично, атмосферно, детализированные капли дождя, отражения в лужах..." rows="6"></textarea>
-                        
-                        <div class="prompt-examples">
-                            <p class="examples-title">Примеры промптов:</p>
-                            <div class="example-chip" data-example="Космонавт в открытом космосе, Земля на фоне, звезды мерцают, медленное вращение, эпичная музыка">Космос</div>
-                            <div class="example-chip" data-example="Кот в костюме супергероя летит над ночным городом, неоновые огни, динамичный полет">Суперкот</div>
-                            <div class="example-chip" data-example="Водопад в волшебном лесу, светлячки, магическое сияние, фэнтези атмосфера">Волшебный лес</div>
-                        </div>
-                    </div>
-                    
-                    <div class="video-settings">
-                        <h4>Настройки видео</h4>
-                        
-                        <div class="setting-row">
-                            <label>Длительность:</label>
-                            <select id="video-duration">
-                                <option value="3">3 секунды</option>
-                                <option value="5" selected>5 секунд</option>
-                                <option value="7">7 секунд</option>
-                                <option value="10">10 секунд</option>
-                            </select>
-                        </div>
-                        
-                        <div class="setting-row">
-                            <label>Качество:</label>
-                            <div class="quality-options">
-                                <label class="quality-option">
-                                    <input type="radio" name="quality" value="720p" checked>
-                                    <span>720p (стандарт)</span>
-                                </label>
-                                <label class="quality-option">
-                                    <input type="radio" name="quality" value="1080p">
-                                    <span>1080p (+20 звёзд)</span>
-                                </label>
-                            </div>
-                        </div>
-                        
-                        <div class="setting-row">
-                            <label>Стиль анимации:</label>
-                            <select id="video-style">
-                                <option value="realistic">Реалистичный</option>
-                                <option value="cinematic">Кинематографичный</option>
-                                <option value="animated">Анимационный</option>
-                                <option value="artistic">Художественный</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="video-preview">
-                        <h4>Предпросмотр параметров</h4>
-                        <div class="preview-card">
-                            <div class="preview-placeholder">
-                                <div class="placeholder-icon">🎬</div>
-                                <div class="placeholder-text">Здесь будет превью видео</div>
-                            </div>
-                            <div class="preview-details">
-                                <p><strong>Длительность:</strong> <span id="preview-duration">5</span> сек</p>
-                                <p><strong>Качество:</strong> <span id="preview-quality">720p</span></p>
-                                <p><strong>Стоимость:</strong> <span id="video-text-price">70</span> звёзд</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="video-action">
-                        <button class="generate-btn large" id="start-video-text-btn">
-                            <span class="generate-icon">🎬</span>
-                            <span>Сгенерировать видео за <span id="video-text-final-price">70</span> звёзд</span>
-                        </button>
-                        <p class="generate-hint">Генерация займет 45-90 секунд</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- ЭКРАН ГЕНЕРАЦИИ IMAGE-TO-VIDEO -->
-        <div class="screen-overlay" id="screen-video-image" style="display: none;">
-            <div class="video-generate-container">
-                <div class="generate-header">
-                    <button class="back-btn" id="video-image-back-btn">←</button>
-                    <h3>Image-to-Video</h3>
-                    <div style="width: 40px;"></div>
-                </div>
-                
-                <div class="video-generate-content">
-                    <div class="image-video-section">
-                        <h4>Загрузите два кадра</h4>
-                        <p class="input-hint">ИИ создаст плавную анимацию перехода между ними</p>
-                        
-                        <div class="image-frames">
-                            <div class="frame-container">
-                                <div class="frame-label">Начальный кадр</div>
-                                <div class="frame-upload" id="start-frame-upload">
-                                    <div class="upload-icon">📷</div>
-                                    <div class="upload-text">Загрузить фото</div>
-                                    <input type="file" id="start-frame-input" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="frame-preview" id="start-frame-preview"></div>
-                            </div>
-                            
-                            <div class="frame-arrow">→</div>
-                            
-                            <div class="frame-container">
-                                <div class="frame-label">Конечный кадр</div>
-                                <div class="frame-upload" id="end-frame-upload">
-                                    <div class="upload-icon">📷</div>
-                                    <div class="upload-text">Загрузить фото</div>
-                                    <input type="file" id="end-frame-input" accept="image/*" style="display: none;">
-                                </div>
-                                <div class="frame-preview" id="end-frame-preview"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="transition-settings">
-                            <h4>Настройки перехода</h4>
-                            <div class="setting-row">
-                                <label>Тип перехода:</label>
-                                <select id="transition-type">
-                                    <option value="smooth">Плавный</option>
-                                    <option value="morph">Морфинг</option>
-                                    <option value="zoom">Приближение</option>
-                                    <option value="rotate">Вращение</option>
-                                </select>
-                            </div>
-                            
-                            <div class="setting-row">
-                                <label>Длительность:</label>
-                                <select id="transition-duration">
-                                    <option value="3">3 секунды</option>
-                                    <option value="5" selected>5 секунд</option>
-                                    <option value="7">7 секунд</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="video-action">
-                        <button class="generate-btn large" id="start-video-image-btn">
-                            <span class="generate-icon">🔄</span>
-                            <span>Создать анимацию за <span id="video-image-price">70</span> звёзд</span>
-                        </button>
-                        <p class="generate-hint">Анимация будет создана за 30-60 секунд</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-               <!-- ЭКРАН ИСТОРИИ -->
+
+        <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
             <div class="screen-header">
                 <h2>📚 История</h2>
@@ -611,8 +379,6 @@
             
             <!-- СПИСОК ИСТОРИИ -->
             <div class="history-container" id="history-container">
-                <!-- Записи будут добавляться через JavaScript -->
-                
                 <!-- ПУСТАЯ ИСТОРИЯ -->
                 <div class="history-empty" id="history-empty">
                     <div class="empty-icon">📭</div>
@@ -635,7 +401,7 @@
             </div>
         </div>
 
-               <!-- ЭКРАН ПРОФИЛЯ -->
+        <!-- ЭКРАН ПРОФИЛЯ -->
         <div class="screen" id="screen-profile">
             <div class="screen-header">
                 <h2>👤 Профиль</h2>
@@ -848,10 +614,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
