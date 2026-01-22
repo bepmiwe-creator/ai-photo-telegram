@@ -2384,3 +2384,211 @@ input:checked + .slider:before {
 .history-btn.download:hover {
     background: rgba(76, 175, 80, 0.2);
 }
+
+/* ========== УЛУЧШЕННЫЙ ЭКРАН ГЕНЕРАЦИИ ========== */
+.generate-type {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.type-badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #9c27b0, #7b1fa2);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(156, 39, 176, 0.2);
+}
+
+/* СЕКЦИЯ ПРОМПТА */
+.prompt-section {
+    margin-bottom: 25px;
+}
+
+.prompt-textarea {
+    width: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 120px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.prompt-textarea:focus {
+    outline: none;
+    border-color: #9c27b0;
+    box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+}
+
+.prompt-textarea::placeholder {
+    color: #aaa;
+}
+
+.prompt-counter {
+    text-align: right;
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+/* ЗАГОЛОВОК ЗАГРУЗКИ */
+.upload-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.optional-badge {
+    background: rgba(0, 0, 0, 0.05);
+    color: #666;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.upload-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 14px;
+    margin-top: 15px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+}
+
+.upload-info .material-icons-round {
+    font-size: 18px;
+    color: #42a5f5;
+}
+
+/* ФОРМАТЫ С ИКОНКАМИ */
+.format-icons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.format-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 15px;
+    border-radius: 16px;
+    border: 2px solid transparent;
+}
+
+.format-icon-item:hover {
+    background: rgba(0, 0, 0, 0.02);
+    transform: translateY(-3px);
+}
+
+.format-icon-item.selected {
+    background: rgba(156, 39, 176, 0.05);
+    border-color: rgba(156, 39, 176, 0.3);
+}
+
+.format-icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.format-icon-item.selected .format-icon-box {
+    background: rgba(156, 39, 176, 0.1);
+    box-shadow: 0 5px 15px rgba(156, 39, 176, 0.1);
+}
+
+.icon-inside {
+    font-size: 28px;
+    opacity: 0.8;
+}
+
+/* Формы иконок */
+.square { width: 70px; height: 70px; }
+.portrait { width: 56px; height: 70px; }
+.wide { width: 70px; height: 39px; }
+.story { width: 39px; height: 70px; }
+.classic { width: 52px; height: 70px; }
+.poster { width: 46px; height: 70px; }
+
+.format-icon-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+}
+
+.format-icon-item.selected .format-icon-label {
+    color: #9c27b0;
+}
+
+/* ПОДСКАЗКИ МОДЕЛЕЙ */
+.model-hint {
+    color: #777;
+    font-size: 13px;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* КНОПКА ГЕНЕРАЦИИ */
+.generate-btn:disabled {
+    background: linear-gradient(90deg, #cccccc, #aaaaaa) !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.generate-btn:disabled .generate-icon {
+    opacity: 0.5;
+}
+
+#generate-btn-text {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ПОДСКАЗКА ПОД КНОПКОЙ */
+#generate-hint {
+    color: #ff9800;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 480px) {
+    .format-icons-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .format-icon-box {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .square { width: 60px; height: 60px; }
+    .portrait { width: 48px; height: 60px; }
+    .wide { width: 60px; height: 34px; }
+    .story { width: 34px; height: 60px; }
+    .classic { width: 45px; height: 60px; }
+    .poster { width: 40px; height: 60px; }
+}
