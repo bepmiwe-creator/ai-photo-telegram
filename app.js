@@ -51,7 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // 4. Настраиваем кнопки
     setupButtons();
     
-    // 5. Плавное появление
+    // 5. НАСТРАИВАЕМ ЗАГРУЗКУ ФОТО (ДОБАВЬ ЭТУ СТРОЧКУ!)
+    setupRealUpload();
+    
+    // 6. Плавное появление
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
@@ -434,11 +437,8 @@ function setupButtons() {
         });
     });
     
-    // Кнопка загрузки фото
-    const uploadBtn = document.getElementById('upload-add-btn');
-    if (uploadBtn) {
-        uploadBtn.addEventListener('click', simulateUpload);
-    }
+ // Настраиваем реальную загрузку фото
+setupRealUpload();
     
     // Кнопка генерации
     const generateBtn = document.getElementById('start-generate-btn');
@@ -454,39 +454,72 @@ function setupButtons() {
     // Инициализация видео
     setupVideo();
 }
- 
+ // ========== РЕАЛЬНАЯ ЗАГРУЗКА ФОТО ==========
+function setupRealUpload() {
+    // Создаем скрытый input для выбора файлов
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';  // Только изображения
+    fileInput.multiple = true;     // Можно выбирать несколько
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+    
+    // Когда выбрали файлы
+    fileInput.addEventListener('change', function(e) {
+        const files = e.target.files;
+        if (files.length > 0) {
+            handleFileUpload(files);
+        }
+        fileInput.value = ''; // Сбрасываем input
+    });
+    
+    // Привязываем красивую кнопку к скрытому input
+    const uploadBtn = document.getElementById('upload-add-btn');
+    if (uploadBtn) {
+        uploadBtn.addEventListener('click', function() {
+            fileInput.click(); // Открываем выбор файлов
+        });
+    }
+}
 
-function simulateUpload() {
-    if (uploadedImages.length >= 5) {
-        alert('Можно загрузить не более 5 фото');
+// Обработка загруженных файлов
+function handleFileUpload(files) {
+    const maxFiles = 5;
+    const remaining = maxFiles - uploadedImages.length;
+    
+    if (files.length > remaining) {
+        alert(`Можно загрузить не более ${maxFiles} фото. Осталось мест: ${remaining}`);
         return;
     }
     
-    // Имитируем загрузку (в реальном приложении будет выбор файлов)
-    alert('В реальном приложении здесь откроется выбор файлов с телефона\n\nДля демо добавляем тестовое фото');
-    
-    // Добавляем тестовое изображение
-    const testImages = [
-        'https://via.placeholder.com/300/FFC0CB/FFFFFF?text=Фото+1',
-        'https://via.placeholder.com/300/FFB6C1/FFFFFF?text=Фото+2',
-        'https://via.placeholder.com/300/FF69B4/FFFFFF?text=Фото+3'
-    ];
-    
-    const randomImg = testImages[Math.floor(Math.random() * testImages.length)];
-    uploadedImages.push({ preview: randomImg });
-    updateUploadGrid();
+    for (let i = 0; i < Math.min(files.length, remaining); i++) {
+        const file = files[i];
+        
+        // Проверяем, что это изображение
+        if (!file.type.startsWith('image/')) {
+            alert('Пожалуйста, загружайте только изображения');
+            continue;
+        }
+        
+        // Проверяем размер (макс. 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert(`Фото "${file.name}" слишком большое (макс. 5MB)`);
+            continue;
+        }
+        
+        // Читаем файл и создаем превью
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedImages.push({
+                preview: e.target.result, // Картинка в base64
+                file: file                // Сам файл
+            });
+            updateUploadGrid();      // Обновляем экран
+            checkGenerateButton();   // Активируем кнопку генерации
+        };
+        reader.readAsDataURL(file); // Конвертируем в base64
+    }
 }
-    
-    // Тестовые изображения
-    const testImages = [
-        'https://via.placeholder.com/300/FFC0CB/FFFFFF?text=Фото+1',
-        'https://via.placeholder.com/300/FFB6C1/FFFFFF?text=Фото+2',
-        'https://via.placeholder.com/300/FF69B4/FFFFFF?text=Фото+3'
-    ];
-    
-    const randomImg = testImages[Math.floor(Math.random() * testImages.length)];
-    uploadedImages.push({ preview: randomImg });
-    updateUploadGrid();
 
 function updateUploadGrid() {
     const container = document.getElementById('upload-grid');
@@ -1766,6 +1799,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
