@@ -544,41 +544,229 @@
                 </div>
             </div>
         </div>
-        <!-- ЭКРАН ИСТОРИИ -->
+               <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
             <div class="screen-header">
                 <h2>📚 История</h2>
                 <p class="screen-subtitle">Ваши генерации за последние 7 дней</p>
             </div>
             
-            <div class="history-list" id="history-list">
-                <div class="history-empty">
+            <!-- ФИЛЬТРЫ -->
+            <div class="history-filters glass-card">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="photo">Фото</button>
+                <button class="filter-btn" data-filter="photosession">Фотосессии</button>
+                <button class="filter-btn" data-filter="video">Видео</button>
+                <div class="filter-info">
+                    <span id="history-count">0</span> записей
+                </div>
+            </div>
+            
+            <!-- СПИСОК ИСТОРИИ -->
+            <div class="history-container" id="history-container">
+                <!-- Записи будут добавляться через JavaScript -->
+                
+                <!-- ПУСТАЯ ИСТОРИЯ -->
+                <div class="history-empty" id="history-empty">
                     <div class="empty-icon">📭</div>
-                    <p>У вас пока нет созданных фото</p>
-                    <p class="empty-hint">Начните с раздела "Фото" или "Фотосессия"</p>
+                    <h3>История пуста</h3>
+                    <p>Здесь появятся ваши созданные фото и видео</p>
+                    <button class="btn-start" id="start-from-history">Создать первую генерацию</button>
+                </div>
+            </div>
+            
+            <!-- ИНФОРМАЦИЯ -->
+            <div class="history-info glass-card">
+                <div class="info-icon">💾</div>
+                <div class="info-content">
+                    <h4>Как работает история?</h4>
+                    <p>• Все генерации хранятся 7 дней</p>
+                    <p>• Вы можете скачать результаты в любое время</p>
+                    <p>• История автоматически очищается по истечении срока</p>
+                    <p>• Для постоянного хранения используйте скачивание</p>
                 </div>
             </div>
         </div>
 
-        <!-- ЭКРАН ПРОФИЛЯ -->
+               <!-- ЭКРАН ПРОФИЛЯ -->
         <div class="screen" id="screen-profile">
-            <div class="profile-card">
-                <div class="profile-avatar">
-                    <span class="material-icons-round" style="font-size: 64px; color: #ec407a;">person</span>
+            <div class="screen-header">
+                <h2>👤 Профиль</h2>
+                <p class="screen-subtitle">Ваша статистика и настройки</p>
+            </div>
+            
+            <div class="profile-container">
+                <!-- КАРТОЧКА ПОЛЬЗОВАТЕЛЯ -->
+                <div class="profile-card glass-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <span class="material-icons-round" style="font-size: 64px; color: #ec407a;">person</span>
+                        </div>
+                        <div class="profile-info">
+                            <h2 id="profile-name">Пользователь</h2>
+                            <p class="profile-id">ID: <span id="profile-id">...</span></p>
+                            <div class="profile-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Стаж:</span>
+                                    <span class="stat-value" id="profile-days">1 день</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-label">Уровень:</span>
+                                    <span class="stat-value" id="profile-level">👶 Новичок</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-balance">
+                        <div class="balance-info">
+                            <span class="balance-label">Баланс:</span>
+                            <span class="balance-value"><strong id="profile-balance">85</strong> ⭐</span>
+                        </div>
+                        <button class="balance-add-btn" id="add-balance-profile">
+                            <span class="material-icons-round">add</span>
+                            Пополнить
+                        </button>
+                    </div>
                 </div>
-                <h2 id="profile-name">Пользователь</h2>
-                <div class="profile-info">
-                    <div class="info-row">
-                        <span class="info-label">ID:</span>
-                        <span class="info-value" id="profile-id">...</span>
+                
+                <!-- СТАТИСТИКА -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(236, 64, 122, 0.1);">
+                            <span>📸</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stats-photos">0</h3>
+                            <p>Создано фото</p>
+                        </div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Стаж:</span>
-                        <span class="info-value">С сегодняшнего дня 👶</span>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(66, 165, 245, 0.1);">
+                            <span>🎞️</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stats-videos">0</h3>
+                            <p>Создано видео</p>
+                        </div>
                     </div>
-                    <div class="info-row">
-                        <span class="info-label">Баланс:</span>
-                        <span class="info-value"><strong id="profile-balance">85</strong> звёзд</span>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(156, 39, 176, 0.1);">
+                            <span>💰</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stats-spent">0</h3>
+                            <p>Потрачено звёзд</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: rgba(76, 175, 80, 0.1);">
+                            <span>🎯</span>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="stats-saved">0</h3>
+                            <p>Сохранено файлов</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ИСТОРИЯ В ПРОФИЛЕ -->
+                <div class="profile-history glass-card">
+                    <div class="history-header">
+                        <h3>📅 Последние генерации</h3>
+                        <a href="#" class="view-all" onclick="switchScreen('history'); return false;">Все →</a>
+                    </div>
+                    
+                    <div class="recent-list" id="recent-list">
+                        <!-- Последние 3 записи из истории -->
+                        <div class="recent-empty" id="recent-empty">
+                            <p>У вас еще нет созданных генераций</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- НАСТРОЙКИ -->
+                <div class="settings-section glass-card">
+                    <h3>⚙️ Настройки</h3>
+                    
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-icon">🌙</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Темная тема</span>
+                                    <span class="setting-desc">Автоматически подстраивается под Telegram</span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="dark-mode" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-icon">💾</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Автосохранение</span>
+                                    <span class="setting-desc">Сохранять все результаты автоматически</span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-save" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span class="setting-icon">🔔</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Уведомления</span>
+                                    <span class="setting-desc">Оповещения о завершении генераций</span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="notifications" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="setting-item clickable" onclick="alert('Функция скоро будет доступна')">
+                            <div class="setting-info">
+                                <span class="setting-icon">👥</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Пригласить друзей</span>
+                                    <span class="setting-desc">Получите 50 звёзд за каждого друга</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-round">chevron_right</span>
+                        </div>
+                        
+                        <div class="setting-item clickable" onclick="alert('Поддержка: @NeuroFlashStudio_bot')">
+                            <div class="setting-info">
+                                <span class="setting-icon">🆘</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Помощь и поддержка</span>
+                                    <span class="setting-desc">Напишите нам в Telegram</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-round">chevron_right</span>
+                        </div>
+                        
+                        <div class="setting-item clickable" onclick="clearHistory()">
+                            <div class="setting-info">
+                                <span class="setting-icon">🗑️</span>
+                                <div class="setting-text">
+                                    <span class="setting-title">Очистить историю</span>
+                                    <span class="setting-desc">Удалить все записи из истории</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-round">delete_outline</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -613,6 +801,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
