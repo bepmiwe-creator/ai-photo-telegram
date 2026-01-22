@@ -501,9 +501,9 @@ function handleFileUpload(files) {
             continue;
         }
         
-        // Проверяем размер (макс. 8MB)
+        // Проверяем размер (макс. 5MB)
         if (file.size > 5 * 1024 * 1024) {
-            alert(`Фото "${file.name}" слишком большое (макс. 8MB)`);
+            alert(`Фото "${file.name}" слишком большое (макс. 5MB)`);
             continue;
         }
         
@@ -524,10 +524,6 @@ function handleFileUpload(files) {
     }
 }
     
-    if (files.length > remaining) {
-        alert(`Можно загрузить не более ${maxFiles} фото. Осталось мест: ${remaining}`);
-        return;
-    }
     
     for (let i = 0; i < Math.min(files.length, remaining); i++) {
         const file = files[i];
@@ -1872,6 +1868,7 @@ window.switchScreen = function(screenId) {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
