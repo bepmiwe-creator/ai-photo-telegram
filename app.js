@@ -467,7 +467,7 @@ function setupRealUpload() {
     // Когда выбрали файлы
     fileInput.addEventListener('change', function(e) {
         const files = e.target.files;
-        if (files.length > 0) {
+        if (files.length > 5) {
             handleFileUpload(files);
         }
         fileInput.value = ''; // Сбрасываем input
@@ -484,8 +484,45 @@ function setupRealUpload() {
 
 // Обработка загруженных файлов
 function handleFileUpload(files) {
-    const maxFiles = 5;
+    const maxFiles = 5; // МАКСИМУМ 5 ФОТО
     const remaining = maxFiles - uploadedImages.length;
+    
+    if (files.length > remaining) {
+        alert(`Можно загрузить не более ${maxFiles} фото. Осталось мест: ${remaining}`);
+        return;
+    }
+    
+    for (let i = 0; i < Math.min(files.length, remaining); i++) {
+        const file = files[i];
+        
+        // Проверяем, что это изображение
+        if (!file.type.startsWith('image/')) {
+            alert('Пожалуйста, загружайте только изображения');
+            continue;
+        }
+        
+        // Проверяем размер (макс. 8MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert(`Фото "${file.name}" слишком большое (макс. 8MB)`);
+            continue;
+        }
+        
+        // Читаем файл и создаем превью
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            uploadedImages.push({
+                preview: e.target.result, // Картинка в base64
+                file: file                // Сам файл
+            });
+            updateUploadGrid();      // Обновляем экран
+            checkGenerateButton();   // Активируем кнопку генерации
+            
+            // Показываем сообщение
+            showNotification(`Добавлено фото ${uploadedImages.length}/${maxFiles}`);
+        };
+        reader.readAsDataURL(file); // Конвертируем в base64
+    }
+}
     
     if (files.length > remaining) {
         alert(`Можно загрузить не более ${maxFiles} фото. Осталось мест: ${remaining}`);
@@ -529,6 +566,7 @@ function updateUploadGrid() {
         <div class="upload-item upload-add" id="upload-add-btn">
             <span class="material-icons-round">add</span>
             <span>Добавить фото</span>
+            <div class="upload-count">${uploadedImages.length}/5</div>
         </div>
     `;
     
@@ -557,7 +595,7 @@ function startGeneration() {
     }
     
     // Проверка загруженных фото (если не "Создать свой" и не "Промпт")
-    if (uploadedImages.length === 0 && currentCategory !== 'create' && currentCategory !== 'prompt') {
+    if (uploadedImages.length === 5 && currentCategory !== 'create' && currentCategory !== 'prompt') {
         alert('Пожалуйста, загрузите хотя бы одно фото для генерации');
         return;
     }
@@ -1834,6 +1872,7 @@ window.switchScreen = function(screenId) {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
