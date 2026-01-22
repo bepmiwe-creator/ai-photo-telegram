@@ -224,6 +224,48 @@ function showGenerateScreen() {
             backBtn.onclick = hideGenerateScreen;
         }
     }
+function hideGenerateScreen() {
+    const generateScreen = document.getElementById('screen-generate');
+    if (generateScreen) {
+        generateScreen.style.display = 'none';
+        
+        // Сбрасываем загруженные фото
+        uploadedImages = [];
+        updateUploadGrid();
+        
+        // Сбрасываем выбор модели (стандартная Nano)
+        document.querySelectorAll('.model-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        const nanoModel = document.querySelector('.model-card[data-model="nano"]');
+        if (nanoModel) {
+            nanoModel.classList.add('selected');
+        }
+        selectedModel = 'nano';
+        
+        // Сбрасываем выбор формата (стандартный 1:1)
+        const formatSelect = document.getElementById('format-select');
+        if (formatSelect) {
+            formatSelect.value = '1:1';
+            selectedFormat = '1:1';
+        }
+        
+        // Очищаем поле промпта (если было открыто)
+        const promptField = document.getElementById('ai-prompt');
+        if (promptField) {
+            promptField.value = '';
+        }
+        
+        // Сбрасываем счетчик символов
+        const charCount = document.getElementById('char-count');
+        if (charCount) {
+            charCount.textContent = '0';
+            charCount.style.color = '#777';
+        }
+        
+        console.log('Экран генерации закрыт');
+    }
+}
 }
 
 // ========== НОВЫЕ ФУНКЦИИ ДЛЯ УЛУЧШЕННОГО ИНТЕРФЕЙСА ==========
@@ -1724,6 +1766,7 @@ function setupHistoryAndProfile() {
 // Инициализация истории и профиля
 setupHistoryAndProfile();
 console.log('Nano Banana App готов!');
+
 
 
 
