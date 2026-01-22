@@ -125,24 +125,19 @@
                 </div>
                 
                                 <!-- ВЫБОР ФОРМАТА -->
+                               <!-- ВЫБОР ФОРМАТА -->
                 <div class="format-section">
                     <h4>Формат фото</h4>
                     <p class="input-hint">Выберите соотношение сторон</p>
                     
-                    <div class="format-select-container">
-                        <select class="format-select" id="format-select">
-                            <option value="1:1" data-preview="⬜">Квадрат (1:1)</option>
-                            <option value="4:5" data-preview="📱">Портрет (4:5)</option>
-                            <option value="16:9" data-preview="📺">Широкий (16:9)</option>
-                            <option value="9:16" data-preview="📲">Сторис (9:16)</option>
-                            <option value="3:4" data-preview="🖼️">Классика (3:4)</option>
-                            <option value="2:3" data-preview="🎬">Постер (2:3)</option>
-                        </select>
-                        <div class="format-preview" id="format-preview">
-                            <div class="preview-box" id="preview-box"></div>
-                            <span class="preview-text" id="preview-text">1:1</span>
-                        </div>
-                    </div>
+                    <select class="format-select-simple" id="format-select">
+                        <option value="1:1">Квадрат (1:1)</option>
+                        <option value="4:5">Портрет (4:5)</option>
+                        <option value="16:9">Широкий (16:9)</option>
+                        <option value="9:16">Сторис (9:16)</option>
+                        <option value="3:4">Классика (3:4)</option>
+                        <option value="2:3">Постер (2:3)</option>
+                    </select>
                 </div>
                 
                 <!-- ВЫБОР МОДЕЛИ -->
@@ -853,6 +848,7 @@
     <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
