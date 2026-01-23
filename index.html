@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nano Banana | AI Photo</title>
+    <title>Nano Banana | Old Money AI Photo</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <!-- ВЕРХНИЙ HEADER (ШАПКА) -->
+    <!-- ВЕРХНИЙ HEADER -->
     <header class="app-header">
         <div class="header-content">
             <div class="logo">
@@ -93,7 +93,7 @@
                 <p class="screen-subtitle">Выберите пример стиля для генерации</p>
                 
                 <div class="styles-grid" id="styles-container">
-                    <!-- Стили будут загружаться через JavaScript -->
+                    <!-- Стили загружаются через JavaScript -->
                 </div>
                 
                 <div class="style-info card">
@@ -178,11 +178,7 @@
                             <div class="upload-subtitle">Пример из интернета</div>
                         </div>
                         <div class="upload-container" id="example-container">
-                            <div class="upload-placeholder" onclick="uploadExample()">
-                                <span class="material-icons-round">add_photo_alternate</span>
-                                <span class="upload-label">Фото пример</span>
-                                <span class="upload-subtitle">Пример из интернета</span>
-                            </div>
+                            <!-- Загружается через JavaScript -->
                         </div>
                     </div>
 
@@ -198,11 +194,7 @@
                             <div class="upload-subtitle">Ваше лицо</div>
                         </div>
                         <div class="upload-container" id="face-container">
-                            <div class="upload-placeholder" onclick="uploadFace()">
-                                <span class="material-icons-round">person_add</span>
-                                <span class="upload-label">Ваше фото</span>
-                                <span class="upload-subtitle">Ваше лицо</span>
-                            </div>
+                            <!-- Загружается через JavaScript -->
                         </div>
                     </div>
                 </div>
@@ -227,6 +219,246 @@
                     <p class="generate-hint">
                         Загрузите оба фото для активации генерации
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ФОТОСЕССИЙ (С ПАКЕТАМИ) -->
+        <div class="screen" id="screen-photosession">
+            <div class="screen-header">
+                <h2>📸 Фотосессии</h2>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="photosession-grid">
+                    <!-- СВОЯ ФОТОСЕССИЯ (НА ПЕРВОМ МЕСТЕ) -->
+                    <div class="photosession-card create-card" data-pack="custom">
+                        <div class="photosession-icon">🎨</div>
+                        <div class="photosession-title">Своя фотосессия</div>
+                        <div class="photosession-desc">Создайте уникальную серию из любого сгенерированного фото</div>
+                        <div class="photosession-count">🎁 10+3 фото в подарок</div>
+                        <div class="photosession-price">
+                            <span class="price-special">от 159 звёзд</span>
+                        </div>
+                        <button class="photosession-btn create-btn" data-pack="custom">Создать свою</button>
+                    </div>
+                    
+                    <!-- ПАКЕТ "ЗИМНЯЯ СКАЗКА" -->
+                    <div class="photosession-card" data-pack="winter">
+                        <div class="photosession-icon">❄️</div>
+                        <div class="photosession-title">Зимняя сказка</div>
+                        <div class="photosession-desc">10 фото в зимнем стиле с разными позами</div>
+                        <div class="photosession-count">🎯 10 фото</div>
+                        <div class="photosession-price">
+                            <span class="price-old">199 звёзд</span>
+                            <span class="price-new">159 звёзд</span>
+                        </div>
+                        <button class="photosession-btn" data-pack="winter">Выбрать пакет</button>
+                    </div>
+                    
+                    <!-- ПАКЕТ "СВАДЕБНАЯ" -->
+                    <div class="photosession-card" data-pack="wedding">
+                        <div class="photosession-icon">💍</div>
+                        <div class="photosession-title">Свадебная</div>
+                        <div class="photosession-desc">10 романтических фото для пары</div>
+                        <div class="photosession-count">👫 Для пар</div>
+                        <div class="photosession-price">
+                            <span class="price-old">199 звёзд</span>
+                            <span class="price-new">159 звёзд</span>
+                        </div>
+                        <button class="photosession-btn" data-pack="wedding">Выбрать пакет</button>
+                    </div>
+                    
+                    <!-- ПАКЕТ "ПЛЯЖНЫЙ ОТДЫХ" -->
+                    <div class="photosession-card" data-pack="beach">
+                        <div class="photosession-icon">🏖️</div>
+                        <div class="photosession-title">Пляжный отдых</div>
+                        <div class="photosession-desc">10 летних фото с морской тематикой</div>
+                        <div class="photosession-count">☀️ Летний стиль</div>
+                        <div class="photosession-price">
+                            <span class="price-old">199 звёзд</span>
+                            <span class="price-new">159 звёзд</span>
+                        </div>
+                        <button class="photosession-btn" data-pack="beach">Выбрать пакет</button>
+                    </div>
+                    
+                    <!-- ПАКЕТ "РОСКОШЬ LUXURY" -->
+                    <div class="photosession-card" data-pack="luxury">
+                        <div class="photosession-icon">💎</div>
+                        <div class="photosession-title">Роскошь Luxury</div>
+                        <div class="photosession-desc">10 фото в premium-стиле</div>
+                        <div class="photosession-count">⭐ Премиум</div>
+                        <div class="photosession-price">
+                            <span class="price-old">199 звёзд</span>
+                            <span class="price-new">159 звёзд</span>
+                        </div>
+                        <button class="photosession-btn" data-pack="luxury">Выбрать пакет</button>
+                    </div>
+                </div>
+                
+                <!-- ИНФОРМАЦИОННЫЙ БЛОК -->
+                <div class="photosession-info card">
+                    <div class="info-icon">💡</div>
+                    <div class="info-content">
+                        <h4>Как это работает?</h4>
+                        <div class="info-steps">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Выберите стиль фотосессии</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Загрузите 3-5 своих фото</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">ИИ создаст 10 уникальных фото</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <span class="step-text">+3 фото в подарок!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СОЗДАНИЯ СВОЕЙ ФОТОСЕССИИ -->
+        <div class="screen" id="screen-photosession-custom">
+            <div class="screen-header">
+                <button class="back-btn" id="photosession-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h2>🎨 Своя фотосессия</h2>
+                <div class="header-placeholder"></div>
+            </div>
+
+            <div class="screen-content">
+                <!-- ЗАГОЛОВОК -->
+                <div class="photosession-title-card">
+                    <h3>Создайте полноценную фотосессию из 1 фото</h3>
+                    <p class="photosession-subtitle">
+                        Выберите любое сгенерированное фото - ИИ создаст уникальную серию 
+                        в разных образах, позах и локациях
+                    </p>
+                </div>
+
+                <!-- СГЕНЕРИРОВАННЫЕ ФОТО ПОЛЬЗОВАТЕЛЯ -->
+                <div class="user-photos-section">
+                    <div class="section-header">
+                        <h4>Ваши сгенерированные фото</h4>
+                        <div class="photos-count" id="user-photos-count">8 фото</div>
+                    </div>
+                    
+                    <div class="user-photos-grid" id="user-photos-container">
+                        <!-- Фото загружаются через JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ИНФОРМАЦИЯ О ФОТОСЕССИИ -->
+                <div class="photosession-info card">
+                    <div class="info-icon">💡</div>
+                    <div class="info-content">
+                        <h4>Как работает фотосессия?</h4>
+                        <div class="info-steps">
+                            <div class="step">
+                                <span class="step-number">1</span>
+                                <span class="step-text">Выберите фото из вашей коллекции</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">2</span>
+                                <span class="step-text">Выберите количество кадров (от 10)</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">3</span>
+                                <span class="step-text">ИИ создаст вариации в разных стилях</span>
+                            </div>
+                            <div class="step">
+                                <span class="step-number">4</span>
+                                <span class="step-text">+3 фото в подарок к каждому заказу!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ -->
+        <div class="overlay" id="photosession-modal">
+            <div class="overlay-content photosession-modal">
+                <div class="overlay-header">
+                    <h3>Создать фотосессию</h3>
+                    <button class="close-btn" onclick="hidePhotosessionModal()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- ВЫБРАННОЕ ФОТО -->
+                    <div class="selected-photo-preview">
+                        <img id="selected-photo-img" src="" alt="Выбранное фото">
+                    </div>
+
+                    <!-- ВЫБОР КОЛИЧЕСТВА КАДРОВ -->
+                    <div class="frames-selection">
+                        <div class="frames-header">
+                            <h4>Количество</h4>
+                            <div class="frames-price">
+                                <span id="photosession-price">159</span> ⭐
+                            </div>
+                        </div>
+                        
+                        <div class="frames-control">
+                            <button class="frame-btn minus" onclick="decreasePhotosessionFrames()">
+                                <span class="material-icons-round">remove</span>
+                            </button>
+                            
+                            <div class="frames-count">
+                                <div class="frames-number" id="photosession-count">10</div>
+                                <div class="frames-bonus">+3 фото бесплатно</div>
+                            </div>
+                            
+                            <button class="frame-btn plus" onclick="increasePhotosessionFrames()">
+                                <span class="material-icons-round">add</span>
+                            </button>
+                        </div>
+                        
+                        <div class="frames-hint">
+                            <span class="material-icons-round">info</span>
+                            <span>Минимум 10 кадров. Каждый дополнительный кадр +15 звёзд</span>
+                        </div>
+                    </div>
+
+                    <!-- ИТОГОВАЯ ИНФОРМАЦИЯ -->
+                    <div class="photosession-summary">
+                        <div class="summary-item">
+                            <span>Выбранных кадров:</span>
+                            <span id="photosession-count-summary">10</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Бесплатных фото:</span>
+                            <span>3</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Итого получите:</span>
+                            <span class="total-count">
+                                <span id="photosession-total">13</span> фото
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- КНОПКА СОЗДАНИЯ -->
+                    <div class="photosession-action">
+                        <button class="generate-btn large" id="start-photosession-btn" onclick="startPhotosessionGeneration()">
+                            <span class="generate-icon">✨</span>
+                            <span>Создать фотосессию</span>
+                        </button>
+                        <p class="photosession-result-hint">
+                            Вы получите <span id="result-photo-count">13</span> фото в стиле выбранного изображения
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -319,12 +551,10 @@
                 </div>
                 
                 <div class="overlay-body">
-                    <!-- ТИП ГЕНЕРАЦИИ -->
                     <div class="generate-type">
                         <div class="type-badge" id="type-badge">✨ По описанию</div>
                     </div>
                     
-                    <!-- ПОЛЕ ДЛЯ ПРОМПТА -->
                     <div class="prompt-section" id="prompt-section" style="display: none;">
                         <h4>Опишите изображение</h4>
                         <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
@@ -345,7 +575,6 @@
                         </div>
                     </div>
                     
-                    <!-- ЗАГРУЗКА ФОТО -->
                     <div class="upload-section">
                         <div class="upload-header">
                             <h4>Загрузите свои фото</h4>
@@ -367,7 +596,6 @@
                         </div>
                     </div>
                     
-                    <!-- ВЫБОР ФОРМАТА -->
                     <div class="format-section">
                         <h4>Формат фото</h4>
                         <p class="input-hint">Выберите соотношение сторон</p>
@@ -382,7 +610,6 @@
                         </select>
                     </div>
                     
-                    <!-- ВЫБОР МОДЕЛИ -->
                     <div class="model-section">
                         <h4>Модель ИИ</h4>
                         <p class="input-hint">Выберите качество генерации</p>
@@ -403,115 +630,12 @@
                         </div>
                     </div>
                     
-                    <!-- КНОПКА ГЕНЕРАЦИИ -->
                     <div class="generate-action">
                         <button class="generate-btn" id="start-generate-btn" disabled>
                             <span class="generate-icon">📝</span>
                             <span id="generate-btn-text">Загрузите фото</span>
                         </button>
                         <p class="generate-hint" id="generate-hint">Загрузите хотя бы одно фото для генерации</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ЭКРАН ФОТОСЕССИИ -->
-        <div class="screen" id="screen-photosession">
-            <div class="screen-header">
-                <h2>📸 Фотосессии</h2>
-                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
-            </div>
-            
-            <div class="screen-content">
-                <div class="photosession-grid">
-                    <!-- ПАКЕТ "ЗИМНЯЯ СКАЗКА" -->
-                    <div class="photosession-card" data-pack="winter">
-                        <div class="photosession-icon">❄️</div>
-                        <div class="photosession-title">Зимняя сказка</div>
-                        <div class="photosession-desc">10 фото в зимнем стиле с разными позами</div>
-                        <div class="photosession-count">🎯 10 фото</div>
-                        <div class="photosession-price">
-                            <span class="price-old">199 звёзд</span>
-                            <span class="price-new">159 звёзд</span>
-                        </div>
-                        <button class="photosession-btn" data-pack="winter">Выбрать пакет</button>
-                    </div>
-                    
-                    <!-- ПАКЕТ "СВАДЕБНАЯ" -->
-                    <div class="photosession-card" data-pack="wedding">
-                        <div class="photosession-icon">💍</div>
-                        <div class="photosession-title">Свадебная</div>
-                        <div class="photosession-desc">10 романтических фото для пары</div>
-                        <div class="photosession-count">👫 Для пар</div>
-                        <div class="photosession-price">
-                            <span class="price-old">199 звёзд</span>
-                            <span class="price-new">159 звёзд</span>
-                        </div>
-                        <button class="photosession-btn" data-pack="wedding">Выбрать пакет</button>
-                    </div>
-                    
-                    <!-- ПАКЕТ "ПЛЯЖНЫЙ ОТДЫХ" -->
-                    <div class="photosession-card" data-pack="beach">
-                        <div class="photosession-icon">🏖️</div>
-                        <div class="photosession-title">Пляжный отдых</div>
-                        <div class="photosession-desc">10 летних фото с морской тематикой</div>
-                        <div class="photosession-count">☀️ Летний стиль</div>
-                        <div class="photosession-price">
-                            <span class="price-old">199 звёзд</span>
-                            <span class="price-new">159 звёзд</span>
-                        </div>
-                        <button class="photosession-btn" data-pack="beach">Выбрать пакет</button>
-                    </div>
-                    
-                    <!-- ПАКЕТ "РОСКОШЬ LUXURY" -->
-                    <div class="photosession-card" data-pack="luxury">
-                        <div class="photosession-icon">💎</div>
-                        <div class="photosession-title">Роскошь Luxury</div>
-                        <div class="photosession-desc">10 фото в premium-стиле</div>
-                        <div class="photosession-count">⭐ Премиум</div>
-                        <div class="photosession-price">
-                            <span class="price-old">199 звёзд</span>
-                            <span class="price-new">159 звёзд</span>
-                        </div>
-                        <button class="photosession-btn" data-pack="luxury">Выбрать пакет</button>
-                    </div>
-                    
-                    <!-- СВОЯ ФОТОСЕССИЯ -->
-                    <div class="photosession-card create-card" data-pack="custom">
-                        <div class="photosession-icon">🎨</div>
-                        <div class="photosession-title">Своя фотосессия</div>
-                        <div class="photosession-desc">Создайте уникальный стиль на основе вашего фото</div>
-                        <div class="photosession-count">🎁 10+3 фото в подарок</div>
-                        <div class="photosession-price">
-                            <span class="price-special">200 звёзд</span>
-                        </div>
-                        <button class="photosession-btn create-btn" data-pack="custom">Создать свою</button>
-                    </div>
-                </div>
-                
-                <!-- ИНФОРМАЦИОННЫЙ БЛОК -->
-                <div class="photosession-info card">
-                    <div class="info-icon">💡</div>
-                    <div class="info-content">
-                        <h4>Как это работает?</h4>
-                        <div class="info-steps">
-                            <div class="step">
-                                <span class="step-number">1</span>
-                                <span class="step-text">Выберите стиль фотосессии</span>
-                            </div>
-                            <div class="step">
-                                <span class="step-number">2</span>
-                                <span class="step-text">Загрузите 3-5 своих фото</span>
-                            </div>
-                            <div class="step">
-                                <span class="step-number">3</span>
-                                <span class="step-text">ИИ создаст 10 уникальных фото</span>
-                            </div>
-                            <div class="step">
-                                <span class="step-number">4</span>
-                                <span class="step-text">+3 фото в подарок!</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -580,7 +704,6 @@
                     </div>
                 </div>
                 
-                <!-- ИНФОРМАЦИЯ О ВИДЕО -->
                 <div class="video-info card">
                     <div class="info-icon">📹</div>
                     <div class="info-content">
@@ -605,7 +728,6 @@
             </div>
             
             <div class="screen-content">
-                <!-- ФИЛЬТРЫ -->
                 <div class="history-filters card">
                     <button class="filter-btn active" data-filter="all">Все</button>
                     <button class="filter-btn" data-filter="photo">Фото</button>
@@ -616,9 +738,7 @@
                     </div>
                 </div>
                 
-                <!-- СПИСОК ИСТОРИИ -->
                 <div class="history-container" id="history-container">
-                    <!-- ПУСТАЯ ИСТОРИЯ -->
                     <div class="history-empty" id="history-empty">
                         <div class="empty-icon">📭</div>
                         <h3>История пуста</h3>
@@ -627,7 +747,6 @@
                     </div>
                 </div>
                 
-                <!-- ИНФОРМАЦИЯ -->
                 <div class="history-info card">
                     <div class="info-icon">💾</div>
                     <div class="info-content">
@@ -652,7 +771,6 @@
             
             <div class="screen-content">
                 <div class="profile-container">
-                    <!-- КАРТОЧКА ПОЛЬЗОВАТЕЛЯ -->
                     <div class="profile-card card">
                         <div class="profile-header">
                             <div class="profile-avatar">
@@ -686,7 +804,6 @@
                         </div>
                     </div>
                     
-                    <!-- СТАТИСТИКА -->
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-icon" style="background: rgba(236, 64, 122, 0.1);">
@@ -729,7 +846,6 @@
                         </div>
                     </div>
                     
-                    <!-- ИСТОРИЯ В ПРОФИЛЕ -->
                     <div class="profile-history card">
                         <div class="history-header">
                             <h3>📅 Последние генерации</h3>
@@ -743,7 +859,6 @@
                         </div>
                     </div>
                     
-                    <!-- НАСТРОЙКИ -->
                     <div class="settings-section card">
                         <h3>⚙️ Настройки</h3>
                         
@@ -867,4 +982,3 @@
     <script src="app.js"></script>
 </body>
 </html>
-
