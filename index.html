@@ -50,7 +50,7 @@
                             <span class="quick-icon">📸</span>
                         </div>
                         <div class="quick-text">ФОТОСЕССИЯ</div>
-                        <div class="quick-hint">Пакеты 10+3 фото</div>
+                        <div class="quick-hint">Создай съемку мечты</div>
                     </div>
                     
                     <div class="quick-card" data-screen="video">
@@ -143,6 +143,11 @@
                     </div>
                 </div>
 
+                <!-- ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ -->
+                <div class="horizontal-categories" id="horizontal-categories">
+                    <!-- Категории загружаются через JavaScript -->
+                </div>
+
                 <!-- КАТАЛОГ КАТЕГОРИЙ -->
                 <div class="categories-grid" id="categories-container">
                     <!-- Категории загружаются через JavaScript -->
@@ -156,7 +161,7 @@
                 <button class="back-btn" id="create-own-back-btn">
                     <span class="material-icons-round">arrow_back</span>
                 </button>
-                <h2>🆕 Создать свой стиль</h2>
+                <h2>Создать свой стиль</h2>
                 <button class="help-btn" id="how-it-works-btn">
                     <span class="material-icons-round">help_outline</span>
                 </button>
@@ -173,10 +178,7 @@
                 <!-- КОНТЕЙНЕРЫ ДЛЯ ЗАГРУЗКИ -->
                 <div class="upload-comparison">
                     <div class="upload-column">
-                        <div class="upload-column-header">
-                            <div class="upload-label">Фото пример</div>
-                            <div class="upload-subtitle">Пример из интернета</div>
-                        </div>
+                        <div class="upload-column-header"></div>
                         <div class="upload-container" id="example-container">
                             <!-- Загружается через JavaScript -->
                         </div>
@@ -189,10 +191,7 @@
                     </div>
 
                     <div class="upload-column">
-                        <div class="upload-column-header">
-                            <div class="upload-label">Ваше фото</div>
-                            <div class="upload-subtitle">Ваше лицо</div>
-                        </div>
+                        <div class="upload-column-header"></div>
                         <div class="upload-container" id="face-container">
                             <!-- Загружается через JavaScript -->
                         </div>
@@ -385,6 +384,63 @@
             </div>
         </div>
 
+        <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
+        <div class="overlay" id="category-modal">
+            <div class="overlay-content category-modal">
+                <div class="overlay-header">
+                    <h3 id="category-modal-title">Категория</h3>
+                    <button class="close-btn" id="category-modal-close">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="category-styles-grid" id="category-styles-container">
+                        <!-- Стили загружаются через JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ПРЕВЬЮ СТИЛЯ -->
+        <div class="overlay" id="style-preview-modal">
+            <div class="overlay-content style-preview-modal">
+                <div class="overlay-header">
+                    <button class="back-btn" id="style-preview-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="style-preview-title">Название стиля</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="style-preview-image-container">
+                        <img id="style-preview-image" src="" alt="Превью стиля">
+                    </div>
+                    
+                    <div class="style-preview-info">
+                        <h4>Этот стиль идеально подходит для:</h4>
+                        <ul class="style-features">
+                            <li>Портретов в полный рост</li>
+                            <li>Семейных фотосессий</li>
+                            <li>Создания атмосферных кадров</li>
+                            <li>Идеального сочетания цвета и света</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="style-preview-action">
+                        <button class="generate-btn large" id="style-preview-generate-btn">
+                            <span class="generate-icon">✨</span>
+                            <span>Создать в этом стиле</span>
+                        </button>
+                        <p class="generate-hint">
+                            Загрузите 1-5 своих фото для генерации в выбранном стиле
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ -->
         <div class="overlay" id="photosession-modal">
             <div class="overlay-content photosession-modal">
@@ -484,34 +540,33 @@
                     </div>
 
                     <div class="info-section">
-                        <h4>⚙️ Как это работает?</h4>
                         <div class="steps-list">
                             <div class="step-item">
                                 <div class="step-number">1</div>
                                 <div class="step-content">
-                                    <strong>Загрузите фото-пример</strong><br>
-                                    Стиль, поза, одежда, фон
+                                    <strong>Загрузите фото-пример</strong>
+                                    <div class="step-subtext">Стиль, поза, одежда, фон</div>
                                 </div>
                             </div>
                             <div class="step-item">
                                 <div class="step-number">2</div>
                                 <div class="step-content">
-                                    <strong>Загрузите своё фото</strong><br>
-                                    Чёткое фото лица анфас
+                                    <strong>Загрузите своё фото</strong>
+                                    <div class="step-subtext">Чёткое фото лица анфас</div>
                                 </div>
                             </div>
                             <div class="step-item">
                                 <div class="step-number">3</div>
                                 <div class="step-content">
-                                    <strong>AI проанализирует пример</strong><br>
-                                    Определит стиль и особенности
+                                    <strong>AI проанализирует пример</strong>
+                                    <div class="step-subtext">Определит стиль и особенности</div>
                                 </div>
                             </div>
                             <div class="step-item">
                                 <div class="step-number">4</div>
                                 <div class="step-content">
-                                    <strong>Создаст похожее фото</strong><br>
-                                    С вашим лицом в выбранном стиле
+                                    <strong>Создаст похожее фото</strong>
+                                    <div class="step-subtext">С вашим лицом в выбранном стиле</div>
                                 </div>
                             </div>
                         </div>
@@ -565,13 +620,6 @@
                         
                         <div class="prompt-counter">
                             <span id="char-count">0</span> / 2000 знаков
-                        </div>
-                        
-                        <div class="prompt-examples">
-                            <p class="examples-title">Примеры для вдохновения:</p>
-                            <div class="example-chip" data-example="Кот в костюме супергероя летит над ночным городом, неоновые огни, динамичный кадр">Суперкот</div>
-                            <div class="example-chip" data-example="Девушка в свадебном платье в волшебном лесу, светлячки, магическое сияние, фэнтези">Свадьба в лесу</div>
-                            <div class="example-chip" data-example="Космонавт в открытом космосе, Земля на фоне, звездное небо, эпично">Космонавт</div>
                         </div>
                     </div>
                     
