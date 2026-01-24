@@ -1,5 +1,5 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
-// Версия 3.0: Добавлены фотосессии
+// Версия 3.1: Обновление UI по техзаданию
 
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
@@ -13,19 +13,20 @@ let uploadedFace = null;
 let photosessionFrames = 10; // Количество кадров для фотосессии
 let selectedPhotoForSession = null; // Выбранное фото для фотосессии
 let userGeneratedPhotos = []; // Массив сгенерированных фото пользователя
+let selectedCategoryForModal = null; // Выбранная категория для модального окна
 
 // ========== ДАННЫЕ ==========
 const categories = [
     { id: 'create', title: 'Создать свой', icon: '🆕', count: 'Ваш стиль', color: '#9C27B0' },
-    { id: 'winter', title: 'Зима', icon: '❄️', count: '24 стиля', color: '#64B5F6' },
-    { id: 'birthday', title: 'День рождения', icon: '🎂', count: '18 стилей', color: '#FFB74D' },
-    { id: 'trends', title: 'Тренды', icon: '🔥', count: '32 стиля', color: '#FF5722' },
-    { id: 'couples', title: 'Парные', icon: '👫', count: '15 стилей', color: '#EC407A' },
-    { id: 'girls', title: 'Для девушек', icon: '💃', count: '28 стилей', color: '#E91E63' },
-    { id: 'men', title: 'Для мужчин', icon: '🕺', count: '16 стилей', color: '#42A5F5' },
-    { id: 'pets', title: 'Питомцы', icon: '🐾', count: '12 стилей', color: '#81C784' },
-    { id: 'professions', title: 'Профессии', icon: '💼', count: '21 стиль', color: '#78909C' },
-    { id: 'luxury', title: 'Luxury', icon: '💎', count: '14 стилей', color: '#FFD700' }
+    { id: 'winter', title: 'Зима', icon: '❄️', count: '', color: '#64B5F6' },
+    { id: 'birthday', title: 'День рождения', icon: '🎂', count: '', color: '#FFB74D' },
+    { id: 'trends', title: 'Тренды', icon: '🔥', count: '', color: '#FF5722' },
+    { id: 'couples', title: 'Парные', icon: '👫', count: '', color: '#EC407A' },
+    { id: 'girls', title: 'Для девушек', icon: '💃', count: '', color: '#E91E63' },
+    { id: 'men', title: 'Для мужчин', icon: '🕺', count: '', color: '#42A5F5' },
+    { id: 'pets', title: 'Питомцы', icon: '🐾', count: '', color: '#81C784' },
+    { id: 'professions', title: 'Профессии', icon: '💼', count: '', color: '#78909C' },
+    { id: 'luxury', title: 'Luxury', icon: '💎', count: '', color: '#FFD700' }
 ];
 
 // Тестовые сгенерированные фото пользователя (в реальном приложении будут загружаться из истории)
@@ -42,55 +43,55 @@ const mockGeneratedPhotos = [
 
 const styleExamples = {
     winter: [
-        { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7" },
-        { id: 2, name: "Зимний лес", icon: "🌲", color: "#81C784" },
-        { id: 3, name: "Новогоднее настроение", icon: "🎄", color: "#FF8A65" },
-        { id: 4, name: "Лыжный курорт", icon: "⛷️", color: "#64B5F6" },
-        { id: 5, name: "Морозные узоры", icon: "❄️", color: "#90CAF9" },
-        { id: 6, name: "Рождественский вечер", icon: "🎅", color: "#E57373" }
+        { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
+        { id: 2, name: "Зимний лес", icon: "🌲", color: "#81C784", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🌲" },
+        { id: 3, name: "Новогоднее настроение", icon: "🎄", color: "#FF8A65", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🎄" },
+        { id: 4, name: "Лыжный курорт", icon: "⛷️", color: "#64B5F6", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=⛷️" },
+        { id: 5, name: "Морозные узоры", icon: "❄️", color: "#90CAF9", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
+        { id: 6, name: "Рождественский вечер", icon: "🎅", color: "#E57373", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🎅" }
     ],
     birthday: [
-        { id: 1, name: "Торт и свечи", icon: "🎂", color: "#FFB74D" },
-        { id: 2, name: "Праздничный вечер", icon: "🎉", color: "#BA68C8" },
-        { id: 3, name: "Воздушные шары", icon: "🎈", color: "#4DD0E1" },
-        { id: 4, name: "Подарки", icon: "🎁", color: "#AED581" }
+        { id: 1, name: "Торт и свечи", icon: "🎂", color: "#FFB74D", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎂" },
+        { id: 2, name: "Праздничный вечер", icon: "🎉", color: "#BA68C8", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎉" },
+        { id: 3, name: "Воздушные шары", icon: "🎈", color: "#4DD0E1", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎈" },
+        { id: 4, name: "Подарки", icon: "🎁", color: "#AED581", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎁" }
     ],
     trends: [
-        { id: 1, name: "Неоновый стиль", icon: "💡", color: "#9575CD" },
-        { id: 2, name: "Ретро волна", icon: "📻", color: "#FF8A65" },
-        { id: 3, name: "Футуризм", icon: "🚀", color: "#4DB6AC" },
-        { id: 4, name: "Минимализм", icon: "⬜", color: "#90A4AE" }
+        { id: 1, name: "Неоновый стиль", icon: "💡", color: "#9575CD", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=💡" },
+        { id: 2, name: "Ретро волна", icon: "📻", color: "#FF8A65", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=📻" },
+        { id: 3, name: "Футуризм", icon: "🚀", color: "#4DB6AC", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=🚀" },
+        { id: 4, name: "Минимализм", icon: "⬜", color: "#90A4AE", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=⬜" }
     ],
     couples: [
-        { id: 1, name: "Романтический вечер", icon: "💕", color: "#F06292" },
-        { id: 2, name: "Прогулка в парке", icon: "🌳", color: "#81C784" },
-        { id: 3, name: "Пляжный закат", icon: "🌅", color: "#FFB74D" }
+        { id: 1, name: "Романтический вечер", icon: "💕", color: "#F06292", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=💕" },
+        { id: 2, name: "Прогулка в парке", icon: "🌳", color: "#81C784", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=🌳" },
+        { id: 3, name: "Пляжный закат", icon: "🌅", color: "#FFB74D", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=🌅" }
     ],
     girls: [
-        { id: 1, name: "Стиль принцессы", icon: "👸", color: "#CE93D8" },
-        { id: 2, name: "Деловой образ", icon: "💼", color: "#80CBC4" },
-        { id: 3, name: "Спортивный шик", icon: "👟", color: "#FFAB91" }
+        { id: 1, name: "Стиль принцессы", icon: "👸", color: "#CE93D8", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=👸" },
+        { id: 2, name: "Деловой образ", icon: "💼", color: "#80CBC4", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=💼" },
+        { id: 3, name: "Спортивный шик", icon: "👟", color: "#FFAB91", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=👟" }
     ],
     men: [
-        { id: 1, name: "Классический костюм", icon: "🤵", color: "#78909C" },
-        { id: 2, name: "Спортивный стиль", icon: "🏃", color: "#42A5F5" },
-        { id: 3, name: "Кэжуал образ", icon: "👕", color: "#26A69A" }
+        { id: 1, name: "Классический костюм", icon: "🤵", color: "#78909C", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=🤵" },
+        { id: 2, name: "Спортивный стиль", icon: "🏃", color: "#42A5F5", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=🏃" },
+        { id: 3, name: "Кэжуал образ", icon: "👕", color: "#26A69A", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=👕" }
     ],
     pets: [
-        { id: 1, name: "Домашний любимец", icon: "🐶", color: "#FFD54F" },
-        { id: 2, name: "Игривый момент", icon: "🎾", color: "#AED581" },
-        { id: 3, name: "Портрет питомца", icon: "📷", color: "#80DEEA" }
+        { id: 1, name: "Домашний любимец", icon: "🐶", color: "#FFD54F", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=🐶" },
+        { id: 2, name: "Игривый момент", icon: "🎾", color: "#AED581", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=🎾" },
+        { id: 3, name: "Портрет питомца", icon: "📷", color: "#80DEEA", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=📷" }
     ],
     professions: [
-        { id: 1, name: "Врач", icon: "👨‍⚕️", color: "#EF5350" },
-        { id: 2, name: "Программист", icon: "💻", color: "#42A5F5" },
-        { id: 3, name: "Учитель", icon: "👩‍🏫", color: "#66BB6A" },
-        { id: 4, name: "Повар", icon: "👨‍🍳", color: "#FFA726" }
+        { id: 1, name: "Врач", icon: "👨‍⚕️", color: "#EF5350", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👨‍⚕️" },
+        { id: 2, name: "Программист", icon: "💻", color: "#42A5F5", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=💻" },
+        { id: 3, name: "Учитель", icon: "👩‍🏫", color: "#66BB6A", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👩‍🏫" },
+        { id: 4, name: "Повар", icon: "👨‍🍳", color: "#FFA726", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👨‍🍳" }
     ],
     luxury: [
-        { id: 1, name: "Золотой шик", icon: "💰", color: "#FFD700" },
-        { id: 2, name: "Алмазный блеск", icon: "💎", color: "#B39DDB" },
-        { id: 3, name: "Шикарный вечер", icon: "🍾", color: "#F8BBD0" }
+        { id: 1, name: "Золотой шик", icon: "💰", color: "#FFD700", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=💰" },
+        { id: 2, name: "Алмазный блеск", icon: "💎", color: "#B39DDB", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=💎" },
+        { id: 3, name: "Шикарный вечер", icon: "🍾", color: "#F8BBD0", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=🍾" }
     ]
 };
 
@@ -101,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initTelegram();
     setupNavigation();
     loadPhotoCategories();
+    loadHorizontalCategories();
     setupButtons();
     setupRealUpload();
     setupHistoryAndProfile();
@@ -151,6 +153,7 @@ function setupNavigation() {
         hideGenerateScreen();
         hideHowItWorks();
         hidePhotosessionModal();
+        hideCategoryModal();
         
         const targetScreen = document.getElementById(`screen-${screenId}`);
         if (targetScreen) {
@@ -165,6 +168,7 @@ function setupNavigation() {
             
             if (screenId === 'photo') {
                 loadPhotoCategories();
+                loadHorizontalCategories();
             } else if (screenId === 'photosession') {
                 loadUserPhotos();
             } else if (screenId === 'history') {
@@ -215,7 +219,7 @@ function loadPhotoCategories() {
         card.innerHTML = `
             <div class="category-icon" style="background-color: ${cat.color}20; color: ${cat.color};">${cat.icon}</div>
             <div class="category-title">${cat.title}</div>
-            <div class="category-count">${cat.count}</div>
+            ${cat.id === 'create' ? `<div class="category-count">${cat.count}</div>` : ''}
         `;
         
         card.addEventListener('click', () => {
@@ -226,8 +230,8 @@ function loadPhotoCategories() {
                 uploadedFace = null;
                 showCreateOwnStyle();
             } else {
-                currentCategory = cat.id;
-                showStyleSelection(cat.id);
+                selectedCategoryForModal = cat.id;
+                showCategoryModal(cat.id);
             }
         });
         
@@ -242,6 +246,215 @@ function loadPhotoCategories() {
             showGenerateScreen();
         });
     }
+}
+
+// ========== ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ ==========
+function loadHorizontalCategories() {
+    const container = document.getElementById('horizontal-categories');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // Показываем только основные категории (кроме "Создать свой")
+    const mainCategories = categories.filter(cat => cat.id !== 'create');
+    
+    mainCategories.forEach(category => {
+        const section = document.createElement('div');
+        section.className = 'horizontal-category-section';
+        
+        const header = document.createElement('div');
+        header.className = 'horizontal-category-header';
+        header.innerHTML = `
+            <h3 class="horizontal-category-title">${category.title}</h3>
+            <button class="view-all-btn" data-category="${category.id}">
+                Все ${styleExamples[category.id]?.length || 0} стиля
+                <span class="material-icons-round">arrow_forward</span>
+            </button>
+        `;
+        
+        const scrollContainer = document.createElement('div');
+        scrollContainer.className = 'horizontal-scroll-container';
+        scrollContainer.id = `scroll-${category.id}`;
+        
+        const styles = styleExamples[category.id] || [];
+        const displayStyles = styles.slice(0, 5); // Показываем только первые 5 стилей
+        
+        displayStyles.forEach(style => {
+            const styleCard = document.createElement('div');
+            styleCard.className = 'horizontal-style-card';
+            styleCard.dataset.category = category.id;
+            styleCard.dataset.styleId = style.id;
+            
+            styleCard.innerHTML = `
+                <div class="horizontal-style-preview">
+                    <img src="${style.preview}" alt="${style.name}">
+                </div>
+                <div class="horizontal-style-name">${style.name}</div>
+            `;
+            
+            styleCard.addEventListener('click', () => {
+                selectedStyle = style.name;
+                showStylePreviewModal(category.id, style.id);
+            });
+            
+            scrollContainer.appendChild(styleCard);
+        });
+        
+        // Добавляем кнопку "Все стили" в конец горизонтального списка
+        if (styles.length > 5) {
+            const allStylesCard = document.createElement('div');
+            allStylesCard.className = 'horizontal-style-card all-styles-card';
+            allStylesCard.dataset.category = category.id;
+            
+            allStylesCard.innerHTML = `
+                <div class="all-styles-icon">
+                    <span class="material-icons-round">more_horiz</span>
+                </div>
+                <div class="all-styles-text">
+                    <div>Все</div>
+                    <div class="all-styles-count">${styles.length} стиля</div>
+                </div>
+            `;
+            
+            allStylesCard.addEventListener('click', () => {
+                selectedCategoryForModal = category.id;
+                showCategoryModal(category.id);
+            });
+            
+            scrollContainer.appendChild(allStylesCard);
+        }
+        
+        section.appendChild(header);
+        section.appendChild(scrollContainer);
+        container.appendChild(section);
+        
+        // Нажатие на заголовок категории
+        const titleElement = header.querySelector('.horizontal-category-title');
+        titleElement.addEventListener('click', () => {
+            selectedCategoryForModal = category.id;
+            showCategoryModal(category.id);
+        });
+        
+        // Нажатие на кнопку "Все стили"
+        const viewAllBtn = header.querySelector('.view-all-btn');
+        viewAllBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedCategoryForModal = category.id;
+            showCategoryModal(category.id);
+        });
+    });
+}
+
+// ========== МОДАЛЬНОЕ ОКНО КАТЕГОРИИ ==========
+function showCategoryModal(categoryId) {
+    const modal = document.getElementById('category-modal');
+    if (!modal) return;
+    
+    const category = categories.find(c => c.id === categoryId);
+    if (!category) return;
+    
+    const titleElement = document.getElementById('category-modal-title');
+    if (titleElement) {
+        titleElement.textContent = category.title;
+    }
+    
+    const container = document.getElementById('category-styles-container');
+    if (container) {
+        container.innerHTML = '';
+        
+        const styles = styleExamples[categoryId] || [];
+        
+        styles.forEach(style => {
+            const styleCard = document.createElement('div');
+            styleCard.className = 'modal-style-card';
+            styleCard.style.borderColor = style.color + '50';
+            styleCard.style.backgroundColor = style.color + '15';
+            
+            styleCard.innerHTML = `
+                <div class="modal-style-icon" style="background-color: ${style.color}30; color: ${style.color};">${style.icon}</div>
+                <div class="modal-style-name">${style.name}</div>
+            `;
+            
+            styleCard.addEventListener('click', () => {
+                selectedStyle = style.name;
+                showStylePreviewModal(categoryId, style.id);
+            });
+            
+            container.appendChild(styleCard);
+        });
+    }
+    
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function hideCategoryModal() {
+    const modal = document.getElementById('category-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            selectedCategoryForModal = null;
+        }, 300);
+    }
+}
+
+// ========== МОДАЛЬНОЕ ОКНО ПРЕВЬЮ СТИЛЯ ==========
+function showStylePreviewModal(categoryId, styleId) {
+    const modal = document.getElementById('style-preview-modal');
+    if (!modal) return;
+    
+    const category = categories.find(c => c.id === categoryId);
+    const style = styleExamples[categoryId]?.find(s => s.id === styleId);
+    
+    if (!category || !style) return;
+    
+    const titleElement = document.getElementById('style-preview-title');
+    const previewElement = document.getElementById('style-preview-image');
+    
+    if (titleElement) titleElement.textContent = style.name;
+    if (previewElement) {
+        previewElement.src = style.preview;
+        previewElement.alt = style.name;
+    }
+    
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    const backBtn = document.getElementById('style-preview-back-btn');
+    if (backBtn) {
+        backBtn.onclick = function() {
+            hideStylePreviewModal();
+            if (selectedCategoryForModal) {
+                showCategoryModal(selectedCategoryForModal);
+            }
+        };
+    }
+}
+
+function hideStylePreviewModal() {
+    const modal = document.getElementById('style-preview-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    }
+}
+
+function startStyleGeneration() {
+    const categoryId = selectedCategoryForModal;
+    const styleName = selectedStyle;
+    
+    if (!categoryId || !styleName) {
+        showNotification('Выберите стиль для генерации');
+        return;
+    }
+    
+    currentCategory = categoryId;
+    hideStylePreviewModal();
+    hideCategoryModal();
+    showGenerateScreen();
 }
 
 // ========== ВЫБОР СТИЛЯ В КАТЕГОРИИ ==========
@@ -279,23 +492,6 @@ function showStyleSelection(categoryId) {
         
         stylesContainer.appendChild(styleCard);
     });
-    
-    if (styles.length > 0) {
-        const randomCard = document.createElement('div');
-        randomCard.className = 'style-card random-style';
-        randomCard.innerHTML = `
-            <div class="style-icon">🎲</div>
-            <div class="style-name">Случайный стиль</div>
-        `;
-        
-        randomCard.addEventListener('click', () => {
-            const randomStyle = styles[Math.floor(Math.random() * styles.length)];
-            selectedStyle = randomStyle.name + ' (случайный)';
-            showGenerateScreen();
-        });
-        
-        stylesContainer.appendChild(randomCard);
-    }
     
     stylesScreen.classList.add('active');
     
@@ -878,6 +1074,16 @@ function setupButtons() {
         });
     }
     
+    const categoryModalCloseBtn = document.getElementById('category-modal-close');
+    if (categoryModalCloseBtn) {
+        categoryModalCloseBtn.addEventListener('click', hideCategoryModal);
+    }
+    
+    const stylePreviewGenerateBtn = document.getElementById('style-preview-generate-btn');
+    if (stylePreviewGenerateBtn) {
+        stylePreviewGenerateBtn.addEventListener('click', startStyleGeneration);
+    }
+    
     setupPhotosessions();
     setupVideo();
 }
@@ -1232,4 +1438,4 @@ function updateProfileStats() {
     document.getElementById('profile-days').textContent = '1 день';
 }
 
-console.log('🍌 Nano Banana App готов! Версия 3.0 с фотосессиями');
+console.log('🍌 Nano Banana App готов! Версия 3.1 с горизонтальными каталогами');
