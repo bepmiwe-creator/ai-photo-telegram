@@ -1,5 +1,5 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
-// Версия 3.1: Обновление UI по техзаданию
+// Версия 4.0: Полное обновление по техзаданию
 
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
@@ -10,26 +10,37 @@ let selectedFormat = '1:1';
 let selectedStyle = null;
 let uploadedExample = null;
 let uploadedFace = null;
-let photosessionFrames = 10; // Количество кадров для фотосессии
-let selectedPhotoForSession = null; // Выбранное фото для фотосессии
-let userGeneratedPhotos = []; // Массив сгенерированных фото пользователя
-let selectedCategoryForModal = null; // Выбранная категория для модального окна
+let photosessionFrames = 10;
+let selectedPhotoForSession = null;
+let userGeneratedPhotos = [];
+let selectedCategoryForModal = null;
+let currentPhotosessionCategory = null;
+let currentGalleryIndex = 0;
+let currentGalleryImages = [];
+let inactivityTimer = null;
 
 // ========== ДАННЫЕ ==========
 const categories = [
     { id: 'create', title: 'Создать свой', icon: '🆕', count: 'Ваш стиль', color: '#9C27B0' },
-    { id: 'winter', title: 'Зима', icon: '❄️', count: '', color: '#64B5F6' },
-    { id: 'birthday', title: 'День рождения', icon: '🎂', count: '', color: '#FFB74D' },
-    { id: 'trends', title: 'Тренды', icon: '🔥', count: '', color: '#FF5722' },
-    { id: 'couples', title: 'Парные', icon: '👫', count: '', color: '#EC407A' },
-    { id: 'girls', title: 'Для девушек', icon: '💃', count: '', color: '#E91E63' },
-    { id: 'men', title: 'Для мужчин', icon: '🕺', count: '', color: '#42A5F5' },
-    { id: 'pets', title: 'Питомцы', icon: '🐾', count: '', color: '#81C784' },
-    { id: 'professions', title: 'Профессии', icon: '💼', count: '', color: '#78909C' },
-    { id: 'luxury', title: 'Luxury', icon: '💎', count: '', color: '#FFD700' }
+    { id: 'winter', title: '❄️ Зима', icon: '❄️', count: '', color: '#64B5F6' },
+    { id: 'birthday', title: '🎂 День рождения', icon: '🎂', count: '', color: '#FFB74D' },
+    { id: 'trends', title: '🔥 Тренды', icon: '🔥', count: '', color: '#FF5722' },
+    { id: 'couples', title: '👫 Парные', icon: '👫', count: '', color: '#EC407A' },
+    { id: 'girls', title: '💃 Для девушек', icon: '💃', count: '', color: '#E91E63' },
+    { id: 'men', title: '🕺 Для мужчин', icon: '🕺', count: '', color: '#42A5F5' },
+    { id: 'pets', title: '🐾 Питомцы', icon: '🐾', count: '', color: '#81C784' },
+    { id: 'professions', title: '💼 Профессии', icon: '💼', count: '', color: '#78909C' },
+    { id: 'luxury', title: '💎 Luxury', icon: '💎', count: '', color: '#FFD700' }
 ];
 
-// Тестовые сгенерированные фото пользователя (в реальном приложении будут загружаться из истории)
+// Функция для склонения слова "стиль"
+function getStyleWord(count) {
+    if (count % 10 === 1 && count % 100 !== 11) return 'стиль';
+    if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return 'стиля';
+    return 'стилей';
+}
+
+// Тестовые сгенерированные фото пользователя
 const mockGeneratedPhotos = [
     { id: 1, src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+1', title: 'Зимняя сказка' },
     { id: 2, src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+2', title: 'Розовый закат' },
@@ -41,6 +52,59 @@ const mockGeneratedPhotos = [
     { id: 8, src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+8', title: 'Стиль' }
 ];
 
+// Данные для фотосессий (горизонтальные каталоги)
+const photosessionCategories = [
+    { 
+        id: 'winter', 
+        title: 'Зимняя сказка', 
+        icon: '❄️', 
+        color: '#64B5F6',
+        styles: [
+            { id: 1, name: "Снежная королева", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+1", views: 17200, rating: 4.9 },
+            { id: 2, name: "Зимний лес", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+2", views: 12300, rating: 4.7 },
+            { id: 3, name: "Новогоднее настроение", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+3", views: 21500, rating: 5.0 },
+            { id: 4, name: "Лыжный курорт", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+4", views: 8900, rating: 4.5 },
+            { id: 5, name: "Морозные узоры", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+5", views: 14200, rating: 4.8 },
+            { id: 6, name: "Рождественский вечер", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+6", views: 18700, rating: 4.9 },
+            { id: 7, name: "Зимний город", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+7", views: 9500, rating: 4.6 },
+            { id: 8, name: "Снеговик", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+8", views: 11200, rating: 4.4 }
+        ]
+    },
+    { 
+        id: 'wedding', 
+        title: 'Свадебная', 
+        icon: '💍', 
+        color: '#EC407A',
+        styles: [
+            { id: 1, name: "Романтический закат", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+1", views: 24500, rating: 5.0 },
+            { id: 2, name: "Церковная церемония", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+2", views: 18700, rating: 4.8 },
+            { id: 3, name: "Праздничный банкет", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+3", views: 16200, rating: 4.7 }
+        ]
+    },
+    { 
+        id: 'beach', 
+        title: 'Пляжный отдых', 
+        icon: '🏖️', 
+        color: '#FFB74D',
+        styles: [
+            { id: 1, name: "Закат на море", preview: "https://via.placeholder.com/300x300/FFB74D/FFFFFF?text=🏖️+1", views: 32500, rating: 4.9 },
+            { id: 2, name: "Пальмовый рай", preview: "https://via.placeholder.com/300x300/FFB74D/FFFFFF?text=🏖️+2", views: 27800, rating: 4.8 }
+        ]
+    },
+    { 
+        id: 'luxury', 
+        title: 'Роскошь Luxury', 
+        icon: '💎', 
+        color: '#FFD700',
+        styles: [
+            { id: 1, name: "Золотой шик", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+1", views: 43200, rating: 5.0 },
+            { id: 2, name: "Алмазный блеск", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+2", views: 38900, rating: 4.9 },
+            { id: 3, name: "Шикарный вечер", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+3", views: 41500, rating: 5.0 }
+        ]
+    }
+];
+
+// Примеры стилей для категорий
 const styleExamples = {
     winter: [
         { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
@@ -103,11 +167,11 @@ document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     loadPhotoCategories();
     loadHorizontalCategories();
+    loadPhotosessionHorizontalCategories();
     setupButtons();
     setupRealUpload();
     setupHistoryAndProfile();
     
-    // Загружаем тестовые фото пользователя
     userGeneratedPhotos = [...mockGeneratedPhotos];
     loadUserPhotos();
     
@@ -154,6 +218,8 @@ function setupNavigation() {
         hideHowItWorks();
         hidePhotosessionModal();
         hideCategoryModal();
+        hidePhotosessionGalleryModal();
+        hideFullscreenViewer();
         
         const targetScreen = document.getElementById(`screen-${screenId}`);
         if (targetScreen) {
@@ -171,6 +237,7 @@ function setupNavigation() {
                 loadHorizontalCategories();
             } else if (screenId === 'photosession') {
                 loadUserPhotos();
+                loadPhotosessionHorizontalCategories();
             } else if (screenId === 'history') {
                 loadHistory();
             } else if (screenId === 'profile') {
@@ -210,34 +277,58 @@ function loadPhotoCategories() {
     
     container.innerHTML = '';
     
-    categories.forEach(cat => {
+    // Сначала показываем горизонтальные блоки
+    const horizontalContainer = document.createElement('div');
+    horizontalContainer.className = 'horizontal-cards-container';
+    horizontalContainer.innerHTML = `
+        <div class="prompt-card" id="prompt-generate-btn">
+            <div class="prompt-icon">✍️</div>
+            <div class="prompt-text">
+                <div class="prompt-title">Генерация по описанию</div>
+                <div class="prompt-desc">Опишите картинку словами, ИИ создаст её</div>
+            </div>
+            <div class="prompt-arrow">
+                <span class="material-icons-round">arrow_forward</span>
+            </div>
+        </div>
+        <div class="create-own-card" data-category-id="create">
+            <div class="category-icon" style="background-color: #9C27B020; color: #9C27B0;">🆕</div>
+            <div class="category-title">Создать свой</div>
+            <div class="category-count">Ваш стиль</div>
+        </div>
+    `;
+    
+    container.appendChild(horizontalContainer);
+    
+    // Потом добавляем остальные категории
+    const gridContainer = document.createElement('div');
+    gridContainer.className = 'categories-grid';
+    
+    // Показываем только основные категории (кроме "Создать свой")
+    const mainCategories = categories.filter(cat => cat.id !== 'create');
+    
+    mainCategories.forEach(cat => {
         const card = document.createElement('div');
-        card.className = `category-card ${cat.id === 'create' ? 'create-own' : ''}`;
+        card.className = 'category-card';
         card.dataset.categoryId = cat.id;
         card.style.borderColor = cat.color + '30';
         
         card.innerHTML = `
             <div class="category-icon" style="background-color: ${cat.color}20; color: ${cat.color};">${cat.icon}</div>
             <div class="category-title">${cat.title}</div>
-            ${cat.id === 'create' ? `<div class="category-count">${cat.count}</div>` : ''}
         `;
         
         card.addEventListener('click', () => {
-            if (cat.id === 'create') {
-                currentCategory = cat.id;
-                selectedStyle = null;
-                uploadedExample = null;
-                uploadedFace = null;
-                showCreateOwnStyle();
-            } else {
-                selectedCategoryForModal = cat.id;
-                showCategoryModal(cat.id);
-            }
+            selectedCategoryForModal = cat.id;
+            showCategoryModal(cat.id);
         });
         
-        container.appendChild(card);
+        gridContainer.appendChild(card);
     });
     
+    container.appendChild(gridContainer);
+    
+    // Настройка кнопки генерации по промпту
     const promptBtn = document.getElementById('prompt-generate-btn');
     if (promptBtn) {
         promptBtn.addEventListener('click', function() {
@@ -246,9 +337,21 @@ function loadPhotoCategories() {
             showGenerateScreen();
         });
     }
+    
+    // Настройка кнопки "Создать свой"
+    const createOwnCard = horizontalContainer.querySelector('.create-own-card');
+    if (createOwnCard) {
+        createOwnCard.addEventListener('click', () => {
+            currentCategory = 'create';
+            selectedStyle = null;
+            uploadedExample = null;
+            uploadedFace = null;
+            showCreateOwnStyle();
+        });
+    }
 }
 
-// ========== ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ ==========
+// ========== ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ (страница ФОТО) ==========
 function loadHorizontalCategories() {
     const container = document.getElementById('horizontal-categories');
     if (!container) return;
@@ -264,10 +367,14 @@ function loadHorizontalCategories() {
         
         const header = document.createElement('div');
         header.className = 'horizontal-category-header';
+        
+        const stylesCount = styleExamples[category.id]?.length || 0;
+        const styleWord = getStyleWord(stylesCount);
+        
         header.innerHTML = `
             <h3 class="horizontal-category-title">${category.title}</h3>
             <button class="view-all-btn" data-category="${category.id}">
-                Все ${styleExamples[category.id]?.length || 0} стиля
+                Все ${stylesCount} ${styleWord}
                 <span class="material-icons-round">arrow_forward</span>
             </button>
         `;
@@ -277,7 +384,7 @@ function loadHorizontalCategories() {
         scrollContainer.id = `scroll-${category.id}`;
         
         const styles = styleExamples[category.id] || [];
-        const displayStyles = styles.slice(0, 5); // Показываем только первые 5 стилей
+        const displayStyles = styles.slice(0, 5);
         
         displayStyles.forEach(style => {
             const styleCard = document.createElement('div');
@@ -294,7 +401,8 @@ function loadHorizontalCategories() {
             
             styleCard.addEventListener('click', () => {
                 selectedStyle = style.name;
-                showStylePreviewModal(category.id, style.id);
+                selectedCategoryForModal = category.id;
+                showCategoryModal(category.id);
             });
             
             scrollContainer.appendChild(styleCard);
@@ -312,7 +420,7 @@ function loadHorizontalCategories() {
                 </div>
                 <div class="all-styles-text">
                     <div>Все</div>
-                    <div class="all-styles-count">${styles.length} стиля</div>
+                    <div class="all-styles-count">${stylesCount} ${styleWord}</div>
                 </div>
             `;
             
@@ -345,7 +453,104 @@ function loadHorizontalCategories() {
     });
 }
 
-// ========== МОДАЛЬНОЕ ОКНО КАТЕГОРИИ ==========
+// ========== ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ ФОТОСЕССИЙ ==========
+function loadPhotosessionHorizontalCategories() {
+    const container = document.getElementById('photosession-horizontal-categories');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    photosessionCategories.forEach(category => {
+        const section = document.createElement('div');
+        section.className = 'horizontal-category-section';
+        
+        const header = document.createElement('div');
+        header.className = 'horizontal-category-header';
+        
+        const stylesCount = category.styles.length;
+        const styleWord = getStyleWord(stylesCount);
+        
+        header.innerHTML = `
+            <h3 class="horizontal-category-title">${category.title}</h3>
+            <button class="view-all-btn" data-category="${category.id}">
+                Все ${stylesCount} ${styleWord}
+                <span class="material-icons-round">arrow_forward</span>
+            </button>
+        `;
+        
+        const scrollContainer = document.createElement('div');
+        scrollContainer.className = 'horizontal-scroll-container';
+        scrollContainer.id = `photosession-scroll-${category.id}`;
+        
+        const displayStyles = category.styles.slice(0, 5);
+        
+        displayStyles.forEach(style => {
+            const styleCard = document.createElement('div');
+            styleCard.className = 'horizontal-style-card';
+            styleCard.dataset.category = category.id;
+            styleCard.dataset.styleId = style.id;
+            
+            styleCard.innerHTML = `
+                <div class="horizontal-style-preview">
+                    <img src="${style.preview}" alt="${style.name}">
+                </div>
+                <div class="horizontal-style-name">${style.name}</div>
+            `;
+            
+            styleCard.addEventListener('click', () => {
+                currentPhotosessionCategory = category;
+                showPhotosessionGalleryModal(category.id);
+            });
+            
+            scrollContainer.appendChild(styleCard);
+        });
+        
+        // Добавляем кнопку "Все стили" в конец горизонтального списка
+        if (category.styles.length > 5) {
+            const allStylesCard = document.createElement('div');
+            allStylesCard.className = 'horizontal-style-card all-styles-card';
+            allStylesCard.dataset.category = category.id;
+            
+            allStylesCard.innerHTML = `
+                <div class="all-styles-icon">
+                    <span class="material-icons-round">more_horiz</span>
+                </div>
+                <div class="all-styles-text">
+                    <div>Все</div>
+                    <div class="all-styles-count">${stylesCount} ${styleWord}</div>
+                </div>
+            `;
+            
+            allStylesCard.addEventListener('click', () => {
+                currentPhotosessionCategory = category;
+                showPhotosessionGalleryModal(category.id);
+            });
+            
+            scrollContainer.appendChild(allStylesCard);
+        }
+        
+        section.appendChild(header);
+        section.appendChild(scrollContainer);
+        container.appendChild(section);
+        
+        // Нажатие на заголовок категории
+        const titleElement = header.querySelector('.horizontal-category-title');
+        titleElement.addEventListener('click', () => {
+            currentPhotosessionCategory = category;
+            showPhotosessionGalleryModal(category.id);
+        });
+        
+        // Нажатие на кнопку "Все стили"
+        const viewAllBtn = header.querySelector('.view-all-btn');
+        viewAllBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentPhotosessionCategory = category;
+            showPhotosessionGalleryModal(category.id);
+        });
+    });
+}
+
+// ========== МОДАЛЬНОЕ ОКНО КАТЕГОРИИ (страница ФОТО) ==========
 function showCategoryModal(categoryId) {
     const modal = document.getElementById('category-modal');
     if (!modal) return;
@@ -377,7 +582,9 @@ function showCategoryModal(categoryId) {
             
             styleCard.addEventListener('click', () => {
                 selectedStyle = style.name;
-                showStylePreviewModal(categoryId, style.id);
+                currentCategory = categoryId;
+                hideCategoryModal();
+                showGenerateScreen();
             });
             
             container.appendChild(styleCard);
@@ -399,41 +606,141 @@ function hideCategoryModal() {
     }
 }
 
-// ========== МОДАЛЬНОЕ ОКНО ПРЕВЬЮ СТИЛЯ ==========
-function showStylePreviewModal(categoryId, styleId) {
-    const modal = document.getElementById('style-preview-modal');
+// ========== МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ ==========
+function showPhotosessionGalleryModal(categoryId) {
+    const modal = document.getElementById('photosession-gallery-modal');
     if (!modal) return;
     
-    const category = categories.find(c => c.id === categoryId);
-    const style = styleExamples[categoryId]?.find(s => s.id === styleId);
+    const category = photosessionCategories.find(c => c.id === categoryId);
+    if (!category) return;
     
-    if (!category || !style) return;
+    const titleElement = document.getElementById('photosession-gallery-title');
+    if (titleElement) {
+        titleElement.textContent = category.title;
+    }
     
-    const titleElement = document.getElementById('style-preview-title');
-    const previewElement = document.getElementById('style-preview-image');
-    
-    if (titleElement) titleElement.textContent = style.name;
-    if (previewElement) {
-        previewElement.src = style.preview;
-        previewElement.alt = style.name;
+    const container = document.getElementById('photosession-gallery-container');
+    if (container) {
+        container.innerHTML = '';
+        
+        category.styles.forEach(style => {
+            const viewsText = style.views >= 1000 ? (style.views / 1000).toFixed(1) + 'K' : style.views;
+            
+            const styleCard = document.createElement('div');
+            styleCard.className = 'photosession-gallery-card';
+            styleCard.dataset.category = category.id;
+            styleCard.dataset.styleId = style.id;
+            
+            styleCard.innerHTML = `
+                <div class="photosession-gallery-preview">
+                    <img src="${style.preview}" alt="${style.name}">
+                    <div class="photosession-gallery-info">
+                        <div class="gallery-info-item">
+                            <span class="info-icon">👁️</span>
+                            <span class="info-text">${viewsText}</span>
+                        </div>
+                        <div class="gallery-info-item">
+                            <span class="info-icon">⭐</span>
+                            <span class="info-text">${style.rating}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="photosession-gallery-name">${style.name}</div>
+            `;
+            
+            styleCard.addEventListener('click', () => {
+                showPhotosessionSeriesModal(category, style);
+            });
+            
+            container.appendChild(styleCard);
+        });
     }
     
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('show'), 10);
-    
-    const backBtn = document.getElementById('style-preview-back-btn');
-    if (backBtn) {
-        backBtn.onclick = function() {
-            hideStylePreviewModal();
-            if (selectedCategoryForModal) {
-                showCategoryModal(selectedCategoryForModal);
-            }
-        };
+}
+
+function hidePhotosessionGalleryModal() {
+    const modal = document.getElementById('photosession-gallery-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            currentPhotosessionCategory = null;
+        }, 300);
     }
 }
 
-function hideStylePreviewModal() {
-    const modal = document.getElementById('style-preview-modal');
+// ========== МОДАЛЬНОЕ ОКНО СЕРИИ ФОТОСЕССИИ ==========
+function showPhotosessionSeriesModal(category, style) {
+    const modal = document.getElementById('photosession-series-modal');
+    if (!modal) return;
+    
+    const titleElement = document.getElementById('photosession-series-title');
+    if (titleElement) {
+        titleElement.textContent = style.name;
+    }
+    
+    const container = document.getElementById('photosession-series-container');
+    if (container) {
+        container.innerHTML = '';
+        
+        // Создаем 10 тестовых изображений для серии
+        for (let i = 1; i <= 10; i++) {
+            const seriesCard = document.createElement('div');
+            seriesCard.className = 'photosession-series-card';
+            seriesCard.dataset.index = i;
+            
+            seriesCard.innerHTML = `
+                <div class="photosession-series-preview">
+                    <img src="https://via.placeholder.com/300x300/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${i}" alt="${style.name} ${i}">
+                </div>
+                <div class="photosession-series-number">${i}</div>
+            `;
+            
+            seriesCard.addEventListener('click', () => {
+                currentGalleryImages = [];
+                for (let j = 1; j <= 10; j++) {
+                    currentGalleryImages.push({
+                        src: `https://via.placeholder.com/800x800/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${j}`,
+                        alt: `${style.name} ${j}`
+                    });
+                }
+                currentGalleryIndex = i - 1;
+                showFullscreenViewer();
+            });
+            
+            container.appendChild(seriesCard);
+        }
+    }
+    
+    // Обновляем кнопку генерации
+    const generateBtn = document.getElementById('photosession-series-generate-btn');
+    const btnText = document.getElementById('photosession-series-btn-text');
+    
+    if (userBalance >= 159) {
+        if (btnText) btnText.textContent = `Сгенерировать фотосессию за 159 звёзд`;
+        if (generateBtn) generateBtn.onclick = function() {
+            startPhotosessionGeneration(style.name, 159);
+        };
+    } else {
+        if (btnText) btnText.textContent = `Пополнить баланс`;
+        if (generateBtn) generateBtn.onclick = function() {
+            showInsufficientBalancePopup(159);
+        };
+    }
+    
+    const balanceElement = document.getElementById('photosession-series-balance');
+    if (balanceElement) {
+        balanceElement.textContent = userBalance;
+    }
+    
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+}
+
+function hidePhotosessionSeriesModal() {
+    const modal = document.getElementById('photosession-series-modal');
     if (modal) {
         modal.classList.remove('show');
         setTimeout(() => {
@@ -442,64 +749,81 @@ function hideStylePreviewModal() {
     }
 }
 
-function startStyleGeneration() {
-    const categoryId = selectedCategoryForModal;
-    const styleName = selectedStyle;
+// ========== ПОЛНОЭКРАННЫЙ ПРОСМОТР ==========
+function showFullscreenViewer() {
+    const modal = document.getElementById('fullscreen-viewer');
+    if (!modal) return;
     
-    if (!categoryId || !styleName) {
-        showNotification('Выберите стиль для генерации');
-        return;
-    }
+    updateFullscreenImage();
     
-    currentCategory = categoryId;
-    hideStylePreviewModal();
-    hideCategoryModal();
-    showGenerateScreen();
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('show'), 10);
+    
+    // Запускаем таймер для скрытия элементов управления
+    resetInactivityTimer();
 }
 
-// ========== ВЫБОР СТИЛЯ В КАТЕГОРИИ ==========
-function showStyleSelection(categoryId) {
-    const stylesContainer = document.getElementById('styles-container');
-    const stylesScreen = document.getElementById('screen-styles');
-    const categoryTitle = document.getElementById('styles-category-title');
+function hideFullscreenViewer() {
+    const modal = document.getElementById('fullscreen-viewer');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.style.display = 'none';
+            currentGalleryIndex = 0;
+            currentGalleryImages = [];
+            clearTimeout(inactivityTimer);
+        }, 300);
+    }
+}
+
+function updateFullscreenImage() {
+    const imageElement = document.getElementById('fullscreen-image');
+    const counterElement = document.getElementById('fullscreen-counter');
+    const controls = document.getElementById('fullscreen-controls');
     
-    if (!stylesContainer || !stylesScreen || !categoryTitle) return;
-    
-    const category = categories.find(c => c.id === categoryId);
-    if (category) {
-        categoryTitle.textContent = category.title;
+    if (imageElement && currentGalleryImages[currentGalleryIndex]) {
+        imageElement.src = currentGalleryImages[currentGalleryIndex].src;
+        imageElement.alt = currentGalleryImages[currentGalleryIndex].alt;
     }
     
-    stylesContainer.innerHTML = '';
+    if (counterElement) {
+        counterElement.textContent = `${currentGalleryIndex + 1}/${currentGalleryImages.length}`;
+    }
     
-    const styles = styleExamples[categoryId] || [];
+    // Показываем элементы управления
+    if (controls) {
+        controls.style.opacity = '1';
+        controls.style.visibility = 'visible';
+    }
     
-    styles.forEach(style => {
-        const styleCard = document.createElement('div');
-        styleCard.className = 'style-card';
-        styleCard.style.borderColor = style.color + '50';
-        styleCard.style.backgroundColor = style.color + '15';
-        
-        styleCard.innerHTML = `
-            <div class="style-icon" style="background-color: ${style.color}30; color: ${style.color};">${style.icon}</div>
-            <div class="style-name">${style.name}</div>
-        `;
-        
-        styleCard.addEventListener('click', () => {
-            selectedStyle = style.name;
-            showGenerateScreen();
-        });
-        
-        stylesContainer.appendChild(styleCard);
-    });
-    
-    stylesScreen.classList.add('active');
-    
-    const backBtn = document.getElementById('styles-back-btn');
-    if (backBtn) {
-        backBtn.onclick = function() {
-            stylesScreen.classList.remove('active');
-        };
+    // Сбрасываем таймер неактивности
+    resetInactivityTimer();
+}
+
+function nextImage() {
+    if (currentGalleryIndex < currentGalleryImages.length - 1) {
+        currentGalleryIndex++;
+        updateFullscreenImage();
+    }
+}
+
+function prevImage() {
+    if (currentGalleryIndex > 0) {
+        currentGalleryIndex--;
+        updateFullscreenImage();
+    }
+}
+
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(hideFullscreenControls, 3000);
+}
+
+function hideFullscreenControls() {
+    const controls = document.getElementById('fullscreen-controls');
+    if (controls) {
+        controls.style.opacity = '0';
+        controls.style.visibility = 'hidden';
     }
 }
 
@@ -653,10 +977,9 @@ function startCreateOwnGeneration() {
         userBalance -= 10;
         updateBalance();
         
-        // Добавляем сгенерированное фото в массив пользователя
         const newPhoto = {
             id: Date.now(),
-            src: uploadedExample.preview, // В реальном приложении это будет сгенерированное фото
+            src: uploadedExample.preview,
             title: 'Свой стиль'
         };
         userGeneratedPhotos.unshift(newPhoto);
@@ -725,14 +1048,12 @@ function showPhotosessionModal() {
     const modal = document.getElementById('photosession-modal');
     if (!modal) return;
     
-    // Обновляем изображение
     const imgElement = document.getElementById('selected-photo-img');
     if (imgElement) {
         imgElement.src = selectedPhotoForSession.src;
         imgElement.alt = selectedPhotoForSession.title;
     }
     
-    // Обновляем количество кадров
     updatePhotosessionCount();
     
     modal.style.display = 'flex';
@@ -758,14 +1079,12 @@ function updatePhotosessionCount() {
     
     if (countElement) countElement.textContent = photosessionFrames;
     
-    // Рассчитываем цену: 159 звезд за 10 кадров + 15 за каждый дополнительный
     const basePrice = 159;
     const extraFrames = Math.max(0, photosessionFrames - 10);
     const totalPrice = basePrice + (extraFrames * 15);
     
     if (priceElement) priceElement.textContent = totalPrice;
     
-    // Общее количество фото: выбранные кадры + 3 бесплатных
     const totalPhotos = photosessionFrames + 3;
     if (totalElement) totalElement.textContent = totalPhotos;
     if (resultCountElement) resultCountElement.textContent = totalPhotos;
@@ -785,60 +1104,35 @@ function increasePhotosessionFrames() {
     }
 }
 
-function startPhotosessionGeneration() {
-    if (!selectedPhotoForSession) {
-        showNotification('Выберите фото для фотосессии');
+function startPhotosessionGeneration(title, price) {
+    if (price > userBalance) {
+        showInsufficientBalancePopup(price);
         return;
     }
     
-    const basePrice = 159;
-    const extraFrames = Math.max(0, photosessionFrames - 10);
-    const totalPrice = basePrice + (extraFrames * 15);
-    
-    if (totalPrice > userBalance) {
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.showPopup({
-                title: 'Недостаточно звёзд',
-                message: `Telegram баланс: ${userBalance}\nПополнить баланс в боте?`,
-                buttons: [
-                    { id: 'exit', type: 'default', text: 'Выход' },
-                    { id: 'ok', type: 'ok', text: 'ОК' }
-                ]
-            }, function(buttonId) {
-                if (buttonId === 'ok') {
-                    tg.openTelegramLink('https://t.me/NeuroFlashStudio_bot');
-                }
-            });
-        } else {
-            showNotification(`Недостаточно звёзд! Нужно: ${totalPrice}, у вас: ${userBalance}`);
-        }
-        return;
-    }
-    
-    const btn = document.getElementById('start-photosession-btn');
+    const btn = document.getElementById('photosession-series-generate-btn');
     const originalHTML = btn.innerHTML;
     btn.disabled = true;
     btn.innerHTML = `<span class="generate-icon">⏳</span><span>Создание фотосессии...</span>`;
     
     setTimeout(() => {
-        userBalance -= totalPrice;
+        userBalance -= price;
         updateBalance();
         
         if (window.addToHistory) {
             window.addToHistory('photosession', 
-                `Фотосессия: ${selectedPhotoForSession.title}`,
-                `${photosessionFrames} кадров + 3 в подарок`,
-                totalPrice
+                `Фотосессия: ${title}`,
+                `10 кадров + 3 в подарок`,
+                price
             );
         }
         
-        showNotification(`🎉 Фотосессия создана! Вы получите ${photosessionFrames + 3} уникальных фото.`);
+        showNotification(`🎉 Фотосессия создана! Вы получите 13 уникальных фото.`);
         
         setTimeout(() => {
             btn.disabled = false;
             btn.innerHTML = originalHTML;
-            hidePhotosessionModal();
+            hidePhotosessionSeriesModal();
             
             setTimeout(() => {
                 if (window.switchScreen) {
@@ -847,6 +1141,28 @@ function startPhotosessionGeneration() {
             }, 500);
         }, 500);
     }, 3000);
+}
+
+function showInsufficientBalancePopup(requiredAmount) {
+    const missingAmount = requiredAmount - userBalance;
+    
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.showPopup({
+            title: 'Недостаточно звёзд',
+            message: `Telegram баланс: ${userBalance}\nНе хватает: ${missingAmount} звёзд\n\nПополнить баланс в боте?`,
+            buttons: [
+                { id: 'exit', type: 'default', text: 'Выход' },
+                { id: 'ok', type: 'ok', text: 'ОК' }
+            ]
+        }, function(buttonId) {
+            if (buttonId === 'ok') {
+                tg.openTelegramLink('https://t.me/NeuroFlashStudio_bot');
+            }
+        });
+    } else {
+        showNotification(`Недостаточно звёзд! Нужно: ${requiredAmount}, у вас: ${userBalance}`);
+    }
 }
 
 // ========== КАК ЭТО РАБОТАЕТ ==========
@@ -947,7 +1263,6 @@ function hideGenerateScreen() {
     }
 }
 
-// ========== НАСТРОЙКА ПОЛЯ ПРОМПТА ==========
 function setupPromptField() {
     const promptTextarea = document.getElementById('ai-prompt');
     const charCount = document.getElementById('char-count');
@@ -986,7 +1301,6 @@ function setupPromptField() {
     }
 }
 
-// ========== ПРОВЕРКА АКТИВНОСТИ КНОПКИ ==========
 function checkGenerateButton() {
     const generateBtn = document.getElementById('start-generate-btn');
     const btnText = document.getElementById('generate-btn-text');
@@ -1025,7 +1339,6 @@ function checkGenerateButton() {
     }
 }
 
-// ========== ВЫБОР ФОРМАТА ==========
 function setupFormatSelect() {
     const formatSelect = document.getElementById('format-select');
     
@@ -1067,6 +1380,11 @@ function setupButtons() {
         });
     }
     
+    const categoryModalCloseBtn = document.getElementById('category-modal-close');
+    if (categoryModalCloseBtn) {
+        categoryModalCloseBtn.addEventListener('click', hideCategoryModal);
+    }
+    
     const photosessionBackBtn = document.getElementById('photosession-back-btn');
     if (photosessionBackBtn) {
         photosessionBackBtn.addEventListener('click', () => {
@@ -1074,18 +1392,53 @@ function setupButtons() {
         });
     }
     
-    const categoryModalCloseBtn = document.getElementById('category-modal-close');
-    if (categoryModalCloseBtn) {
-        categoryModalCloseBtn.addEventListener('click', hideCategoryModal);
+    const photosessionGalleryBackBtn = document.getElementById('photosession-gallery-back-btn');
+    if (photosessionGalleryBackBtn) {
+        photosessionGalleryBackBtn.onclick = hidePhotosessionGalleryModal;
     }
     
-    const stylePreviewGenerateBtn = document.getElementById('style-preview-generate-btn');
-    if (stylePreviewGenerateBtn) {
-        stylePreviewGenerateBtn.addEventListener('click', startStyleGeneration);
+    const photosessionSeriesBackBtn = document.getElementById('photosession-series-back-btn');
+    if (photosessionSeriesBackBtn) {
+        photosessionSeriesBackBtn.onclick = hidePhotosessionSeriesModal;
     }
     
-    setupPhotosessions();
-    setupVideo();
+    const fullscreenCloseBtn = document.getElementById('fullscreen-close-btn');
+    if (fullscreenCloseBtn) {
+        fullscreenCloseBtn.onclick = hideFullscreenViewer;
+    }
+    
+    const fullscreenPrevBtn = document.getElementById('fullscreen-prev-btn');
+    if (fullscreenPrevBtn) {
+        fullscreenPrevBtn.onclick = prevImage;
+    }
+    
+    const fullscreenNextBtn = document.getElementById('fullscreen-next-btn');
+    if (fullscreenNextBtn) {
+        fullscreenNextBtn.onclick = nextImage;
+    }
+    
+    const photosessionBtns = document.querySelectorAll('.photosession-btn:not([data-pack="custom"])');
+    photosessionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const pack = this.dataset.pack;
+            showNotification(`Выбран пакет: ${pack}. Функция скоро будет доступна!`);
+        });
+    });
+    
+    const customSessionBtn = document.querySelector('.photosession-btn[data-pack="custom"]');
+    if (customSessionBtn) {
+        customSessionBtn.addEventListener('click', function() {
+            showCustomPhotosession();
+        });
+    }
+    
+    const videoBtns = document.querySelectorAll('.video-btn');
+    videoBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const type = this.dataset.videoType;
+            showNotification(`Выбран тип видео: ${type}. Функция скоро будет доступна!`);
+        });
+    });
 }
 
 // ========== ЗАГРУЗКА ФОТО ==========
@@ -1225,7 +1578,6 @@ function startGeneration() {
         
         const details = `Модель: ${selectedModel === 'nano' ? 'Nano Banana' : 'Nano Banana Pro'}, Формат: ${selectedFormat}`;
         
-        // Добавляем сгенерированное фото
         const newPhoto = {
             id: Date.now(),
             src: uploadedImages[0]?.preview || 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Сгенерировано',
@@ -1304,35 +1656,8 @@ function showNotification(message) {
 }
 
 // ========== ДОПОЛНИТЕЛЬНЫЕ МОДУЛИ ==========
-function setupPhotosessions() {
-    const photoSessionBtns = document.querySelectorAll('.photosession-btn:not([data-pack="custom"])');
-    photoSessionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const pack = this.dataset.pack;
-            showNotification(`Выбран пакет: ${pack}. Функция скоро будет доступна!`);
-        });
-    });
-    
-    const customSessionBtn = document.querySelector('.photosession-btn[data-pack="custom"]');
-    if (customSessionBtn) {
-        customSessionBtn.addEventListener('click', function() {
-            showCustomPhotosession();
-        });
-    }
-}
-
 function showCustomPhotosession() {
     switchScreen('photosession-custom');
-}
-
-function setupVideo() {
-    const videoBtns = document.querySelectorAll('.video-btn');
-    videoBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const type = this.dataset.videoType;
-            showNotification(`Выбран тип видео: ${type}. Функция скоро будет доступна!`);
-        });
-    });
 }
 
 // ========== ИСТОРИЯ И ПРОФИЛЬ ==========
@@ -1438,4 +1763,4 @@ function updateProfileStats() {
     document.getElementById('profile-days').textContent = '1 день';
 }
 
-console.log('🍌 Nano Banana App готов! Версия 3.1 с горизонтальными каталогами');
+console.log('🍌 Nano Banana App готов! Версия 4.0 с полным обновлением по ТЗ');
