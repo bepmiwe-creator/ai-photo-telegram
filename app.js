@@ -1,5 +1,5 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
-// Версия 4.0: Полное обновление по техзаданию
+// Версия 5.0: Полное обновление по техзаданию
 
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
@@ -18,6 +18,7 @@ let currentPhotosessionCategory = null;
 let currentGalleryIndex = 0;
 let currentGalleryImages = [];
 let inactivityTimer = null;
+let newHistoryItems = 0; // Счетчик новых элементов в истории
 
 // ========== ДАННЫЕ ==========
 const categories = [
@@ -42,14 +43,54 @@ function getStyleWord(count) {
 
 // Тестовые сгенерированные фото пользователя
 const mockGeneratedPhotos = [
-    { id: 1, src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+1', title: 'Зимняя сказка' },
-    { id: 2, src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+2', title: 'Розовый закат' },
-    { id: 3, src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+3', title: 'Элегантность' },
-    { id: 4, src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+4', title: 'Городские огни' },
-    { id: 5, src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+5', title: 'Романтика' },
-    { id: 6, src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+6', title: 'Минимализм' },
-    { id: 7, src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+7', title: 'Природа' },
-    { id: 8, src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+8', title: 'Стиль' }
+    { 
+        id: 1, 
+        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+1', 
+        title: 'Зимняя сказка',
+        date: '23.01.2026'
+    },
+    { 
+        id: 2, 
+        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+2', 
+        title: 'Розовый закат',
+        date: '22.01.2026'
+    },
+    { 
+        id: 3, 
+        src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+3', 
+        title: 'Элегантность',
+        date: '21.01.2026'
+    },
+    { 
+        id: 4, 
+        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+4', 
+        title: 'Городские огни',
+        date: '20.01.2026'
+    },
+    { 
+        id: 5, 
+        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+5', 
+        title: 'Романтика',
+        date: '19.01.2026'
+    },
+    { 
+        id: 6, 
+        src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+6', 
+        title: 'Минимализм',
+        date: '18.01.2026'
+    },
+    { 
+        id: 7, 
+        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+7', 
+        title: 'Природа',
+        date: '17.01.2026'
+    },
+    { 
+        id: 8, 
+        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+8', 
+        title: 'Стиль',
+        date: '16.01.2026'
+    }
 ];
 
 // Данные для фотосессий (горизонтальные каталоги)
@@ -104,7 +145,7 @@ const photosessionCategories = [
     }
 ];
 
-// Примеры стилей для категорий
+// Примеры стилей для категорий (только для горизонтальных каталогов)
 const styleExamples = {
     winter: [
         { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
@@ -174,6 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     userGeneratedPhotos = [...mockGeneratedPhotos];
     loadUserPhotos();
+    updateHistoryBadge();
     
     setTimeout(() => {
         document.body.classList.add('loaded');
@@ -185,6 +227,12 @@ function initTelegram() {
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.expand();
+        
+        // Отключаем вертикальные свайпы внутри контента
+        tg.disableVerticalSwipes();
+        
+        // Всегда показываем кнопку закрытия
+        tg.showCloseButton();
         
         const user = tg.initDataUnsafe?.user;
         if (user) {
@@ -210,6 +258,12 @@ function setupNavigation() {
     function switchScreen(screenId) {
         console.log('Переключаемся на экран:', screenId);
         
+        // Сбрасываем бейдж при переходе в историю
+        if (screenId === 'history') {
+            newHistoryItems = 0;
+            updateHistoryBadge();
+        }
+        
         screens.forEach(screen => {
             screen.classList.remove('active');
         });
@@ -220,6 +274,8 @@ function setupNavigation() {
         hideCategoryModal();
         hidePhotosessionGalleryModal();
         hideFullscreenViewer();
+        hideLoadingScreen();
+        hideResultScreen();
         
         const targetScreen = document.getElementById(`screen-${screenId}`);
         if (targetScreen) {
@@ -267,6 +323,13 @@ function setupNavigation() {
         });
     }
     
+    const startFromHistoryBtn = document.getElementById('start-from-history');
+    if (startFromHistoryBtn) {
+        startFromHistoryBtn.addEventListener('click', function() {
+            switchScreen('photo');
+        });
+    }
+    
     window.switchScreen = switchScreen;
 }
 
@@ -277,7 +340,7 @@ function loadPhotoCategories() {
     
     container.innerHTML = '';
     
-    // Сначала показываем горизонтальные блоки
+    // Только две горизонтальные карточки: Генерация по описанию и Создать свой
     const horizontalContainer = document.createElement('div');
     horizontalContainer.className = 'horizontal-cards-container';
     horizontalContainer.innerHTML = `
@@ -299,34 +362,6 @@ function loadPhotoCategories() {
     `;
     
     container.appendChild(horizontalContainer);
-    
-    // Потом добавляем остальные категории
-    const gridContainer = document.createElement('div');
-    gridContainer.className = 'categories-grid';
-    
-    // Показываем только основные категории (кроме "Создать свой")
-    const mainCategories = categories.filter(cat => cat.id !== 'create');
-    
-    mainCategories.forEach(cat => {
-        const card = document.createElement('div');
-        card.className = 'category-card';
-        card.dataset.categoryId = cat.id;
-        card.style.borderColor = cat.color + '30';
-        
-        card.innerHTML = `
-            <div class="category-icon" style="background-color: ${cat.color}20; color: ${cat.color};">${cat.icon}</div>
-            <div class="category-title">${cat.title}</div>
-        `;
-        
-        card.addEventListener('click', () => {
-            selectedCategoryForModal = cat.id;
-            showCategoryModal(cat.id);
-        });
-        
-        gridContainer.appendChild(card);
-    });
-    
-    container.appendChild(gridContainer);
     
     // Настройка кнопки генерации по промпту
     const promptBtn = document.getElementById('prompt-generate-btn');
@@ -402,7 +437,7 @@ function loadHorizontalCategories() {
             styleCard.addEventListener('click', () => {
                 selectedStyle = style.name;
                 selectedCategoryForModal = category.id;
-                showCategoryModal(category.id);
+                showGenerateScreenWithStyle(category.id, style.name);
             });
             
             scrollContainer.appendChild(styleCard);
@@ -426,7 +461,7 @@ function loadHorizontalCategories() {
             
             allStylesCard.addEventListener('click', () => {
                 selectedCategoryForModal = category.id;
-                showCategoryModal(category.id);
+                showGenerateScreenWithCategory(category.id);
             });
             
             scrollContainer.appendChild(allStylesCard);
@@ -440,7 +475,7 @@ function loadHorizontalCategories() {
         const titleElement = header.querySelector('.horizontal-category-title');
         titleElement.addEventListener('click', () => {
             selectedCategoryForModal = category.id;
-            showCategoryModal(category.id);
+            showGenerateScreenWithCategory(category.id);
         });
         
         // Нажатие на кнопку "Все стили"
@@ -448,9 +483,25 @@ function loadHorizontalCategories() {
         viewAllBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             selectedCategoryForModal = category.id;
-            showCategoryModal(category.id);
+            showGenerateScreenWithCategory(category.id);
         });
     });
+}
+
+function showGenerateScreenWithStyle(categoryId, styleName) {
+    const category = categories.find(c => c.id === categoryId);
+    currentCategory = categoryId;
+    selectedStyle = styleName;
+    
+    showGenerateScreen();
+}
+
+function showGenerateScreenWithCategory(categoryId) {
+    const category = categories.find(c => c.id === categoryId);
+    currentCategory = categoryId;
+    selectedStyle = null;
+    
+    showGenerateScreen();
 }
 
 // ========== ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ ФОТОСЕССИЙ ==========
@@ -548,62 +599,6 @@ function loadPhotosessionHorizontalCategories() {
             showPhotosessionGalleryModal(category.id);
         });
     });
-}
-
-// ========== МОДАЛЬНОЕ ОКНО КАТЕГОРИИ (страница ФОТО) ==========
-function showCategoryModal(categoryId) {
-    const modal = document.getElementById('category-modal');
-    if (!modal) return;
-    
-    const category = categories.find(c => c.id === categoryId);
-    if (!category) return;
-    
-    const titleElement = document.getElementById('category-modal-title');
-    if (titleElement) {
-        titleElement.textContent = category.title;
-    }
-    
-    const container = document.getElementById('category-styles-container');
-    if (container) {
-        container.innerHTML = '';
-        
-        const styles = styleExamples[categoryId] || [];
-        
-        styles.forEach(style => {
-            const styleCard = document.createElement('div');
-            styleCard.className = 'modal-style-card';
-            styleCard.style.borderColor = style.color + '50';
-            styleCard.style.backgroundColor = style.color + '15';
-            
-            styleCard.innerHTML = `
-                <div class="modal-style-icon" style="background-color: ${style.color}30; color: ${style.color};">${style.icon}</div>
-                <div class="modal-style-name">${style.name}</div>
-            `;
-            
-            styleCard.addEventListener('click', () => {
-                selectedStyle = style.name;
-                currentCategory = categoryId;
-                hideCategoryModal();
-                showGenerateScreen();
-            });
-            
-            container.appendChild(styleCard);
-        });
-    }
-    
-    modal.style.display = 'flex';
-    setTimeout(() => modal.classList.add('show'), 10);
-}
-
-function hideCategoryModal() {
-    const modal = document.getElementById('category-modal');
-    if (modal) {
-        modal.classList.remove('show');
-        setTimeout(() => {
-            modal.style.display = 'none';
-            selectedCategoryForModal = null;
-        }, 300);
-    }
 }
 
 // ========== МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ ==========
@@ -832,6 +827,80 @@ function showCreateOwnStyle() {
     const createScreen = document.getElementById('screen-create-own');
     if (!createScreen) return;
     
+    // Создаем экран "Создать свой стиль", если его еще нет
+    if (!createScreen) {
+        const main = document.getElementById('app-main');
+        const createScreenHTML = `
+            <div class="screen" id="screen-create-own">
+                <div class="screen-header">
+                    <button class="back-btn" id="create-own-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h2>Создать свой стиль</h2>
+                    <button class="help-btn" id="how-it-works-btn">
+                        <span class="material-icons-round">help_outline</span>
+                    </button>
+                </div>
+
+                <div class="screen-content">
+                    <div class="create-own-instructions">
+                        <p class="instructions-text">
+                            Загрузите фото-пример (стиль, который хотите повторить) и свое фото. 
+                            AI проанализирует пример и создаст похожее изображение с вашим лицом.
+                        </p>
+                    </div>
+
+                    <!-- КОНТЕЙНЕРЫ ДЛЯ ЗАГРУЗКИ -->
+                    <div class="upload-comparison">
+                        <div class="upload-column">
+                            <div class="upload-column-header"></div>
+                            <div class="upload-container" id="example-container">
+                                <!-- Загружается через JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="arrow-column">
+                            <div class="arrow-icon">
+                                <span class="material-icons-round">arrow_forward</span>
+                            </div>
+                        </div>
+
+                        <div class="upload-column">
+                            <div class="upload-column-header"></div>
+                            <div class="upload-container" id="face-container">
+                                <!-- Загружается через JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- РЕКОМЕНДАЦИИ -->
+                    <div class="upload-recommendations">
+                        <div class="recommendation-icon">
+                            <span class="material-icons-round">lightbulb</span>
+                        </div>
+                        <div class="recommendation-text">
+                            <strong>Рекомендуем:</strong> портреты с хорошим освещением, вид лица анфас. 
+                            Для примера выбирайте четкие фото с хорошим качеством.
+                        </div>
+                    </div>
+
+                    <!-- КНОПКА ГЕНЕРАЦИИ -->
+                    <div class="generate-action create-own-action">
+                        <button class="generate-btn large" id="create-own-generate-btn" disabled>
+                            <span class="generate-icon">📷</span>
+                            <span id="create-own-btn-text">Загрузите оба фото</span>
+                        </button>
+                        <p class="generate-hint">
+                            Загрузите оба фото для активации генерации
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        main.insertAdjacentHTML('beforeend', createScreenHTML);
+    }
+    
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     createScreen.classList.add('active');
     
@@ -843,6 +912,18 @@ function showCreateOwnStyle() {
     const howItWorksBtn = document.getElementById('how-it-works-btn');
     if (howItWorksBtn) {
         howItWorksBtn.onclick = showHowItWorks;
+    }
+    
+    const backBtn = document.getElementById('create-own-back-btn');
+    if (backBtn) {
+        backBtn.onclick = () => {
+            switchScreen('photo');
+        };
+    }
+    
+    const generateBtn = document.getElementById('create-own-generate-btn');
+    if (generateBtn) {
+        generateBtn.onclick = startCreateOwnGeneration;
     }
 }
 
@@ -968,40 +1049,7 @@ function startCreateOwnGeneration() {
         return;
     }
     
-    const btn = document.getElementById('create-own-generate-btn');
-    const originalHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<span class="generate-icon">⏳</span><span>Генерация...</span>`;
-    
-    setTimeout(() => {
-        userBalance -= 10;
-        updateBalance();
-        
-        const newPhoto = {
-            id: Date.now(),
-            src: uploadedExample.preview,
-            title: 'Свой стиль'
-        };
-        userGeneratedPhotos.unshift(newPhoto);
-        loadUserPhotos();
-        
-        if (window.addToHistory) {
-            window.addToHistory('photo', 'Создать свой стиль', 'Генерация по примеру', 10);
-        }
-        
-        showNotification('🎉 Генерация завершена! Фото добавлены в историю.');
-        
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            
-            setTimeout(() => {
-                if (window.switchScreen) {
-                    window.switchScreen('history');
-                }
-            }, 500);
-        }, 500);
-    }, 3000);
+    showLoadingScreen();
 }
 
 // ========== ФОТОСЕССИИ ==========
@@ -1110,37 +1158,7 @@ function startPhotosessionGeneration(title, price) {
         return;
     }
     
-    const btn = document.getElementById('photosession-series-generate-btn');
-    const originalHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<span class="generate-icon">⏳</span><span>Создание фотосессии...</span>`;
-    
-    setTimeout(() => {
-        userBalance -= price;
-        updateBalance();
-        
-        if (window.addToHistory) {
-            window.addToHistory('photosession', 
-                `Фотосессия: ${title}`,
-                `10 кадров + 3 в подарок`,
-                price
-            );
-        }
-        
-        showNotification(`🎉 Фотосессия создана! Вы получите 13 уникальных фото.`);
-        
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            hidePhotosessionSeriesModal();
-            
-            setTimeout(() => {
-                if (window.switchScreen) {
-                    window.switchScreen('history');
-                }
-            }, 500);
-        }, 500);
-    }, 3000);
+    showLoadingScreen();
 }
 
 function showInsufficientBalancePopup(requiredAmount) {
@@ -1168,6 +1186,89 @@ function showInsufficientBalancePopup(requiredAmount) {
 // ========== КАК ЭТО РАБОТАЕТ ==========
 function showHowItWorks() {
     const overlay = document.getElementById('how-it-works-overlay');
+    if (!overlay) {
+        // Создаем оверлей "Как это работает"
+        const body = document.body;
+        const overlayHTML = `
+            <div class="overlay" id="how-it-works-overlay">
+                <div class="overlay-content">
+                    <div class="overlay-header">
+                        <h2>Как это работает?</h2>
+                        <button class="close-btn" onclick="hideHowItWorks()">
+                            <span class="material-icons-round">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="overlay-body">
+                        <div class="info-section">
+                            <div class="info-icon-large">🎨</div>
+                            <h3>Генерация по примеру</h3>
+                            <p class="info-text">
+                                Нашли крутое фото в интернете и хотите такое же, но с собой? 
+                                Загрузите его как пример, добавьте своё фото — и AI создаст похожее изображение с вашим лицом!
+                            </p>
+                        </div>
+
+                        <div class="info-section">
+                            <div class="steps-list">
+                                <div class="step-item">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <strong>Загрузите фото-пример</strong>
+                                        <div class="step-subtext">Стиль, поза, одежда, фон</div>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <strong>Загрузите своё фото</strong>
+                                        <div class="step-subtext">Чёткое фото лица анфас</div>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <strong>AI проанализирует пример</strong>
+                                        <div class="step-subtext">Определит стиль и особенности</div>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-number">4</div>
+                                    <div class="step-content">
+                                        <strong>Создаст похожее фото</strong>
+                                        <div class="step-subtext">С вашим лицом в выбранном стиле</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-section">
+                            <h4>💡 Советы</h4>
+                            <ul class="tips-list">
+                                <li>Выбирайте чёткие примеры с хорошим освещением</li>
+                                <li>Ваше фото должно быть с видимым лицом</li>
+                                <li>Лучше всего работает с портретами</li>
+                                <li>Избегайте групповых фото в примерах</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-section price-section">
+                            <div class="price-icon">💰</div>
+                            <div class="price-content">
+                                <h4>Стоимость</h4>
+                                <p class="price-text">10 звёзд за генерацию</p>
+                                <p class="price-note">Первые 2 генерации бесплатно для новых пользователей</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        body.insertAdjacentHTML('beforeend', overlayHTML);
+    }
+    
+    const overlay = document.getElementById('how-it-works-overlay');
     if (overlay) {
         overlay.style.display = 'flex';
         setTimeout(() => overlay.classList.add('show'), 10);
@@ -1185,8 +1286,116 @@ function hideHowItWorks() {
 // ========== ЭКРАН ГЕНЕРАЦИИ ==========
 function showGenerateScreen() {
     const generateScreen = document.getElementById('screen-generate');
-    if (!generateScreen) return;
+    if (!generateScreen) {
+        // Создаем экран генерации
+        const main = document.getElementById('app-main');
+        const generateScreenHTML = `
+            <div class="overlay" id="screen-generate">
+                <div class="overlay-content generate-container">
+                    <div class="overlay-header">
+                        <button class="back-btn" id="generate-back-btn">
+                            <span class="material-icons-round">arrow_back</span>
+                        </button>
+                        <h3 id="generate-title">Генерация фото</h3>
+                        <div class="header-placeholder"></div>
+                    </div>
+                    
+                    <div class="overlay-body">
+                        <div class="generate-type">
+                            <div class="type-badge" id="type-badge">✨ По описанию</div>
+                        </div>
+                        
+                        <div class="prompt-section" id="prompt-section" style="display: none;">
+                            <h4>Опишите изображение</h4>
+                            <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
+                            
+                            <textarea class="prompt-textarea" id="ai-prompt" 
+                                      placeholder="Пример: Девушка в розовом платье стоит на берегу океана на закате, волны, песок, золотистый свет, фотореалистично, высокая детализация..." 
+                                      rows="4" maxlength="2000"></textarea>
+                            
+                            <div class="prompt-counter">
+                                <span id="char-count">0</span> / 2000 знаков
+                            </div>
+                        </div>
+                        
+                        <div class="upload-section">
+                            <div class="upload-header">
+                                <h4>Загрузите свои фото</h4>
+                                <span class="required-badge">Обязательно</span>
+                            </div>
+                            <p class="input-hint">Загрузите 1-5 своих фото для генерации. ИИ учтёт черты лица.</p>
+                            
+                            <div class="upload-grid" id="upload-grid">
+                                <div class="upload-item upload-add" id="upload-add-btn">
+                                    <span class="material-icons-round">add</span>
+                                    <span>Добавить фото</span>
+                                    <div class="upload-count">0/5</div>
+                                </div>
+                            </div>
+                            
+                            <div class="upload-info">
+                                <span class="material-icons-round">info</span>
+                                <span>Рекомендуем: портреты с хорошим освещением, вид лица анфас</span>
+                            </div>
+                        </div>
+                        
+                        <div class="format-section">
+                            <h4>Формат фото</h4>
+                            <p class="input-hint">Выберите соотношение сторон</p>
+                            
+                            <select class="format-select" id="format-select">
+                                <option value="1:1">Квадрат (1:1)</option>
+                                <option value="4:5">Портрет (4:5)</option>
+                                <option value="16:9">Широкий (16:9)</option>
+                                <option value="9:16">Сторис (9:16)</option>
+                                <option value="3:4">Классика (3:4)</option>
+                                <option value="2:3">Постер (2:3)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="model-section">
+                            <h4>Модель ИИ</h4>
+                            <p class="input-hint">Выберите качество генерации</p>
+                            
+                            <div class="model-options">
+                                <div class="model-card selected" data-model="nano" data-price="7">
+                                    <div class="model-badge">⭐ 7</div>
+                                    <div class="model-name">Nano Banana</div>
+                                    <div class="model-desc">Стандартное качество</div>
+                                    <div class="model-hint">Быстро, для соцсетей</div>
+                                </div>
+                                <div class="model-card" data-model="pro" data-price="25">
+                                    <div class="model-badge best">⭐ 25</div>
+                                    <div class="model-name">Nano Banana Pro</div>
+                                    <div class="model-desc">Высокое качество</div>
+                                    <div class="model-hint">Детализация, для печати</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="generate-action">
+                            <button class="generate-btn" id="start-generate-btn" disabled>
+                                <span class="generate-icon">📝</span>
+                                <span id="generate-btn-text">Загрузите фото</span>
+                            </button>
+                            <p class="generate-hint" id="generate-hint">Загрузите хотя бы одно фото для генерации</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        main.insertAdjacentHTML('beforeend', generateScreenHTML);
+        
+        // Настраиваем элементы после создания
+        setupFormatSelect();
+        setupPromptField();
+        checkGenerateButton();
+        updateUploadGrid();
+        setupButtons();
+    }
     
+    const generateScreen = document.getElementById('screen-generate');
     generateScreen.style.display = 'flex';
     setTimeout(() => generateScreen.classList.add('show'), 10);
     
@@ -1206,7 +1415,6 @@ function showGenerateScreen() {
         document.getElementById('prompt-section').style.display = 'none';
     }
     
-    setupFormatSelect();
     updateTotalPrice();
     
     if (currentCategory === 'prompt') {
@@ -1284,15 +1492,6 @@ function setupPromptField() {
             checkGenerateButton();
         });
         
-        exampleChips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                const example = this.dataset.example;
-                promptTextarea.value = example;
-                promptTextarea.dispatchEvent(new Event('input'));
-                promptTextarea.focus();
-            });
-        });
-        
         if (currentCategory === 'prompt') {
             setTimeout(() => {
                 promptTextarea.focus();
@@ -1354,7 +1553,9 @@ function setupFormatSelect() {
 
 // ========== КНОПКИ ==========
 function setupButtons() {
-    document.querySelectorAll('.model-card').forEach(card => {
+    // Настройка кнопок моделей
+    const modelCards = document.querySelectorAll('.model-card');
+    modelCards.forEach(card => {
         card.addEventListener('click', function() {
             document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
             this.classList.add('selected');
@@ -1363,35 +1564,30 @@ function setupButtons() {
         });
     });
     
+    // Кнопка генерации
     const generateBtn = document.getElementById('start-generate-btn');
     if (generateBtn) {
         generateBtn.addEventListener('click', startGeneration);
     }
     
-    const createOwnBtn = document.getElementById('create-own-generate-btn');
-    if (createOwnBtn) {
-        createOwnBtn.addEventListener('click', startCreateOwnGeneration);
-    }
+    // Кнопки для фотосессий
+    const photosessionBtns = document.querySelectorAll('.photosession-btn:not([data-pack="custom"])');
+    photosessionBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const pack = this.dataset.pack;
+            showNotification(`Выбран пакет: ${pack}. Функция скоро будет доступна!`);
+        });
+    });
     
-    const createOwnBackBtn = document.getElementById('create-own-back-btn');
-    if (createOwnBackBtn) {
-        createOwnBackBtn.addEventListener('click', () => {
-            switchScreen('photo');
+    // Кнопка "Создать свою" фотосессию
+    const customSessionBtn = document.querySelector('.photosession-btn[data-pack="custom"]');
+    if (customSessionBtn) {
+        customSessionBtn.addEventListener('click', function() {
+            showCustomPhotosession();
         });
     }
     
-    const categoryModalCloseBtn = document.getElementById('category-modal-close');
-    if (categoryModalCloseBtn) {
-        categoryModalCloseBtn.addEventListener('click', hideCategoryModal);
-    }
-    
-    const photosessionBackBtn = document.getElementById('photosession-back-btn');
-    if (photosessionBackBtn) {
-        photosessionBackBtn.addEventListener('click', () => {
-            switchScreen('photosession');
-        });
-    }
-    
+    // Кнопки для модальных окон
     const photosessionGalleryBackBtn = document.getElementById('photosession-gallery-back-btn');
     if (photosessionGalleryBackBtn) {
         photosessionGalleryBackBtn.onclick = hidePhotosessionGalleryModal;
@@ -1402,6 +1598,7 @@ function setupButtons() {
         photosessionSeriesBackBtn.onclick = hidePhotosessionSeriesModal;
     }
     
+    // Кнопки для полноэкранного просмотра
     const fullscreenCloseBtn = document.getElementById('fullscreen-close-btn');
     if (fullscreenCloseBtn) {
         fullscreenCloseBtn.onclick = hideFullscreenViewer;
@@ -1416,29 +1613,6 @@ function setupButtons() {
     if (fullscreenNextBtn) {
         fullscreenNextBtn.onclick = nextImage;
     }
-    
-    const photosessionBtns = document.querySelectorAll('.photosession-btn:not([data-pack="custom"])');
-    photosessionBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const pack = this.dataset.pack;
-            showNotification(`Выбран пакет: ${pack}. Функция скоро будет доступна!`);
-        });
-    });
-    
-    const customSessionBtn = document.querySelector('.photosession-btn[data-pack="custom"]');
-    if (customSessionBtn) {
-        customSessionBtn.addEventListener('click', function() {
-            showCustomPhotosession();
-        });
-    }
-    
-    const videoBtns = document.querySelectorAll('.video-btn');
-    videoBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const type = this.dataset.videoType;
-            showNotification(`Выбран тип видео: ${type}. Функция скоро будет доступна!`);
-        });
-    });
 }
 
 // ========== ЗАГРУЗКА ФОТО ==========
@@ -1564,48 +1738,206 @@ function startGeneration() {
         return;
     }
     
-    const btn = document.getElementById('start-generate-btn');
-    const originalHTML = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = `<span class="generate-icon">⏳</span><span>Генерация...</span>`;
+    showLoadingScreen();
+}
+
+// ========== ЭКРАН ЗАГРУЗКИ ==========
+function showLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (!loadingScreen) {
+        // Создаем экран загрузки
+        const body = document.body;
+        const loadingScreenHTML = `
+            <div class="overlay loading-overlay" id="loading-screen">
+                <div class="loading-content">
+                    <div class="loading-header">
+                        <h2>Идет генерация фото</h2>
+                        <p class="loading-subtitle">обычно занимает 30-60 секунд</p>
+                    </div>
+                    
+                    <div class="loading-animation">
+                        <div class="spinner"></div>
+                    </div>
+                    
+                    <div class="loading-info">
+                        <div class="info-icon">💡</div>
+                        <div class="info-text">
+                            Вы можете продолжать пользоваться приложением, результат будет доступен позже в разделе "История"
+                        </div>
+                    </div>
+                    
+                    <button class="close-loading-btn" onclick="hideLoadingScreen()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        body.insertAdjacentHTML('beforeend', loadingScreenHTML);
+    }
     
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'flex';
+    setTimeout(() => loadingScreen.classList.add('show'), 10);
+    
+    // Имитируем процесс генерации (3 секунды)
     setTimeout(() => {
-        userBalance -= price;
-        updateBalance();
-        
-        const categoryName = currentCategory === 'prompt' ? 'По промпту' : 
-                            categories.find(c => c.id === currentCategory)?.title || 'Фото';
-        
-        const details = `Модель: ${selectedModel === 'nano' ? 'Nano Banana' : 'Nano Banana Pro'}, Формат: ${selectedFormat}`;
-        
-        const newPhoto = {
-            id: Date.now(),
-            src: uploadedImages[0]?.preview || 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Сгенерировано',
-            title: categoryName + (selectedStyle ? ' - ' + selectedStyle : '')
-        };
-        userGeneratedPhotos.unshift(newPhoto);
-        loadUserPhotos();
-        
-        if (window.addToHistory) {
-            window.addToHistory('photo', 
-                `Фото: ${categoryName}${selectedStyle ? ' - ' + selectedStyle : ''}`,
-                details,
-                price
-            );
-        }
-        
-        showNotification('🎉 Генерация завершена! Фото добавлены в историю.');
-        
-        setTimeout(() => {
-            btn.disabled = false;
-            btn.innerHTML = originalHTML;
-            hideGenerateScreen();
-            
-            setTimeout(() => {
-                switchScreen('history');
-            }, 500);
-        }, 500);
+        hideLoadingScreen();
+        showResultScreen();
     }, 3000);
+}
+
+function hideLoadingScreen() {
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.classList.remove('show');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 300);
+    }
+}
+
+// ========== ЭКРАН РЕЗУЛЬТАТА ==========
+function showResultScreen() {
+    const resultScreen = document.getElementById('result-screen');
+    if (!resultScreen) {
+        // Создаем экран результата
+        const body = document.body;
+        const resultScreenHTML = `
+            <div class="overlay result-overlay" id="result-screen">
+                <div class="result-content">
+                    <div class="result-header">
+                        <h2>✅ Готово</h2>
+                        <p class="result-subtitle">Фото успешно сгенерировано</p>
+                    </div>
+                    
+                    <div class="result-preview">
+                        <img src="https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Сгенерировано" alt="Результат генерации">
+                    </div>
+                    
+                    <div class="result-actions">
+                        <button class="download-btn" onclick="downloadResult()">
+                            <span class="download-icon">⬇️</span>
+                            <span>Скачать</span>
+                        </button>
+                    </div>
+                    
+                    <div class="result-info">
+                        <p>Результат доступен в разделе "История"</p>
+                    </div>
+                    
+                    <button class="close-result-btn" onclick="hideResultScreen()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        body.insertAdjacentHTML('beforeend', resultScreenHTML);
+    }
+    
+    const resultScreen = document.getElementById('result-screen');
+    resultScreen.style.display = 'flex';
+    setTimeout(() => resultScreen.classList.add('show'), 10);
+    
+    // Добавляем результат в историю
+    addResultToHistory();
+    
+    // Показываем уведомление
+    showNotification('🎉 Генерация завершена! Фото добавлено в историю.');
+    
+    // Обновляем бейдж на истории
+    newHistoryItems++;
+    updateHistoryBadge();
+}
+
+function hideResultScreen() {
+    const resultScreen = document.getElementById('result-screen');
+    if (resultScreen) {
+        resultScreen.classList.remove('show');
+        setTimeout(() => {
+            resultScreen.style.display = 'none';
+            switchScreen('history');
+        }, 300);
+    }
+}
+
+function downloadResult() {
+    showNotification('Фото будет отправлено в чат Telegram бота');
+    
+    // Имитируем отправку в Telegram
+    setTimeout(() => {
+        showNotification('✅ Фото отправлено в чат!');
+    }, 1000);
+}
+
+function addResultToHistory() {
+    const newPhoto = {
+        id: Date.now(),
+        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Сгенерировано',
+        title: currentCategory === 'prompt' ? 'Генерация по описанию' : 
+               selectedStyle ? selectedStyle : 
+               categories.find(c => c.id === currentCategory)?.title || 'Сгенерированное фото',
+        date: new Date().toLocaleDateString('ru-RU', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })
+    };
+    
+    userGeneratedPhotos.unshift(newPhoto);
+    
+    // Обновляем историю в localStorage
+    if (typeof Storage !== 'undefined') {
+        const history = JSON.parse(localStorage.getItem('nanoBananaHistory') || '[]');
+        history.unshift({
+            id: newPhoto.id,
+            type: 'photo',
+            title: newPhoto.title,
+            description: `Сгенерировано ${new Date().toLocaleDateString('ru-RU')}`,
+            price: calculatePrice(),
+            date: new Date().toISOString()
+        });
+        localStorage.setItem('nanoBananaHistory', JSON.stringify(history));
+    }
+}
+
+// ========== БЕЙДЖ НА ИСТОРИИ ==========
+function updateHistoryBadge() {
+    const historyTab = document.querySelector('.tab-btn[data-screen="history"]');
+    if (!historyTab) return;
+    
+    // Удаляем старый бейдж
+    const oldBadge = historyTab.querySelector('.tab-badge');
+    if (oldBadge) {
+        oldBadge.remove();
+    }
+    
+    // Добавляем новый бейдж, если есть новые элементы
+    if (newHistoryItems > 0) {
+        const badge = document.createElement('span');
+        badge.className = 'tab-badge';
+        badge.textContent = newHistoryItems > 9 ? '9+' : newHistoryItems.toString();
+        badge.style.cssText = `
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #4CAF50;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        `;
+        
+        historyTab.style.position = 'relative';
+        historyTab.appendChild(badge);
+    }
 }
 
 // ========== РАСЧЕТ ЦЕНЫ ==========
@@ -1657,7 +1989,49 @@ function showNotification(message) {
 
 // ========== ДОПОЛНИТЕЛЬНЫЕ МОДУЛИ ==========
 function showCustomPhotosession() {
+    const customScreen = document.getElementById('screen-photosession-custom');
+    if (!customScreen) {
+        // Создаем экран создания своей фотосессии
+        const main = document.getElementById('app-main');
+        const customScreenHTML = `
+            <div class="screen" id="screen-photosession-custom">
+                <div class="screen-header">
+                    <button class="back-btn" id="photosession-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h2>🎨 Своя фотосессия</h2>
+                    <div class="header-placeholder"></div>
+                </div>
+
+                <div class="screen-content">
+                    <!-- СГЕНЕРИРОВАННЫЕ ФОТО ПОЛЬЗОВАТЕЛЯ -->
+                    <div class="user-photos-section">
+                        <div class="section-header">
+                            <h4>Ваши сгенерированные фото</h4>
+                            <div class="photos-count" id="user-photos-count">8 фото</div>
+                        </div>
+                        
+                        <div class="user-photos-grid" id="user-photos-container">
+                            <!-- Фото загружаются через JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        main.insertAdjacentHTML('beforeend', customScreenHTML);
+        
+        // Настраиваем кнопку назад
+        const backBtn = document.getElementById('photosession-back-btn');
+        if (backBtn) {
+            backBtn.onclick = () => {
+                switchScreen('photosession');
+            };
+        }
+    }
+    
     switchScreen('photosession-custom');
+    loadUserPhotos();
 }
 
 // ========== ИСТОРИЯ И ПРОФИЛЬ ==========
@@ -1697,12 +2071,10 @@ function setupHistoryAndProfile() {
 function loadHistory() {
     const container = document.getElementById('history-container');
     const empty = document.getElementById('history-empty');
-    const count = document.getElementById('history-count');
     
-    if (!container || !empty || !count) return;
+    if (!container || !empty) return;
     
     const history = JSON.parse(localStorage.getItem('nanoBananaHistory') || '[]');
-    count.textContent = history.length;
     
     if (history.length === 0) {
         empty.style.display = 'block';
@@ -1713,30 +2085,53 @@ function loadHistory() {
     empty.style.display = 'none';
     container.innerHTML = '';
     
-    history.forEach(item => {
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
+    // Показываем сетку с фото
+    const grid = document.createElement('div');
+    grid.className = 'history-grid';
+    
+    userGeneratedPhotos.forEach(photo => {
+        const photoCard = document.createElement('div');
+        photoCard.className = 'history-photo-card';
         
-        const icon = item.type === 'video' ? '🎬' : 
-                    item.type === 'photosession' ? '📸' : '📷';
-        const color = item.type === 'video' ? '#9C27B0' : 
-                     item.type === 'photosession' ? '#EC407A' : '#42A5F5';
-        
-        historyItem.innerHTML = `
-            <div class="history-item-icon" style="background-color: ${color}20; color: ${color};">${icon}</div>
-            <div class="history-item-content">
-                <div class="history-item-title">${item.title}</div>
-                <div class="history-item-desc">${item.description}</div>
-                <div class="history-item-meta">
-                    <span class="history-item-date">${new Date(item.date).toLocaleDateString('ru-RU')}</span>
-                    <span class="history-item-price">${item.price} ⭐</span>
+        photoCard.innerHTML = `
+            <div class="history-photo-image">
+                <img src="${photo.src}" alt="${photo.title}">
+                <div class="history-photo-overlay">
+                    <button class="photosession-from-history-btn" data-photo-id="${photo.id}">
+                        <span class="photosession-btn-icon">📸</span>
+                        <span>Фотосессия</span>
+                    </button>
                 </div>
             </div>
-            <button class="history-btn download">Скачать</button>
+            <div class="history-photo-date">${photo.date}</div>
         `;
         
-        container.appendChild(historyItem);
+        // Добавляем обработчик для кнопки "Фотосессия"
+        const photosessionBtn = photoCard.querySelector('.photosession-from-history-btn');
+        photosessionBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const photoId = e.currentTarget.getAttribute('data-photo-id');
+            const selectedPhoto = userGeneratedPhotos.find(p => p.id == photoId);
+            if (selectedPhoto) {
+                selectedPhotoForSession = selectedPhoto;
+                showPhotosessionModal();
+            }
+        });
+        
+        // Добавляем обработчик для просмотра фото
+        photoCard.addEventListener('click', () => {
+            currentGalleryImages = [{
+                src: photo.src,
+                alt: photo.title
+            }];
+            currentGalleryIndex = 0;
+            showFullscreenViewer();
+        });
+        
+        grid.appendChild(photoCard);
     });
+    
+    container.appendChild(grid);
 }
 
 function updateProfileStats() {
@@ -1748,10 +2143,16 @@ function updateProfileStats() {
     const spentStars = history.reduce((sum, item) => sum + item.price, 0);
     const savedCount = history.length;
     
-    document.getElementById('stats-photos').textContent = photoCount + photosessionCount;
-    document.getElementById('stats-videos').textContent = videoCount;
-    document.getElementById('stats-spent').textContent = spentStars;
-    document.getElementById('stats-saved').textContent = savedCount;
+    // Обновляем статистику в профиле
+    const statsPhotos = document.getElementById('stats-photos');
+    const statsVideos = document.getElementById('stats-videos');
+    const statsSpent = document.getElementById('stats-spent');
+    const statsSaved = document.getElementById('stats-saved');
+    
+    if (statsPhotos) statsPhotos.textContent = photoCount + photosessionCount;
+    if (statsVideos) statsVideos.textContent = videoCount;
+    if (statsSpent) statsSpent.textContent = spentStars;
+    if (statsSaved) statsSaved.textContent = savedCount;
     
     const totalActions = photoCount + videoCount + photosessionCount;
     let level = '👶 Новичок';
@@ -1763,4 +2164,4 @@ function updateProfileStats() {
     document.getElementById('profile-days').textContent = '1 день';
 }
 
-console.log('🍌 Nano Banana App готов! Версия 4.0 с полным обновлением по ТЗ');
+console.log('🍌 Nano Banana App готов! Версия 5.0 с полным обновлением по ТЗ');
