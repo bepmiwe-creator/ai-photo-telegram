@@ -1,3671 +1,1081 @@
-/* ========== БАЗОВЫЕ СТИЛИ ========== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-    /* Цветовая палитра Old Money */
-    --color-cream: #FFF8F3;
-    --color-ivory: #FAF3E0;
-    --color-soft-pink: #F8E1E7;
-    --color-dusty-pink: #E6B8B8;
-    --color-powder-blue: #E0F2FE;
-    --color-sky-blue: #87CEEB;
-    --color-navy: #1E3A8A;
-    --color-gold: #D4AF37;
-    --color-rose-gold: #B76E79;
-    --color-charcoal: #374151;
-    --color-soft-gray: #F3F4F6;
-    --color-success: #4CAF50;
-    --color-warning: #FF9800;
-    
-    /* Градиенты */
-    --gradient-primary: linear-gradient(135deg, var(--color-soft-pink) 0%, var(--color-powder-blue) 100%);
-    --gradient-accent: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-gold) 100%);
-    --gradient-success: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
-    
-    /* Тени */
-    --shadow-soft: 0 8px 32px rgba(231, 182, 184, 0.15);
-    --shadow-medium: 0 12px 48px rgba(231, 182, 184, 0.25);
-    --shadow-hard: 0 4px 16px rgba(30, 58, 138, 0.1);
-    --shadow-elevated: 0 16px 40px rgba(30, 58, 138, 0.15);
-    
-    /* Закругления */
-    --radius-small: 12px;
-    --radius-medium: 20px;
-    --radius-large: 32px;
-    --radius-circle: 50%;
-    --radius-pill: 999px;
-    
-    /* Шрифты */
-    --font-heading: 'Playfair Display', serif;
-    --font-body: 'Inter', sans-serif;
-}
-
-body {
-    font-family: var(--font-body);
-    background: var(--color-cream);
-    color: var(--color-charcoal);
-    min-height: 100vh;
-    overflow-x: hidden;
-    padding-top: 70px;
-    padding-bottom: 85px;
-    transition: all 0.3s ease;
-}
-
-body.loaded {
-    opacity: 1;
-}
-
-/* Тёмная тема */
-body.dark-theme {
-    background: var(--color-charcoal);
-    color: var(--color-ivory);
-}
-
-/* ========== ТИПОГРАФИЯ ========== */
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    color: var(--color-navy);
-}
-
-.dark-theme h1, 
-.dark-theme h2, 
-.dark-theme h3, 
-.dark-theme h4, 
-.dark-theme h5, 
-.dark-theme h6 {
-    color: var(--color-ivory);
-}
-
-p {
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-/* ========== HEADER ========== */
-.app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--color-soft-pink);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: var(--shadow-hard);
-}
-
-.dark-theme .app-header {
-    background: rgba(55, 65, 81, 0.95);
-    border-bottom: 1px solid var(--color-navy);
-}
-
-.header-content {
-    width: 100%;
-    max-width: 800px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 24px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo-icon {
-    font-size: 28px;
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.logo-text {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-navy);
-}
-
-.dark-theme .logo-text {
-    color: var(--color-ivory);
-}
-
-.balance-btn {
-    background: rgba(231, 182, 184, 0.15);
-    border: 1px solid rgba(231, 182, 184, 0.3);
-    border-radius: 20px;
-    padding: 10px 18px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--color-rose-gold);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.balance-btn:hover {
-    background: rgba(231, 182, 184, 0.25);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
-}
-
-.star-icon {
-    font-size: 18px;
-}
-
-/* ========== MAIN CONTENT ========== */
-.app-main {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 24px;
-    min-height: calc(100vh - 155px);
-}
-
-/* Стили для всех экранов */
-.screen {
-    display: none;
-    animation: fadeIn 0.5s ease;
-}
-
-.screen.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { 
-        opacity: 0; 
-        transform: translateY(20px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateY(0); 
-    }
-}
-
-.screen-header {
-    text-align: center;
-    margin-bottom: 32px;
-    padding: 0 16px;
-}
-
-.screen-header h2 {
-    font-size: 32px;
-    margin-bottom: 8px;
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.screen-subtitle {
-    color: var(--color-charcoal);
-    font-size: 16px;
-    opacity: 0.8;
-}
-
-.dark-theme .screen-subtitle {
-    color: var(--color-ivory);
-    opacity: 0.7;
-}
-
-.screen-content {
-    padding: 0 16px;
-}
-
-/* ========== ГЛАВНЫЙ ЭКРАН ========== */
-.welcome-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(15px);
-    border-radius: var(--radius-large);
-    padding: 40px 32px;
-    margin-bottom: 32px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    text-align: center;
-}
-
-.dark-theme .welcome-card {
-    background: rgba(55, 65, 81, 0.8);
-    border: 1px solid rgba(30, 58, 138, 0.3);
-}
-
-.welcome-header h1 {
-    font-size: 36px;
-    margin-bottom: 16px;
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.welcome-subtitle {
-    color: var(--color-charcoal);
-    font-size: 18px;
-    margin-bottom: 40px;
-    opacity: 0.8;
-}
-
-.dark-theme .welcome-subtitle {
-    color: var(--color-ivory);
-}
-
-.quick-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.quick-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 24px 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 140px;
-}
-
-.dark-theme .quick-card {
-    background: rgba(55, 65, 81, 0.9);
-    border: 1px solid rgba(30, 58, 138, 0.3);
-}
-
-.quick-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.quick-icon-bg {
-    width: 64px;
-    height: 64px;
-    border-radius: var(--radius-circle);
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-
-.quick-icon {
-    font-size: 32px;
-}
-
-.quick-text {
-    font-weight: 700;
-    color: var(--color-navy);
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-
-.dark-theme .quick-text {
-    color: var(--color-ivory);
-}
-
-.quick-hint {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.dark-theme .quick-hint {
-    color: var(--color-ivory);
-    opacity: 0.6;
-}
-
-.welcome-features {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    flex-wrap: wrap;
-}
-
-.feature {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.feature-icon {
-    font-size: 20px;
-    color: var(--color-rose-gold);
-}
-
-.feature-text {
-    font-size: 14px;
-    color: var(--color-charcoal);
-    font-weight: 500;
-}
-
-.dark-theme .feature-text {
-    color: var(--color-ivory);
-}
-
-/* ========== КАРТОЧКИ ========== */
-.card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(231, 182, 184, 0.1);
-}
-
-.dark-theme .card {
-    background: rgba(55, 65, 81, 0.9);
-    border: 1px solid rgba(30, 58, 138, 0.2);
-}
-
-/* ========== ЭКРАН ФОТО ========== */
-/* ГОРИЗОНТАЛЬНЫЕ КАРТОЧКИ (Генерация по описанию + Создать свой) */
-.horizontal-cards-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 32px;
-}
-
-.prompt-card, .create-own-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 180px;
-}
-
-.dark-theme .prompt-card,
-.dark-theme .create-own-card {
-    background: rgba(55, 65, 81, 0.9);
-    border: 1px solid rgba(30, 58, 138, 0.3);
-}
-
-.prompt-card:hover, .create-own-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.prompt-icon {
-    font-size: 40px;
-    margin-bottom: 16px;
-    width: 70px;
-    height: 70px;
-    background: var(--gradient-primary);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.prompt-text {
-    flex: 1;
-}
-
-.prompt-title {
-    font-weight: 700;
-    color: var(--color-navy);
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.dark-theme .prompt-title {
-    color: var(--color-ivory);
-}
-
-.prompt-desc {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.dark-theme .prompt-desc {
-    color: var(--color-ivory);
-    opacity: 0.6;
-}
-
-.prompt-arrow {
-    color: var(--color-rose-gold);
-    font-size: 24px;
-    margin-top: 12px;
-}
-
-.create-own-card {
-    background: var(--gradient-primary);
-    border: 2px dashed var(--color-dusty-pink);
-}
-
-.create-own-card .category-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 32px;
-    margin-bottom: 16px;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.create-own-card .category-title {
-    color: var(--color-navy);
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.create-own-card .category-count {
-    color: var(--color-navy);
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ */
-.horizontal-categories {
-    margin-bottom: 40px;
-}
-
-.horizontal-category-section {
-    margin-bottom: 32px;
-}
-
-.horizontal-category-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    padding: 0 8px;
-}
-
-.horizontal-category-title {
-    color: var(--color-navy);
-    font-size: 20px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 0;
-}
-
-.horizontal-category-title:hover {
-    color: var(--color-rose-gold);
-    transform: translateX(4px);
-}
-
-.dark-theme .horizontal-category-title {
-    color: var(--color-ivory);
-}
-
-.view-all-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(231, 182, 184, 0.1);
-    border: none;
-    padding: 8px 16px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-rose-gold);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.view-all-btn:hover {
-    background: rgba(231, 182, 184, 0.2);
-    transform: translateY(-2px);
-}
-
-.view-all-btn .material-icons-round {
-    font-size: 18px;
-}
-
-.horizontal-scroll-container {
-    display: flex;
-    gap: 16px;
-    overflow-x: auto;
-    padding: 8px 8px 20px 8px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-dusty-pink) transparent;
-}
-
-.horizontal-scroll-container::-webkit-scrollbar {
-    height: 6px;
-}
-
-.horizontal-scroll-container::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 10px;
-}
-
-.horizontal-scroll-container::-webkit-scrollbar-thumb {
-    background: var(--color-dusty-pink);
-    border-radius: 10px;
-}
-
-.horizontal-style-card {
-    flex: 0 0 auto;
-    width: 140px;
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.dark-theme .horizontal-style-card {
-    background: rgba(55, 65, 81, 0.9);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.horizontal-style-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.horizontal-style-preview {
-    width: 100px;
-    height: 100px;
-    border-radius: var(--radius-small);
-    overflow: hidden;
-    margin-bottom: 12px;
-    background: var(--color-soft-gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.horizontal-style-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* СТАТИСТИКА НА ПРЕВЬЮ */
-.style-stats-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    padding: 6px;
-    display: flex;
-    justify-content: space-around;
-    gap: 8px;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
-}
-
-.stat-icon {
-    font-size: 12px;
-}
-
-.stat-value {
-    font-size: 11px;
-}
-
-.horizontal-style-name {
-    font-weight: 600;
-    color: var(--color-navy);
-    font-size: 14px;
-    line-height: 1.3;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dark-theme .horizontal-style-name {
-    color: var(--color-ivory);
-}
-
-.all-styles-card {
-    background: var(--gradient-primary);
-    border: 2px dashed var(--color-dusty-pink);
-    justify-content: center;
-}
-
-.all-styles-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-circle);
-    background: rgba(255, 255, 255, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 12px;
-}
-
-.all-styles-icon .material-icons-round {
-    font-size: 24px;
-    color: var(--color-navy);
-}
-
-.all-styles-text {
-    color: var(--color-navy);
-    font-weight: 600;
-    font-size: 14px;
-}
-
-.all-styles-count {
-    font-size: 12px;
-    font-weight: 500;
-    opacity: 0.8;
-    margin-top: 4px;
-}
-
-/* ========== СОЗДАТЬ СВОЙ СТИЛЬ ========== */
-.screen-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    margin-bottom: 32px;
-}
-
-.back-btn, .help-btn {
-    background: rgba(231, 182, 184, 0.1);
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--color-rose-gold);
-    transition: all 0.3s ease;
-}
-
-.back-btn:hover, .help-btn:hover {
-    background: rgba(231, 182, 184, 0.2);
-    transform: scale(1.1);
-}
-
-.header-placeholder {
-    width: 48px;
-}
-
-.create-own-instructions {
-    background: var(--color-powder-blue);
-    border-radius: var(--radius-medium);
-    padding: 20px;
-    margin-bottom: 32px;
-    border: 1px solid rgba(135, 206, 235, 0.3);
-}
-
-.dark-theme .create-own-instructions {
-    background: rgba(30, 58, 138, 0.2);
-    border: 1px solid rgba(30, 58, 138, 0.4);
-}
-
-.instructions-text {
-    color: var(--color-navy);
-    text-align: center;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.dark-theme .instructions-text {
-    color: var(--color-ivory);
-}
-
-.upload-comparison {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 32px;
-}
-
-.upload-column {
-    flex: 1;
-}
-
-.upload-column-header {
-    text-align: center;
-    margin-bottom: 16px;
-    height: auto;
-}
-
-.upload-label {
-    font-weight: 700;
-    color: var(--color-navy);
-    font-size: 18px;
-    display: block;
-    margin-bottom: 4px;
-}
-
-.dark-theme .upload-label {
-    color: var(--color-ivory);
-}
-
-.upload-subtitle {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.dark-theme .upload-subtitle {
-    color: var(--color-ivory);
-    opacity: 0.6;
-}
-
-.upload-container {
-    min-height: 200px;
-    border: 2px dashed var(--color-dusty-pink);
-    border-radius: var(--radius-medium);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
-
-.upload-container:hover {
-    border-color: var(--color-rose-gold);
-    background: rgba(231, 182, 184, 0.05);
-}
-
-.upload-placeholder {
-    text-align: center;
-    padding: 32px;
-}
-
-.upload-placeholder .material-icons-round {
-    font-size: 48px;
-    color: var(--color-dusty-pink);
-    margin-bottom: 16px;
-    display: block;
-}
-
-.uploaded-photo {
-    position: relative;
-    width: 100%;
-    height: 200px;
-}
-
-.uploaded-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: var(--radius-medium);
-}
-
-.remove-photo {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
-    background: rgba(255, 0, 0, 0.9);
-    color: white;
-    border: none;
-    border-radius: var(--radius-circle);
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.remove-photo:hover {
-    transform: scale(1.1);
-}
-
-.arrow-column {
-    width: 60px;
-    display: flex;
-    justify-content: center;
-}
-
-.arrow-icon {
-    width: 48px;
-    height: 48px;
-    background: var(--gradient-accent);
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-}
-
-.upload-recommendations {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    background: var(--color-soft-gray);
-    border-radius: var(--radius-medium);
-    padding: 20px;
-    margin-bottom: 32px;
-}
-
-.dark-theme .upload-recommendations {
-    background: rgba(55, 65, 81, 0.5);
-}
-
-.recommendation-icon {
-    color: var(--color-rose-gold);
-    font-size: 24px;
-}
-
-.recommendation-text {
-    color: var(--color-charcoal);
-    font-size: 15px;
-    line-height: 1.6;
-}
-
-.dark-theme .recommendation-text {
-    color: var(--color-ivory);
-}
-
-.recommendation-text strong {
-    color: var(--color-navy);
-}
-
-.dark-theme .recommendation-text strong {
-    color: var(--color-ivory);
-}
-
-.generate-action.create-own-action {
-    margin-top: 40px;
-}
-
-/* ========== ФОТОСЕССИИ ========== */
-.photosession-top-button {
-    margin-bottom: 32px;
-    text-align: center;
-}
-
-.photosession-top-button .photosession-btn {
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    padding: 18px 32px;
-    border-radius: var(--radius-pill);
-    font-weight: 600;
-    font-size: 17px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: var(--shadow-medium);
-}
-
-.photosession-top-button .photosession-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-elevated);
-}
-
-.photosession-top-button .photosession-btn .material-icons-round {
-    font-size: 24px;
-}
-
-/* ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ ФОТОСЕССИЙ */
-#photosession-horizontal-categories {
-    margin-bottom: 40px;
-}
-
-/* ИНФОРМАЦИЯ О ФОТОСЕССИИ */
-.photosession-info.card {
-    background: var(--color-powder-blue);
-    border: 1px solid rgba(135, 206, 235, 0.3);
-}
-
-.dark-theme .photosession-info.card {
-    background: rgba(30, 58, 138, 0.2);
-    border: 1px solid rgba(30, 58, 138, 0.4);
-}
-
-.photosession-info .info-title {
-    color: var(--color-navy);
-    font-size: 22px;
-    margin-bottom: 24px;
-    text-align: center;
-    font-weight: 700;
-}
-
-.dark-theme .photosession-info .info-title {
-    color: var(--color-ivory);
-}
-
-.photosession-info .info-steps {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.photosession-info .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.photosession-info .step-number {
-    min-width: 32px;
-    height: 32px;
-    background: var(--gradient-accent);
-    color: white;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-    flex-shrink: 0;
-}
-
-.photosession-info .step-content {
-    flex: 1;
-}
-
-.photosession-info .step-content strong {
-    color: var(--color-navy);
-    display: block;
-    margin-bottom: 4px;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.dark-theme .photosession-info .step-content strong {
-    color: var(--color-ivory);
-}
-
-.photosession-info .step-content p {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.8;
-    margin: 0;
-    line-height: 1.4;
-}
-
-.dark-theme .photosession-info .step-content p {
-    color: var(--color-ivory);
-    opacity: 0.7;
-}
-
-/* ========== МОДАЛЬНОЕ ОКНО КАТЕГОРИИ ========== */
-.category-modal {
-    max-width: 600px;
-}
-
-.category-styles-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.modal-style-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 20px 12px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 140px;
-}
-
-.dark-theme .modal-style-card {
-    background: rgba(55, 65, 81, 0.9);
-}
-
-.modal-style-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-}
-
-.modal-style-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin-bottom: 12px;
-}
-
-.modal-style-name {
-    font-weight: 600;
-    color: var(--color-navy);
-    font-size: 14px;
-    line-height: 1.3;
-}
-
-.dark-theme .modal-style-name {
-    color: var(--color-ivory);
-}
-
-/* ========== МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ ========== */
-.photosession-gallery-modal {
-    max-width: 600px;
-}
-
-.photosession-gallery-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.photosession-gallery-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-}
-
-.dark-theme .photosession-gallery-card {
-    background: rgba(55, 65, 81, 0.9);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.photosession-gallery-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.photosession-gallery-preview {
-    position: relative;
-    width: 100%;
-    height: 150px;
-    border-radius: var(--radius-small);
-    overflow: hidden;
-    margin-bottom: 12px;
-}
-
-.photosession-gallery-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.photosession-gallery-stats {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
-    padding: 8px;
-    display: flex;
-    justify-content: space-around;
-    gap: 8px;
-}
-
-.gallery-stat-item {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.gallery-stat-item .stat-icon {
-    font-size: 12px;
-}
-
-.gallery-stat-item .stat-value {
-    font-size: 12px;
-}
-
-.photosession-gallery-name {
-    font-weight: 600;
-    color: var(--color-navy);
-    font-size: 14px;
-    text-align: center;
-    line-height: 1.3;
-}
-
-.dark-theme .photosession-gallery-name {
-    color: var(--color-ivory);
-}
-
-/* ========== МОДАЛЬНОЕ ОКНО СЕРИИ ФОТОСЕССИИ ========== */
-.photosession-series-modal {
-    max-width: 600px;
-}
-
-.photosession-series-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.photosession-series-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    text-align: center;
-}
-
-.dark-theme .photosession-series-card {
-    background: rgba(55, 65, 81, 0.9);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.photosession-series-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.photosession-series-preview {
-    width: 100%;
-    height: 100px;
-    border-radius: var(--radius-small);
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.photosession-series-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.photosession-series-number {
-    font-weight: 600;
-    color: var(--color-navy);
-    font-size: 14px;
-}
-
-.dark-theme .photosession-series-number {
-    color: var(--color-ivory);
-}
-
-.photosession-balance-info {
-    background: rgba(231, 182, 184, 0.05);
-    border-radius: var(--radius-medium);
-    padding: 16px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-}
-
-.balance-info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.balance-label {
-    color: var(--color-charcoal);
-    font-size: 16px;
-}
-
-.dark-theme .balance-label {
-    color: var(--color-ivory);
-}
-
-.balance-value {
-    color: var(--color-rose-gold);
-    font-size: 24px;
-    font-weight: 800;
-}
-
-.photosession-series-action {
-    text-align: center;
-}
-
-/* ========== ЭКРАН ЗАГРУЗКИ / ГЕНЕРАЦИИ ========== */
-#loading-screen {
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(20px);
-    z-index: 3000;
-}
-
-.loading-container {
-    max-width: 500px;
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.dark-theme .loading-container {
-    background: rgba(55, 65, 81, 0.95);
-}
-
-.loading-animation {
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.loading-icon {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 24px;
-}
-
-.loading-spinner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border: 4px solid rgba(231, 182, 184, 0.2);
-    border-top: 4px solid var(--color-rose-gold);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.loading-banana {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 48px;
-    animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); }
-    50% { transform: translate(-50%, -50%) scale(1.1); }
-}
-
-.loading-subtitle {
-    color: var(--color-charcoal);
-    font-size: 16px;
-    opacity: 0.7;
-    margin-top: 16px;
-}
-
-.dark-theme .loading-subtitle {
-    color: var(--color-ivory);
-}
-
-.loading-info {
-    background: rgba(231, 182, 184, 0.1);
-    border-radius: var(--radius-medium);
-    padding: 20px;
-    margin-top: 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-}
-
-.loading-info .info-icon {
-    color: var(--color-rose-gold);
-    font-size: 24px;
-    flex-shrink: 0;
-}
-
-.loading-info .info-content h4 {
-    color: var(--color-navy);
-    margin-bottom: 8px;
-    font-size: 16px;
-}
-
-.dark-theme .loading-info .info-content h4 {
-    color: var(--color-ivory);
-}
-
-.loading-info .info-content p {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    line-height: 1.4;
-    margin: 0;
-}
-
-.dark-theme .loading-info .info-content p {
-    color: var(--color-ivory);
-    opacity: 0.8;
-}
-
-/* ========== ЭКРАН РЕЗУЛЬТАТА ГЕНЕРАЦИИ ========== */
-#generation-result-modal {
-    background: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(20px);
-    z-index: 3000;
-}
-
-.result-container {
-    max-width: 500px;
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.dark-theme .result-container {
-    background: rgba(55, 65, 81, 0.95);
-}
-
-.result-preview {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    border-radius: var(--radius-medium);
-    overflow: hidden;
-    margin-bottom: 24px;
-    border: 3px solid var(--color-rose-gold);
-    box-shadow: var(--shadow-medium);
-}
-
-.result-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.result-success {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: rgba(76, 175, 80, 0.9);
-    color: white;
-    padding: 10px 20px;
-    border-radius: var(--radius-pill);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-    font-size: 16px;
-    backdrop-filter: blur(10px);
-}
-
-.success-icon {
-    font-size: 20px;
-}
-
-.download-btn {
-    background: var(--gradient-success);
-    color: white;
-    border: none;
-    border-radius: var(--radius-pill);
-    padding: 18px 32px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: var(--shadow-medium);
-}
-
-.download-btn.large {
-    padding: 20px 40px;
-    font-size: 18px;
-}
-
-.download-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-elevated);
-}
-
-.download-icon {
-    font-size: 24px;
-}
-
-.result-hint {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-top: 12px;
-    text-align: center;
-    opacity: 0.7;
-}
-
-.dark-theme .result-hint {
-    color: var(--color-ivory);
-}
-
-.result-info {
-    margin-top: 24px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(231, 182, 184, 0.2);
-    text-align: center;
-}
-
-.result-info p {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-bottom: 16px;
-    opacity: 0.7;
-}
-
-.dark-theme .result-info p {
-    color: var(--color-ivory);
-}
-
-.view-history-btn {
-    background: rgba(231, 182, 184, 0.1);
-    color: var(--color-rose-gold);
-    border: 1px solid rgba(231, 182, 184, 0.3);
-    border-radius: var(--radius-pill);
-    padding: 12px 24px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.view-history-btn:hover {
-    background: rgba(231, 182, 184, 0.2);
-    transform: translateY(-2px);
-}
-
-/* ========== ПОЛНОЭКРАННЫЙ ПРОСМОТР ========== */
-.fullscreen-overlay {
-    background: rgba(0, 0, 0, 0.98);
-    backdrop-filter: blur(20px);
-    z-index: 4000;
-}
-
-.fullscreen-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.fullscreen-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    border-radius: 4px;
-}
-
-.fullscreen-controls {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    pointer-events: none;
-    opacity: 1;
-    visibility: visible;
-    transition: all 0.3s ease;
-}
-
-.fullscreen-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: auto;
-}
-
-.fullscreen-close-btn {
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    width: 44px;
-    height: 44px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.fullscreen-close-btn:hover {
-    background: rgba(0, 0, 0, 0.7);
-    transform: scale(1.1);
-}
-
-.fullscreen-close-btn .material-icons-round {
-    font-size: 24px;
-}
-
-.fullscreen-counter {
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 16px;
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(10px);
-}
-
-.fullscreen-placeholder {
-    width: 44px;
-}
-
-.fullscreen-navigation {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    pointer-events: auto;
-}
-
-.fullscreen-nav-btn {
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    width: 56px;
-    height: 56px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.fullscreen-nav-btn:hover {
-    background: rgba(0, 0, 0, 0.7);
-    transform: scale(1.1);
-}
-
-.fullscreen-nav-btn .material-icons-round {
-    font-size: 32px;
-}
-
-.fullscreen-center-space {
-    flex: 1;
-}
-
-.fullscreen-bottom-bar {
-    display: flex;
-    justify-content: center;
-    pointer-events: auto;
-}
-
-.fullscreen-save-btn {
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    padding: 12px 24px;
-    border-radius: var(--radius-pill);
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    backdrop-filter: blur(10px);
-}
-
-.fullscreen-save-btn:hover {
-    background: rgba(0, 0, 0, 0.7);
-    transform: translateY(-2px);
-}
-
-.fullscreen-save-btn .material-icons-round {
-    font-size: 20px;
-}
-
-.fullscreen-controls.hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* ========== ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ ========== */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(10px);
-    z-index: 2000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.overlay.show {
-    opacity: 1;
-}
-
-.overlay-content {
-    background: white;
-    border-radius: var(--radius-large);
-    width: 100%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    padding: 32px;
-    box-shadow: var(--shadow-elevated);
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-}
-
-.dark-theme .overlay-content {
-    background: rgba(55, 65, 81, 0.95);
-}
-
-.overlay.show .overlay-content {
-    transform: translateY(0);
-}
-
-.photosession-modal {
-    max-width: 500px;
-}
-
-.overlay-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(231, 182, 184, 0.2);
-}
-
-.overlay-header h3 {
-    color: var(--color-navy);
-    font-size: 24px;
-    margin: 0;
-}
-
-.dark-theme .overlay-header h3 {
-    color: var(--color-ivory);
-}
-
-.close-btn {
-    background: rgba(231, 182, 184, 0.1);
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-rose-gold);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-    background: rgba(231, 182, 184, 0.2);
-    transform: scale(1.1);
-}
-
-/* ВЫБРАННОЕ ФОТО */
-.selected-photo-preview {
-    width: 100%;
-    height: 300px;
-    border-radius: var(--radius-medium);
-    overflow: hidden;
-    margin-bottom: 32px;
-    border: 3px solid var(--color-rose-gold);
-    box-shadow: var(--shadow-medium);
-}
-
-.selected-photo-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* ВЫБОР КОЛИЧЕСТВА КАДРОВ */
-.frames-selection {
-    background: rgba(231, 182, 184, 0.05);
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-}
-
-.frames-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.frames-header h4 {
-    color: var(--color-navy);
-    font-size: 18px;
-    margin: 0;
-}
-
-.dark-theme .frames-header h4 {
-    color: var(--color-ivory);
-}
-
-.frames-price {
-    color: var(--color-rose-gold);
-    font-size: 24px;
-    font-weight: 800;
-}
-
-.frames-control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 20px;
-}
-
-.frame-btn {
-    background: var(--gradient-accent);
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-hard);
-}
-
-.frame-btn:hover {
-    transform: scale(1.1);
-    box-shadow: var(--shadow-medium);
-}
-
-.frame-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none !important;
-}
-
-.frame-btn.minus {
-    background: linear-gradient(135deg, #FF9800 0%, #FF5722 100%);
-}
-
-.frames-count {
-    text-align: center;
-    min-width: 120px;
-}
-
-.frames-number {
-    font-size: 48px;
-    font-weight: 800;
-    color: var(--color-navy);
-    line-height: 1;
-    margin-bottom: 8px;
-}
-
-.dark-theme .frames-number {
-    color: var(--color-ivory);
-}
-
-.frames-bonus {
-    color: var(--color-success);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.frames-hint {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.dark-theme .frames-hint {
-    color: var(--color-ivory);
-}
-
-.frames-hint .material-icons-round {
-    font-size: 18px;
-    color: var(--color-sky-blue);
-}
-
-/* ИТОГОВАЯ ИНФОРМАЦИЯ */
-.photosession-summary {
-    background: rgba(76, 175, 80, 0.05);
-    border-radius: var(--radius-medium);
-    padding: 20px;
-    margin-bottom: 32px;
-    border: 1px solid rgba(76, 175, 80, 0.2);
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(76, 175, 80, 0.1);
-    color: var(--color-charcoal);
-    font-size: 16px;
-}
-
-.dark-theme .summary-item {
-    color: var(--color-ivory);
-}
-
-.summary-item:last-child {
-    border-bottom: none;
-}
-
-.summary-item.total {
-    font-size: 18px;
-    font-weight: 700;
-    padding-top: 20px;
-    margin-top: 8px;
-    border-top: 2px solid rgba(76, 175, 80, 0.3);
-}
-
-.total-count {
-    color: var(--color-success);
-    font-size: 24px;
-    font-weight: 800;
-}
-
-/* КНОПКА СОЗДАНИЯ */
-.photosession-action {
-    text-align: center;
-}
-
-.photosession-result-hint {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-top: 16px;
-    opacity: 0.8;
-}
-
-.dark-theme .photosession-result-hint {
-    color: var(--color-ivory);
-}
-
-.photosession-result-hint span {
-    color: var(--color-success);
-    font-weight: 700;
-    font-size: 16px;
-}
-
-/* ========== ОВЕРЛЕЙ "КАК ЭТО РАБОТАЕТ" ========== */
-.overlay-body .info-section {
-    margin-bottom: 32px;
-}
-
-.info-icon-large {
-    font-size: 64px;
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-rose-gold);
-}
-
-.info-text {
-    color: var(--color-charcoal);
-    line-height: 1.6;
-    font-size: 16px;
-    text-align: center;
-}
-
-.dark-theme .info-text {
-    color: var(--color-ivory);
-}
-
-.steps-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.step-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.step-number {
-    min-width: 32px;
-    height: 32px;
-    background: var(--gradient-accent);
-    color: white;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 16px;
-}
-
-.step-content {
-    flex: 1;
-}
-
-.step-content strong {
-    color: var(--color-navy);
-    display: block;
-    margin-bottom: 2px;
-    font-size: 16px;
-}
-
-.dark-theme .step-content strong {
-    color: var(--color-ivory);
-}
-
-.step-subtext {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.8;
-    line-height: 1.3;
-}
-
-.dark-theme .step-subtext {
-    color: var(--color-ivory);
-    opacity: 0.7;
-}
-
-.tips-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-.tips-list li {
-    padding: 8px 0;
-    padding-left: 28px;
-    position: relative;
-    color: var(--color-charcoal);
-}
-
-.dark-theme .tips-list li {
-    color: var(--color-ivory);
-}
-
-.tips-list li:before {
-    content: "•";
-    color: var(--color-rose-gold);
-    font-size: 24px;
-    position: absolute;
-    left: 0;
-    top: 4px;
-}
-
-.price-section {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-medium);
-    padding: 24px;
-}
-
-.price-icon {
-    font-size: 48px;
-    color: var(--color-gold);
-}
-
-.price-content h4 {
-    color: var(--color-navy);
-    margin-bottom: 8px;
-}
-
-.price-text {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--color-rose-gold);
-    margin-bottom: 4px;
-}
-
-.price-note {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-/* ========== ЭКРАН ГЕНЕРАЦИИ ========== */
-.generate-container {
-    max-width: 500px;
-}
-
-.generate-type {
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.type-badge {
-    display: inline-block;
-    background: var(--gradient-accent);
-    color: white;
-    padding: 8px 20px;
-    border-radius: var(--radius-pill);
-    font-weight: 600;
-    font-size: 14px;
-    box-shadow: var(--shadow-hard);
-}
-
-.prompt-section {
-    margin-bottom: 32px;
-}
-
-.prompt-section h4 {
-    color: var(--color-navy);
-    margin-bottom: 8px;
-}
-
-.dark-theme .prompt-section h4 {
-    color: var(--color-ivory);
-}
-
-.input-hint {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-bottom: 16px;
-    opacity: 0.7;
-}
-
-.dark-theme .input-hint {
-    color: var(--color-ivory);
-    opacity: 0.6;
-}
-
-.prompt-textarea {
-    width: 100%;
-    padding: 20px;
-    border-radius: var(--radius-medium);
-    border: 2px solid rgba(231, 182, 184, 0.3);
-    font-size: 16px;
-    font-family: var(--font-body);
-    resize: vertical;
-    min-height: 120px;
-    margin-bottom: 12px;
-    transition: all 0.3s ease;
-    background: white;
-}
-
-.dark-theme .prompt-textarea {
-    background: rgba(55, 65, 81, 0.5);
-    border-color: rgba(30, 58, 138, 0.4);
-    color: var(--color-ivory);
-}
-
-.prompt-textarea:focus {
-    outline: none;
-    border-color: var(--color-rose-gold);
-    box-shadow: 0 0 0 3px rgba(231, 182, 184, 0.1);
-}
-
-.prompt-counter {
-    text-align: right;
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-.dark-theme .prompt-counter {
-    color: var(--color-ivory);
-}
-
-/* ЗАГРУЗКА ФОТО */
-.upload-section, .format-section, .model-section {
-    margin-bottom: 32px;
-}
-
-.upload-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 8px;
-}
-
-.upload-header h4 {
-    color: var(--color-navy);
-}
-
-.dark-theme .upload-header h4 {
-    color: var(--color-ivory);
-}
-
-.required-badge {
-    background: var(--color-rose-gold);
-    color: white;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.upload-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin: 20px 0;
-}
-
-.upload-item {
-    background: rgba(231, 182, 184, 0.05);
-    border-radius: var(--radius-medium);
-    aspect-ratio: 1/1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid rgba(231, 182, 184, 0.2);
-    overflow: hidden;
-    position: relative;
-}
-
-.upload-item:hover {
-    border-color: var(--color-dusty-pink);
-    transform: scale(1.02);
-}
-
-.upload-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: var(--radius-small);
-}
-
-.upload-remove {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 24px;
-    height: 24px;
-    background: rgba(255, 0, 0, 0.9);
-    color: white;
-    border-radius: var(--radius-circle);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.upload-item:hover .upload-remove {
-    opacity: 1;
-}
-
-.upload-item.upload-add {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    text-align: center;
-}
-
-.dark-theme .upload-item.upload-add {
-    color: var(--color-ivory);
-}
-
-.upload-item.upload-add .material-icons-round {
-    font-size: 32px;
-    margin-bottom: 8px;
-    color: var(--color-dusty-pink);
-}
-
-.upload-item.upload-add:hover {
-    background: rgba(231, 182, 184, 0.1);
-    border-color: var(--color-dusty-pink);
-    color: var(--color-rose-gold);
-}
-
-.upload-count {
-    font-size: 12px;
-    color: var(--color-charcoal);
-    margin-top: 8px;
-    opacity: 0.7;
-}
-
-.dark-theme .upload-count {
-    color: var(--color-ivory);
-}
-
-.upload-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--color-charcoal);
-    font-size: 14px;
-    padding: 12px;
-    background: rgba(231, 182, 184, 0.05);
-    border-radius: var(--radius-small);
-}
-
-.dark-theme .upload-info {
-    color: var(--color-ivory);
-    background: rgba(55, 65, 81, 0.5);
-}
-
-.upload-info .material-icons-round {
-    font-size: 18px;
-    color: var(--color-sky-blue);
-}
-
-/* ФОРМАТ */
-.format-select {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: var(--radius-medium);
-    border: 2px solid rgba(231, 182, 184, 0.3);
-    font-size: 16px;
-    font-weight: 500;
-    background: white;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-    background-size: 20px;
-    padding-right: 50px;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-}
-
-.dark-theme .format-select {
-    background: rgba(55, 65, 81, 0.5);
-    border-color: rgba(30, 58, 138, 0.4);
-    color: var(--color-ivory);
-}
-
-.format-select:focus {
-    outline: none;
-    border-color: var(--color-rose-gold);
-    box-shadow: 0 0 0 3px rgba(231, 182, 184, 0.1);
-}
-
-/* МОДЕЛИ */
-.model-options {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-@media (min-width: 400px) {
-    .model-options {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.model-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid rgba(231, 182, 184, 0.2);
-    position: relative;
-}
-
-.dark-theme .model-card {
-    background: rgba(55, 65, 81, 0.5);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.model-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-sky-blue);
-}
-
-.model-card.selected {
-    border-color: var(--color-rose-gold);
-    background: rgba(231, 182, 184, 0.05);
-}
-
-.model-badge {
-    position: absolute;
-    top: -10px;
-    right: 16px;
-    background: var(--gradient-accent);
-    color: white;
-    padding: 6px 14px;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 14px;
-}
-
-.model-badge.best {
-    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-rose-gold) 100%);
-}
-
-.model-name {
-    font-weight: 700;
-    color: var(--color-navy);
-    font-size: 18px;
-    margin-bottom: 8px;
-}
-
-.dark-theme .model-name {
-    color: var(--color-ivory);
-}
-
-.model-desc {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    line-height: 1.4;
-    margin-bottom: 8px;
-}
-
-.dark-theme .model-desc {
-    color: var(--color-ivory);
-}
-
-.model-hint {
-    color: var(--color-charcoal);
-    font-size: 13px;
-    font-style: italic;
-    opacity: 0.7;
-}
-
-.dark-theme .model-hint {
-    color: var(--color-ivory);
-}
-
-/* КНОПКА ГЕНЕРАЦИИ */
-.generate-action {
-    text-align: center;
-    margin-top: 40px;
-}
-
-.generate-btn {
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius-pill);
-    padding: 20px 40px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    box-shadow: var(--shadow-medium);
-}
-
-.generate-btn.large {
-    padding: 24px 48px;
-    font-size: 20px;
-}
-
-.generate-btn:hover:not(:disabled) {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-elevated);
-}
-
-.generate-btn:disabled {
-    background: linear-gradient(135deg, #cccccc 0%, #aaaaaa 100%);
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.generate-icon {
-    font-size: 24px;
-}
-
-.generate-hint {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-top: 12px;
-    opacity: 0.7;
-}
-
-.dark-theme .generate-hint {
-    color: var(--color-ivory);
-}
-
-/* ========== СОЗДАНИЕ СВОЕЙ ФОТОСЕССИИ ========== */
-.photosession-title-card {
-    background: var(--gradient-primary);
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    margin-bottom: 32px;
-    text-align: center;
-    border: 1px solid rgba(231, 182, 184, 0.3);
-}
-
-.dark-theme .photosession-title-card {
-    background: rgba(30, 58, 138, 0.2);
-    border: 1px solid rgba(30, 58, 138, 0.4);
-}
-
-.photosession-title-card h3 {
-    color: var(--color-navy);
-    font-size: 22px;
-    margin-bottom: 12px;
-}
-
-.dark-theme .photosession-title-card h3 {
-    color: var(--color-ivory);
-}
-
-.photosession-subtitle {
-    color: var(--color-charcoal);
-    font-size: 15px;
-    line-height: 1.5;
-    opacity: 0.8;
-}
-
-.dark-theme .photosession-subtitle {
-    color: var(--color-ivory);
-}
-
-/* СГЕНЕРИРОВАННЫЕ ФОТО ПОЛЬЗОВАТЕЛЯ */
-.user-photos-section {
-    margin-bottom: 40px;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.section-header h4 {
-    color: var(--color-navy);
-    font-size: 20px;
-}
-
-.dark-theme .section-header h4 {
-    color: var(--color-ivory);
-}
-
-.photos-count {
-    background: rgba(231, 182, 184, 0.1);
-    color: var(--color-rose-gold);
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.user-photos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-}
-
-.user-photo-card {
-    position: relative;
-    border-radius: var(--radius-medium);
-    overflow: hidden;
-    cursor: pointer;
-    aspect-ratio: 1/1;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.user-photo-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-rose-gold);
-}
-
-.user-photo-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.photo-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    padding: 16px;
-    color: white;
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
-
-.user-photo-card:hover .photo-overlay {
-    transform: translateY(0);
-}
-
-.photo-title {
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 4px;
-}
-
-.photo-date {
-    font-size: 11px;
-    opacity: 0.8;
-    margin-bottom: 8px;
-}
-
-.photo-badge {
-    background: rgba(236, 64, 122, 0.9);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 600;
-    display: inline-block;
-}
-
-.photosession-from-photo-btn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    padding: 8px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-navy);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(10px);
-    backdrop-filter: blur(10px);
-}
-
-.user-photo-card:hover .photosession-from-photo-btn {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.photosession-from-photo-btn:hover {
-    background: white;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hard);
-}
-
-.photosession-from-photo-btn .material-icons-round {
-    font-size: 14px;
-    color: var(--color-rose-gold);
-}
-
-.empty-photos {
-    text-align: center;
-    padding: 60px 20px;
-    background: rgba(231, 182, 184, 0.05);
-    border-radius: var(--radius-medium);
-    border: 2px dashed var(--color-dusty-pink);
-    grid-column: 1 / -1;
-}
-
-.empty-photos .empty-icon {
-    font-size: 64px;
-    margin-bottom: 20px;
-    opacity: 0.5;
-}
-
-.empty-photos h3 {
-    color: var(--color-navy);
-    margin-bottom: 12px;
-}
-
-.dark-theme .empty-photos h3 {
-    color: var(--color-ivory);
-}
-
-.empty-photos p {
-    color: var(--color-charcoal);
-    margin-bottom: 24px;
-    opacity: 0.7;
-}
-
-.dark-theme .empty-photos p {
-    color: var(--color-ivory);
-}
-
-/* ========== ВИДЕО ========== */
-.video-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-@media (min-width: 768px) {
-    .video-options {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.video-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 24px;
-    text-align: center;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.dark-theme .video-card {
-    background: rgba(55, 65, 81, 0.5);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.video-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-dusty-pink);
-}
-
-.video-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-}
-
-.video-title {
-    font-weight: 700;
-    color: var(--color-navy);
-    font-size: 18px;
-    margin-bottom: 12px;
-}
-
-.dark-theme .video-title {
-    color: var(--color-ivory);
-}
-
-.video-desc {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-bottom: 16px;
-    line-height: 1.4;
-    min-height: 40px;
-}
-
-.dark-theme .video-desc {
-    color: var(--color-ivory);
-}
-
-.video-details {
-    margin: 12px 0;
-}
-
-.detail {
-    display: inline-block;
-    background: rgba(135, 206, 235, 0.1);
-    color: var(--color-sky-blue);
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 12px;
-    font-weight: 600;
-    margin: 0 4px;
-}
-
-.video-price {
-    margin: 16px 0;
-    color: var(--color-rose-gold);
-    font-weight: 800;
-    font-size: 24px;
-}
-
-.video-btn {
-    background: linear-gradient(135deg, var(--color-sky-blue) 0%, var(--color-navy) 100%);
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    border-radius: var(--radius-medium);
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    margin-top: auto;
-    box-shadow: var(--shadow-hard);
-}
-
-.video-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
-}
-
-.video-card.premium {
-    background: rgba(183, 110, 121, 0.1);
-    border: 2px solid rgba(183, 110, 121, 0.3);
-}
-
-.video-btn.premium {
-    background: var(--gradient-accent);
-}
-
-.video-badge {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    background: var(--gradient-accent);
-    color: white;
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 12px;
-    font-weight: 700;
-    box-shadow: var(--shadow-hard);
-}
-
-/* ========== ИСТОРИЯ ========== */
-.history-filters {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 32px;
-}
-
-.filter-btn {
-    background: rgba(231, 182, 184, 0.1);
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius-pill);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--color-charcoal);
-}
-
-.dark-theme .filter-btn {
-    background: rgba(55, 65, 81, 0.5);
-    color: var(--color-ivory);
-}
-
-.filter-btn:hover {
-    background: rgba(231, 182, 184, 0.2);
-}
-
-.filter-btn.active {
-    background: var(--gradient-accent);
-    color: white;
-    box-shadow: var(--shadow-hard);
-}
-
-.filter-info {
-    margin-left: auto;
-    color: var(--color-charcoal);
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.dark-theme .filter-info {
-    color: var(--color-ivory);
-}
-
-.history-photos-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
-    min-height: 300px;
-}
-
-.history-photo-card {
-    position: relative;
-    border-radius: var(--radius-medium);
-    overflow: hidden;
-    cursor: pointer;
-    aspect-ratio: 1/1;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-}
-
-.history-photo-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-    border-color: var(--color-rose-gold);
-}
-
-.history-photo-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.history-photo-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-    padding: 12px;
-    color: white;
-}
-
-.history-photo-date {
-    font-size: 11px;
-    opacity: 0.8;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.history-photo-action {
-    text-align: center;
-}
-
-.history-photo-action button {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    padding: 6px 12px;
-    border-radius: var(--radius-pill);
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--color-navy);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.history-photo-action button:hover {
-    background: white;
-    transform: translateY(-2px);
-}
-
-.history-empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--color-charcoal);
-    grid-column: 1 / -1;
-}
-
-.dark-theme .history-empty {
-    color: var(--color-ivory);
-}
-
-.empty-icon {
-    font-size: 80px;
-    margin-bottom: 24px;
-    opacity: 0.3;
-}
-
-.history-empty h3 {
-    color: var(--color-navy);
-    margin-bottom: 16px;
-    font-size: 24px;
-}
-
-.dark-theme .history-empty h3 {
-    color: var(--color-ivory);
-}
-
-.history-empty p {
-    color: var(--color-charcoal);
-    margin-bottom: 32px;
-    font-size: 16px;
-    opacity: 0.7;
-}
-
-.dark-theme .history-empty p {
-    color: var(--color-ivory);
-}
-
-.btn-start {
-    background: linear-gradient(135deg, var(--color-sky-blue) 0%, var(--color-navy) 100%);
-    color: white;
-    border: none;
-    padding: 16px 32px;
-    border-radius: var(--radius-pill);
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-hard);
-}
-
-.btn-start:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
-}
-
-/* ========== ПРОФИЛЬ ========== */
-.profile-container {
-    padding: 0 16px;
-}
-
-.profile-card {
-    padding: 32px;
-}
-
-.profile-header {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-}
-
-.profile-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: var(--radius-circle);
-    background: var(--gradient-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid rgba(231, 182, 184, 0.3);
-}
-
-.profile-info h2 {
-    color: var(--color-navy);
-    font-size: 28px;
-    margin-bottom: 8px;
-}
-
-.dark-theme .profile-info h2 {
-    color: var(--color-ivory);
-}
-
-.profile-id {
-    color: var(--color-charcoal);
-    font-size: 16px;
-    margin-bottom: 20px;
-    opacity: 0.7;
-}
-
-.dark-theme .profile-id {
-    color: var(--color-ivory);
-}
-
-.profile-stats {
-    display: flex;
-    gap: 24px;
-}
-
-.stat {
-    display: flex;
-    flex-direction: column;
-}
-
-.stat-label {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    margin-bottom: 4px;
-    opacity: 0.7;
-}
-
-.dark-theme .stat-label {
-    color: var(--color-ivory);
-}
-
-.stat-value {
-    color: var(--color-navy);
-    font-weight: 600;
-    font-size: 16px;
-}
-
-.dark-theme .stat-value {
-    color: var(--color-ivory);
-}
-
-.profile-balance {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: var(--gradient-primary);
-    border-radius: var(--radius-medium);
-    border: 1px solid rgba(231, 182, 184, 0.3);
-}
-
-.balance-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.balance-label {
-    color: var(--color-navy);
-    font-size: 14px;
-    margin-bottom: 8px;
-    opacity: 0.8;
-}
-
-.balance-value {
-    color: var(--color-rose-gold);
-    font-size: 36px;
-    font-weight: 800;
-}
-
-.balance-add-btn {
-    background: var(--gradient-accent);
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-hard);
-}
-
-.balance-add-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
-}
-
-/* СТАТИСТИКА */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 32px;
-}
-
-@media (min-width: 768px) {
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-.stat-card {
-    background: white;
-    border-radius: var(--radius-medium);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    border: 1px solid rgba(231, 182, 184, 0.2);
-    transition: all 0.3s ease;
-}
-
-.dark-theme .stat-card {
-    background: rgba(55, 65, 81, 0.5);
-    border-color: rgba(30, 58, 138, 0.3);
-}
-
-.stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-}
-
-.stat-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-}
-
-.stat-content h3 {
-    color: var(--color-navy);
-    font-size: 32px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.dark-theme .stat-content h3 {
-    color: var(--color-ivory);
-}
-
-.stat-content p {
-    color: var(--color-charcoal);
-    font-size: 14px;
-    opacity: 0.7;
-}
-
-.dark-theme .stat-content p {
-    color: var(--color-ivory);
-}
-
-/* ИСТОРИЯ В ПРОФИЛЕ */
-.profile-history {
-    margin-bottom: 32px;
-}
-
-.history-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-.history-header h3 {
-    color: var(--color-navy);
-    font-size: 22px;
-}
-
-.dark-theme .history-header h3 {
-    color: var(--color-ivory);
-}
-
-.view-all {
-    color: var(--color-sky-blue);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.view-all:hover {
-    text-decoration: underline;
-}
-
-.recent-list {
-    min-height: 100px;
-}
-
-.recent-empty {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--color-charcoal);
-    font-style: italic;
-    opacity: 0.7;
-}
-
-.dark-theme .recent-empty {
-    color: var(--color-ivory);
-}
-
-/* НАСТРОЙКИ */
-.settings-section {
-    margin-top: 32px;
-}
-
-.settings-section h3 {
-    color: var(--color-navy);
-    font-size: 22px;
-    margin-bottom: 32px;
-}
-
-.dark-theme .settings-section h3 {
-    color: var(--color-ivory);
-}
-
-.settings-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.setting-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(231, 182, 184, 0.1);
-}
-
-.setting-item:last-child {
-    border-bottom: none;
-}
-
-.setting-item.clickable {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.setting-item.clickable:hover {
-    background: rgba(231, 182, 184, 0.05);
-    padding-left: 20px;
-    padding-right: 20px;
-    margin: 0 -20px;
-    border-radius: var(--radius-medium);
-}
-
-.setting-info {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.setting-icon {
-    font-size: 24px;
-    color: var(--color-rose-gold);
-    width: 40px;
-    text-align: center;
-}
-
-.setting-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.setting-title {
-    color: var(--color-navy);
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 4px;
-}
-
-.dark-theme .setting-title {
-    color: var(--color-ivory);
-}
-
-.setting-desc {
-    color: var(--color-charcoal);
-    font-size: 13px;
-    opacity: 0.7;
-}
-
-.dark-theme .setting-desc {
-    color: var(--color-ivory);
-}
-
-/* ПЕРЕКЛЮЧАТЕЛЬ */
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 54px;
-    height: 28px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: var(--color-rose-gold);
-}
-
-input:checked + .slider:before {
-    transform: translateX(26px);
-}
-
-/* ========== TAB BAR ========== */
-.tab-bar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 85px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(231, 182, 184, 0.2);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom);
-}
-
-.dark-theme .tab-bar {
-    background: rgba(55, 65, 81, 0.95);
-    border-top: 1px solid rgba(30, 58, 138, 0.3);
-}
-
-.tab-btn {
-    background: none;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: 16px;
-    flex: 1;
-    max-width: 80px;
-    color: var(--color-charcoal);
-    position: relative;
-}
-
-.dark-theme .tab-btn {
-    color: var(--color-ivory);
-}
-
-.tab-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-circle);
-    background: var(--color-soft-gray);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-    transition: all 0.3s ease;
-}
-
-.dark-theme .tab-icon {
-    background: rgba(55, 65, 81, 0.5);
-}
-
-.tab-btn .material-icons-round {
-    font-size: 20px;
-    transition: all 0.3s ease;
-}
-
-.tab-label {
-    font-size: 12px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.tab-badge {
-    position: absolute;
-    top: 8px;
-    right: 20px;
-    width: 8px;
-    height: 8px;
-    background: var(--color-success);
-    border-radius: 50%;
-    display: none;
-}
-
-.tab-btn.active {
-    color: var(--color-rose-gold);
-}
-
-.tab-btn.active .tab-icon {
-    background: var(--gradient-primary);
-    transform: translateY(-4px);
-}
-
-.tab-btn.active .material-icons-round {
-    transform: scale(1.2);
-}
-
-.tab-btn:hover:not(.active) {
-    color: var(--color-dusty-pink);
-    background: rgba(231, 182, 184, 0.05);
-}
-
-/* ========== УВЕДОМЛЕНИЯ ========== */
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: white;
-    color: var(--color-navy);
-    padding: 16px 24px;
-    border-radius: var(--radius-medium);
-    z-index: 9999;
-    box-shadow: var(--shadow-medium);
-    font-family: var(--font-body);
-    font-weight: 500;
-    border-left: 4px solid var(--color-rose-gold);
-    transform: translateX(120%);
-    transition: transform 0.3s ease;
-    max-width: 350px;
-}
-
-.dark-theme .notification {
-    background: rgba(55, 65, 81, 0.95);
-    color: var(--color-ivory);
-}
-
-.notification.show {
-    transform: translateX(0);
-}
-
-/* ========== АДАПТИВНОСТЬ ========== */
-@media (max-width: 768px) {
-    .app-main {
-        padding: 16px;
-    }
-    
-    .screen-header h2 {
-        font-size: 28px;
-    }
-    
-    .welcome-header h1 {
-        font-size: 28px;
-    }
-    
-    .quick-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .horizontal-cards-container {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    
-    .horizontal-style-card {
-        width: 120px;
-    }
-    
-    .upload-comparison {
-        flex-direction: column;
-        gap: 32px;
-    }
-    
-    .arrow-column {
-        width: 100%;
-        height: 60px;
-    }
-    
-    .arrow-icon {
-        transform: rotate(90deg);
-    }
-    
-    .photosession-top-button .photosession-btn {
-        padding: 16px 24px;
-        font-size: 16px;
-    }
-    
-    .video-options {
-        grid-template-columns: 1fr;
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .overlay-content {
-        padding: 24px;
-    }
-    
-    .selected-photo-preview {
-        height: 250px;
-    }
-    
-    .category-styles-grid,
-    .photosession-gallery-grid,
-    .photosession-series-grid,
-    .history-photos-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .fullscreen-controls {
-        padding: 16px;
-    }
-    
-    .fullscreen-nav-btn {
-        width: 48px;
-        height: 48px;
-    }
-    
-    .fullscreen-nav-btn .material-icons-round {
-        font-size: 28px;
-    }
-    
-    .result-preview {
-        height: 250px;
-    }
-    
-    .download-btn.large {
-        padding: 16px 32px;
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .horizontal-style-card {
-        width: 100px;
-    }
-    
-    .horizontal-style-preview {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .upload-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .history-filters {
-        justify-content: center;
-    }
-    
-    .filter-info {
-        display: none;
-    }
-    
-    .frames-control {
-        gap: 16px;
-    }
-    
-    .frames-number {
-        font-size: 36px;
-    }
-    
-    .category-styles-grid,
-    .photosession-gallery-grid,
-    .photosession-series-grid,
-    .history-photos-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-    
-    .loading-icon {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .loading-banana {
-        font-size: 40px;
-    }
-}
-
-/* Анимации */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideOut {
-    from { transform: translateX(0); opacity: 1; }
-    to { transform: translateX(100%); opacity: 0; }
-}
-
-/* Задержки для анимаций */
-.horizontal-style-card {
-    animation: fadeIn 0.5s ease forwards;
-    opacity: 0;
-}
-
-.horizontal-style-card:nth-child(1) { animation-delay: 0.1s; }
-.horizontal-style-card:nth-child(2) { animation-delay: 0.2s; }
-.horizontal-style-card:nth-child(3) { animation-delay: 0.3s; }
-.horizontal-style-card:nth-child(4) { animation-delay: 0.4s; }
-.horizontal-style-card:nth-child(5) { animation-delay: 0.5s; }
-
-.photosession-gallery-card,
-.photosession-series-card {
-    animation: fadeIn 0.5s ease forwards;
-    opacity: 0;
-}
-
-.photosession-gallery-card:nth-child(1),
-.photosession-series-card:nth-child(1) { animation-delay: 0.1s; }
-.photosession-gallery-card:nth-child(2),
-.photosession-series-card:nth-child(2) { animation-delay: 0.2s; }
-.photosession-gallery-card:nth-child(3),
-.photosession-series-card:nth-child(3) { animation-delay: 0.3s; }
-.photosession-gallery-card:nth-child(4),
-.photosession-series-card:nth-child(4) { animation-delay: 0.4s; }
-.photosession-gallery-card:nth-child(5),
-.photosession-series-card:nth-child(5) { animation-delay: 0.5s; }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nano Banana | Old Money AI Photo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- ВЕРХНИЙ HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🍌</span>
+                <span class="logo-text">Nano</span>
+            </div>
+            <button class="balance-btn" id="balance-btn">
+                <span class="star-icon">⭐</span>
+                <span id="header-balance">85</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ОСНОВНОЕ СОДЕРЖИМОЕ -->
+    <main class="app-main" id="app-main">
+        <!-- ГЛАВНЫЙ ЭКРАН -->
+        <div class="screen active" id="screen-main">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <h1>Добро пожаловать в мир AI-фото</h1>
+                    <p class="welcome-subtitle">Элегантные технологии для создания изысканных изображений</p>
+                </div>
+                
+                <div class="quick-grid">
+                    <div class="quick-card" data-screen="photo">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">✨</span>
+                        </div>
+                        <div class="quick-text">ФОТО</div>
+                        <div class="quick-hint">Стили и генерация</div>
+                    </div>
+                    
+                    <div class="quick-card" data-screen="photosession">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">📸</span>
+                        </div>
+                        <div class="quick-text">ФОТОСЕССИЯ</div>
+                        <div class="quick-hint">Создай съемку мечты</div>
+                    </div>
+                    
+                    <div class="quick-card" data-screen="video">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">🎬</span>
+                        </div>
+                        <div class="quick-text">ВИДЕО</div>
+                        <div class="quick-hint">AI-анимация</div>
+                    </div>
+                </div>
+                
+                <div class="welcome-features">
+                    <div class="feature">
+                        <span class="feature-icon">🎨</span>
+                        <span class="feature-text">Уникальные стили</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">⚡</span>
+                        <span class="feature-text">Быстрая генерация</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🔒</span>
+                        <span class="feature-text">Конфиденциально</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ФОТО -->
+        <div class="screen" id="screen-photo">
+            <div class="screen-header">
+                <h2>✨ Фото</h2>
+                <p class="screen-subtitle">Выберите стиль для генерации</p>
+            </div>
+
+            <div class="screen-content">
+                <!-- ГОРИЗОНТАЛЬНЫЕ КНОПКИ В ВЕРХНЕЙ ЧАСТИ -->
+                <div class="horizontal-cards-container" id="categories-container">
+                    <!-- Загружается через JavaScript -->
+                </div>
+
+                <!-- ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ -->
+                <div class="horizontal-categories" id="horizontal-categories-main">
+                    <!-- Категории загружаются через JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СОЗДАТЬ СВОЙ СТИЛЬ -->
+        <div class="screen" id="screen-create-own">
+            <div class="screen-header">
+                <button class="back-btn" id="create-own-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h2>Создать свой стиль</h2>
+                <button class="help-btn" id="how-it-works-btn">
+                    <span class="material-icons-round">help_outline</span>
+                </button>
+            </div>
+
+            <div class="screen-content">
+                <div class="create-own-instructions">
+                    <p class="instructions-text">
+                        Загрузите фото-пример (стиль, который хотите повторить) и свое фото. 
+                        AI проанализирует пример и создаст похожее изображение с вашим лицом.
+                    </p>
+                </div>
+
+                <!-- КОНТЕЙНЕРЫ ДЛЯ ЗАГРУЗКИ -->
+                <div class="upload-comparison">
+                    <div class="upload-column">
+                        <div class="upload-column-header">
+                            <div class="upload-label">Фото пример</div>
+                            <div class="upload-subtitle">Стиль из интернета</div>
+                        </div>
+                        <div class="upload-container" id="example-container">
+                            <!-- Загружается через JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="arrow-column">
+                        <div class="arrow-icon">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-column">
+                        <div class="upload-column-header">
+                            <div class="upload-label">Ваше фото</div>
+                            <div class="upload-subtitle">Ваше лицо анфас</div>
+                        </div>
+                        <div class="upload-container" id="face-container">
+                            <!-- Загружается через JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- РЕКОМЕНДАЦИИ -->
+                <div class="upload-recommendations">
+                    <div class="recommendation-icon">
+                        <span class="material-icons-round">lightbulb</span>
+                    </div>
+                    <div class="recommendation-text">
+                        <strong>Рекомендуем:</strong> портреты с хорошим освещением, вид лица анфас. 
+                        Для примера выбирайте четкие фото с хорошим качеством.
+                    </div>
+                </div>
+
+                <!-- КНОПКА ГЕНЕРАЦИИ -->
+                <div class="generate-action create-own-action">
+                    <button class="generate-btn large" id="create-own-generate-btn" disabled>
+                        <span class="generate-icon">📷</span>
+                        <span id="create-own-btn-text">Загрузите оба фото</span>
+                    </button>
+                    <p class="generate-hint">
+                        Загрузите оба фото для активации генерации
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ФОТОСЕССИЙ -->
+        <div class="screen" id="screen-photosession">
+            <div class="screen-header">
+                <h2>📸 Фотосессии</h2>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
+            </div>
+            
+            <div class="screen-content">
+                <!-- КНОПКА "СОЗДАТЬ СВОЮ" В ВЕРХНЕЙ ЧАСТИ -->
+                <div class="photosession-top-button">
+                    <button class="photosession-btn create-btn" data-pack="custom">
+                        <span class="material-icons-round">camera</span>
+                        Создать свою фотосессию
+                    </button>
+                </div>
+
+                <!-- ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ ФОТОСЕССИЙ -->
+                <div class="horizontal-categories" id="photosession-horizontal-categories">
+                    <!-- Категории загружаются через JavaScript -->
+                </div>
+
+                <!-- ИНФОРМАЦИЯ О ФОТОСЕССИИ -->
+                <div class="photosession-info card">
+                    <h3 class="info-title">Как работает фотосессия?</h3>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Выберите фото из вашей коллекции</strong>
+                                <p>Любое сгенерированное фото</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Выберите количество кадров (от 10)</strong>
+                                <p>Минимум 10, максимум 20 кадров</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>ИИ создаст вариации в разных стилях</strong>
+                                <p>Разные позы, фоны и образы</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>+3 фото в подарок к каждому заказу!</strong>
+                                <p>Итого получите на 3 фото больше</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СОЗДАНИЯ СВОЕЙ ФОТОСЕССИИ -->
+        <div class="screen" id="screen-photosession-custom">
+            <div class="screen-header">
+                <button class="back-btn" id="photosession-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h2>🎨 Своя фотосессия</h2>
+                <div class="header-placeholder"></div>
+            </div>
+
+            <div class="screen-content">
+                <!-- ЗАГОЛОВОК -->
+                <div class="photosession-title-card">
+                    <h3>Создайте полноценную фотосессию из 1 фото</h3>
+                    <p class="photosession-subtitle">
+                        Выберите любое сгенерированное фото - ИИ создаст уникальную серию 
+                        в разных образах, позах и локациях
+                    </p>
+                </div>
+
+                <!-- СГЕНЕРИРОВАННЫЕ ФОТО ПОЛЬЗОВАТЕЛЯ -->
+                <div class="user-photos-section">
+                    <div class="section-header">
+                        <h4>Ваши сгенерированные фото</h4>
+                        <div class="photos-count" id="user-photos-count">8 фото</div>
+                    </div>
+                    
+                    <div class="user-photos-grid" id="user-photos-container">
+                        <!-- Фото загружаются через JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ИНФОРМАЦИЯ О ФОТОСЕССИИ -->
+                <div class="photosession-info card">
+                    <h3 class="info-title">Как работает фотосессия?</h3>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Выберите фото из вашей коллекции</strong>
+                                <p>Любое сгенерированное фото</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Выберите количество кадров (от 10)</strong>
+                                <p>Минимум 10, максимум 20 кадров</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>ИИ создаст вариации в разных стилях</strong>
+                                <p>Разные позы, фоны и образы</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>+3 фото в подарок к каждому заказу!</strong>
+                                <p>Итого получите на 3 фото больше</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ЗАГРУЗКИ / ГЕНЕРАЦИИ -->
+        <div class="overlay" id="loading-screen">
+            <div class="overlay-content loading-container">
+                <div class="overlay-header">
+                    <h3 id="loading-title">Идет генерация фото</h3>
+                    <button class="close-btn" id="loading-close-btn">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- АНИМИРОВАННЫЙ ИНДИКАТОР -->
+                    <div class="loading-animation">
+                        <div class="loading-icon">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-banana">🍌</div>
+                        </div>
+                        <div class="loading-text">
+                            <p class="loading-subtitle">Обычно занимает 30-60 секунд</p>
+                        </div>
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИОННЫЙ БЛОК -->
+                    <div class="loading-info">
+                        <div class="info-icon">
+                            <span class="material-icons-round">info</span>
+                        </div>
+                        <div class="info-content">
+                            <h4>Продолжайте пользоваться приложением</h4>
+                            <p>Результат будет доступен позже в разделе "История". Вы получите уведомление о готовности.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН РЕЗУЛЬТАТА ГЕНЕРАЦИИ -->
+        <div class="overlay" id="generation-result-modal">
+            <div class="overlay-content result-container">
+                <div class="overlay-header">
+                    <h3 id="result-title">Генерация завершена!</h3>
+                    <button class="close-btn" id="result-close-btn">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- РЕЗУЛЬТАТ -->
+                    <div class="result-preview">
+                        <img id="result-image" src="" alt="Результат генерации">
+                        <div class="result-success">
+                            <span class="success-icon">✅</span>
+                            <span class="success-text">Готово!</span>
+                        </div>
+                    </div>
+                    
+                    <!-- КНОПКА СКАЧИВАНИЯ -->
+                    <div class="result-action">
+                        <button class="download-btn large" id="result-download-btn">
+                            <span class="download-icon material-icons-round">file_download</span>
+                            <span>Скачать фото</span>
+                        </button>
+                        <p class="result-hint">
+                            Файл будет отправлен в чат Telegram бота
+                        </p>
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИЯ -->
+                    <div class="result-info">
+                        <p>Результат также сохранен в разделе "История".</p>
+                        <button class="view-history-btn" onclick="hideGenerationResult(); switchScreen('history');">
+                            <span class="material-icons-round">history</span>
+                            Посмотреть в истории
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
+        <div class="overlay" id="category-modal">
+            <div class="overlay-content category-modal">
+                <div class="overlay-header">
+                    <h3 id="category-modal-title">Категория</h3>
+                    <button class="close-btn" id="category-modal-close">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="category-styles-grid" id="category-styles-container">
+                        <!-- Стили загружаются через JavaScript (2 колонки) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ -->
+        <div class="overlay" id="photosession-gallery-modal">
+            <div class="overlay-content photosession-gallery-modal">
+                <div class="overlay-header">
+                    <button class="back-btn" id="photosession-gallery-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="photosession-gallery-title">Галерея фотосессий</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="photosession-gallery-grid" id="photosession-gallery-container">
+                        <!-- Фотосессии загружаются через JavaScript (2 колонки) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО СЕРИИ ФОТОСЕССИИ -->
+        <div class="overlay" id="photosession-series-modal">
+            <div class="overlay-content photosession-series-modal">
+                <div class="overlay-header">
+                    <button class="back-btn" id="photosession-series-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="photosession-series-title">Серия фотосессии</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- СЕРИЯ ФОТОГРАФИЙ -->
+                    <div class="photosession-series-grid" id="photosession-series-container">
+                        <!-- Фотографии серии загружаются через JavaScript -->
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИЯ О БАЛАНСЕ -->
+                    <div class="photosession-balance-info">
+                        <div class="balance-info-item">
+                            <span class="balance-label">Баланс:</span>
+                            <span class="balance-value"><span id="photosession-series-balance">85</span> ⭐</span>
+                        </div>
+                    </div>
+                    
+                    <!-- КНОПКА ГЕНЕРАЦИИ -->
+                    <div class="photosession-series-action">
+                        <button class="generate-btn large" id="photosession-series-generate-btn">
+                            <span class="generate-icon">✨</span>
+                            <span id="photosession-series-btn-text">Сгенерировать фотосессию за 159 звёзд</span>
+                        </button>
+                        <p class="photosession-result-hint">
+                            Вы получите 10 фото в стиле выбранной фотосессии + 3 фото в подарок
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТР -->
+        <div class="overlay fullscreen-overlay" id="fullscreen-viewer">
+            <div class="fullscreen-container">
+                <!-- ИЗОБРАЖЕНИЕ -->
+                <img class="fullscreen-image" id="fullscreen-image" src="" alt="">
+                
+                <!-- ЭЛЕМЕНТЫ УПРАВЛЕНИЯ -->
+                <div class="fullscreen-controls" id="fullscreen-controls">
+                    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+                    <div class="fullscreen-top-bar">
+                        <button class="fullscreen-close-btn" id="fullscreen-close-btn">
+                            <span class="material-icons-round">close</span>
+                        </button>
+                        <div class="fullscreen-counter" id="fullscreen-counter">1/10</div>
+                        <div class="fullscreen-placeholder"></div>
+                    </div>
+                    
+                    <!-- ЦЕНТРАЛЬНЫЕ КНОПКИ НАВИГАЦИИ -->
+                    <div class="fullscreen-navigation">
+                        <button class="fullscreen-nav-btn prev" id="fullscreen-prev-btn">
+                            <span class="material-icons-round">chevron_left</span>
+                        </button>
+                        <div class="fullscreen-center-space"></div>
+                        <button class="fullscreen-nav-btn next" id="fullscreen-next-btn">
+                            <span class="material-icons-round">chevron_right</span>
+                        </button>
+                    </div>
+                    
+                    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+                    <div class="fullscreen-bottom-bar">
+                        <button class="fullscreen-save-btn" id="fullscreen-save-btn">
+                            <span class="material-icons-round">file_download</span>
+                            Сохранить фото
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ -->
+        <div class="overlay" id="photosession-modal">
+            <div class="overlay-content photosession-modal">
+                <div class="overlay-header">
+                    <h3>Создать фотосессию</h3>
+                    <button class="close-btn" onclick="hidePhotosessionModal()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- ВЫБРАННОЕ ФОТО -->
+                    <div class="selected-photo-preview">
+                        <img id="selected-photo-img" src="" alt="Выбранное фото">
+                    </div>
+
+                    <!-- ВЫБОР КОЛИЧЕСТВА КАДРОВ -->
+                    <div class="frames-selection">
+                        <div class="frames-header">
+                            <h4>Количество</h4>
+                            <div class="frames-price">
+                                <span id="photosession-price">159</span> ⭐
+                            </div>
+                        </div>
+                        
+                        <div class="frames-control">
+                            <button class="frame-btn minus" onclick="decreasePhotosessionFrames()">
+                                <span class="material-icons-round">remove</span>
+                            </button>
+                            
+                            <div class="frames-count">
+                                <div class="frames-number" id="photosession-count">10</div>
+                                <div class="frames-bonus">+3 фото бесплатно</div>
+                            </div>
+                            
+                            <button class="frame-btn plus" onclick="increasePhotosessionFrames()">
+                                <span class="material-icons-round">add</span>
+                            </button>
+                        </div>
+                        
+                        <div class="frames-hint">
+                            <span class="material-icons-round">info</span>
+                            <span>Минимум 10 кадров. Каждый дополнительный кадр +15 звёзд</span>
+                        </div>
+                    </div>
+
+                    <!-- ИТОГОВАЯ ИНФОРМАЦИЯ -->
+                    <div class="photosession-summary">
+                        <div class="summary-item">
+                            <span>Выбранных кадров:</span>
+                            <span id="photosession-count-summary">10</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Бесплатных фото:</span>
+                            <span>3</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Итого получите:</span>
+                            <span class="total-count">
+                                <span id="photosession-total">13</span> фото
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- КНОПКА СОЗДАНИЯ -->
+                    <div class="photosession-action">
+                        <button class="generate-btn large" id="start-photosession-btn">
+                            <span class="generate-icon">✨</span>
+                            <span>Создать фотосессию</span>
+                        </button>
+                        <p class="photosession-result-hint">
+                            Вы получите <span id="result-photo-count">13</span> фото в стиле выбранного изображения
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОВЕРЛЕЙ "КАК ЭТО РАБОТАЕТ" -->
+        <div class="overlay" id="how-it-works-overlay">
+            <div class="overlay-content">
+                <div class="overlay-header">
+                    <h2>Как это работает?</h2>
+                    <button class="close-btn" onclick="hideHowItWorks()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="info-section">
+                        <div class="info-icon-large">🎨</div>
+                        <h3>Генерация по примеру</h3>
+                        <p class="info-text">
+                            Нашли крутое фото в интернете и хотите такое же, но с собой? 
+                            Загрузите его как пример, добавьте своё фото — и AI создаст похожее изображение с вашим лицом!
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <div class="steps-list">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <strong>Загрузите фото-пример</strong>
+                                    <div class="step-subtext">Стиль, поза, одежда, фон</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <strong>Загрузите своё фото</strong>
+                                    <div class="step-subtext">Чёткое фото лица анфас</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <strong>AI проанализирует пример</strong>
+                                    <div class="step-subtext">Определит стиль и особенности</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <strong>Создаст похожее фото</strong>
+                                    <div class="step-subtext">С вашим лицом в выбранном стиле</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>💡 Советы</h4>
+                        <ul class="tips-list">
+                            <li>Выбирайте чёткие примеры с хорошим освещением</li>
+                            <li>Ваше фото должно быть с видимым лицом</li>
+                            <li>Лучше всего работает с портретами</li>
+                            <li>Избегайте групповых фото в примерах</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section price-section">
+                        <div class="price-icon">💰</div>
+                        <div class="price-content">
+                            <h4>Стоимость</h4>
+                            <p class="price-text">10 звёзд за генерацию</p>
+                            <p class="price-note">Первые 2 генерации бесплатно для новых пользователей</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ГЕНЕРАЦИИ -->
+        <div class="overlay" id="screen-generate">
+            <div class="overlay-content generate-container">
+                <div class="overlay-header">
+                    <button class="back-btn" id="generate-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="generate-title">Генерация фото</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="generate-type">
+                        <div class="type-badge" id="type-badge">✨ По описанию</div>
+                    </div>
+                    
+                    <div class="prompt-section" id="prompt-section" style="display: none;">
+                        <h4>Опишите изображение</h4>
+                        <p class="input-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
+                        
+                        <textarea class="prompt-textarea" id="ai-prompt" 
+                                  placeholder="Пример: Девушка в розовом платье стоит на берегу океана на закате, волны, песок, золотистый свет, фотореалистично, высокая детализация..." 
+                                  rows="4" maxlength="2000"></textarea>
+                        
+                        <div class="prompt-counter">
+                            <span id="char-count">0</span> / 2000 знаков
+                        </div>
+                    </div>
+                    
+                    <div class="upload-section">
+                        <div class="upload-header">
+                            <h4>Загрузите свои фото</h4>
+                            <span class="required-badge">Обязательно</span>
+                        </div>
+                        <p class="input-hint">Загрузите 1-5 своих фото для генерации. ИИ учтёт черты лица.</p>
+                        
+                        <div class="upload-grid" id="upload-grid">
+                            <div class="upload-item upload-add" id="upload-add-btn">
+                                <span class="material-icons-round">add</span>
+                                <span>Добавить фото</span>
+                                <div class="upload-count">0/5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="upload-info">
+                            <span class="material-icons-round">info</span>
+                            <span>Рекомендуем: портреты с хорошим освещением, вид лица анфас</span>
+                        </div>
+                    </div>
+                    
+                    <div class="format-section">
+                        <h4>Формат фото</h4>
+                        <p class="input-hint">Выберите соотношение сторон</p>
+                        
+                        <select class="format-select" id="format-select">
+                            <option value="1:1">Квадрат (1:1)</option>
+                            <option value="4:5">Портрет (4:5)</option>
+                            <option value="16:9">Широкий (16:9)</option>
+                            <option value="9:16">Сторис (9:16)</option>
+                            <option value="3:4">Классика (3:4)</option>
+                            <option value="2:3">Постер (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="model-section">
+                        <h4>Модель ИИ</h4>
+                        <p class="input-hint">Выберите качество генерации</p>
+                        
+                        <div class="model-options">
+                            <div class="model-card selected" data-model="nano" data-price="7">
+                                <div class="model-badge">⭐ 7</div>
+                                <div class="model-name">Nano Banana</div>
+                                <div class="model-desc">Стандартное качество</div>
+                                <div class="model-hint">Быстро, для соцсетей</div>
+                            </div>
+                            <div class="model-card" data-model="pro" data-price="25">
+                                <div class="model-badge best">⭐ 25</div>
+                                <div class="model-name">Nano Banana Pro</div>
+                                <div class="model-desc">Высокое качество</div>
+                                <div class="model-hint">Детализация, для печати</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="generate-action">
+                        <button class="generate-btn" id="start-generate-btn" disabled>
+                            <span class="generate-icon">📝</span>
+                            <span id="generate-btn-text">Загрузите фото</span>
+                        </button>
+                        <p class="generate-hint" id="generate-hint">Загрузите хотя бы одно фото для генерации</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ВИДЕО -->
+        <div class="screen" id="screen-video">
+            <div class="screen-header">
+                <h2>🎬 Видео</h2>
+                <p class="screen-subtitle">AI-генерация видео из фото и текста. Длительность: 3-10 секунд</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="video-options">
+                    <!-- TEXT-TO-VIDEO -->
+                    <div class="video-card" data-video-type="text">
+                        <div class="video-icon">✍️</div>
+                        <div class="video-title">Text-to-Video</div>
+                        <div class="video-desc">Опишите сцену словами, ИИ создаст видео</div>
+                        <div class="video-details">
+                            <span class="detail">🎞️ 3-5 сек</span>
+                            <span class="detail">🔄 AI SVD</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="text">Создать</button>
+                    </div>
+                    
+                    <!-- IMAGE-TO-VIDEO -->
+                    <div class="video-card" data-video-type="image">
+                        <div class="video-icon">🔄</div>
+                        <div class="video-title">Image-to-Video</div>
+                        <div class="video-desc">Анимация перехода между двумя кадрами</div>
+                        <div class="video-details">
+                            <span class="detail">📸 Start/End frames</span>
+                            <span class="detail">🎬 5-7 сек</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="image">Создать</button>
+                    </div>
+                    
+                    <!-- REFERENCE VIDEO -->
+                    <div class="video-card" data-video-type="reference">
+                        <div class="video-icon">🎞️</div>
+                        <div class="video-title">Reference Video</div>
+                        <div class="video-desc">Видео в стиле загруженной картинки</div>
+                        <div class="video-details">
+                            <span class="detail">🎨 Стиль картинки</span>
+                            <span class="detail">⏱️ 4-6 сек</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="reference">Создать</button>
+                    </div>
+                    
+                    <!-- ОЖИВИТЬ ФОТО -->
+                    <div class="video-card premium" data-video-type="animate">
+                        <div class="video-badge">ПРЕМИУМ</div>
+                        <div class="video-icon">🖼️</div>
+                        <div class="video-title">Оживить фото</div>
+                        <div class="video-desc">Слайд-шоу из фото с музыкой и эффектами</div>
+                        <div class="video-details">
+                            <span class="detail">🎵 С музыкой</span>
+                            <span class="detail">✨ Эффекты</span>
+                        </div>
+                        <div class="video-price">300 звёзд</div>
+                        <button class="video-btn premium" data-video-type="animate">Создать</button>
+                    </div>
+                </div>
+                
+                <div class="video-info card">
+                    <div class="info-icon">📹</div>
+                    <div class="info-content">
+                        <h4>Технические детали</h4>
+                        <ul class="tech-list">
+                            <li>Формат видео: MP4, 720p или 1080p</li>
+                            <li>Частота кадров: 24-30 FPS</li>
+                            <li>Длительность: 3-10 секунд</li>
+                            <li>Модели: Stable Video Diffusion, AnimateDiff</li>
+                            <li>Время генерации: 30-90 секунд</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИСТОРИИ -->
+        <div class="screen" id="screen-history">
+            <div class="screen-header">
+                <h2>📚 История</h2>
+                <p class="screen-subtitle">Все ваши сгенерированные фото</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="history-filters card">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="photo">Фото</button>
+                    <button class="filter-btn" data-filter="photosession">Фотосессии</button>
+                    <button class="filter-btn" data-filter="video">Видео</button>
+                    <div class="filter-info">
+                        <span id="history-count">0</span> записей
+                    </div>
+                </div>
+                
+                <!-- ГРИД С ФОТОГРАФИЯМИ -->
+                <div class="history-photos-grid" id="history-photos-container">
+                    <!-- Фото загружаются через JavaScript (2 колонки) -->
+                </div>
+                
+                <div class="history-info card">
+                    <div class="info-icon">💾</div>
+                    <div class="info-content">
+                        <h4>Как работает история?</h4>
+                        <ul class="info-list">
+                            <li>Все генерации хранятся 7 дней</li>
+                            <li>Вы можете скачать результаты в любое время</li>
+                            <li>История автоматически очищается по истечении срока</li>
+                            <li>Для постоянного хранения используйте скачивание</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ПРОФИЛЯ -->
+        <div class="screen" id="screen-profile">
+            <div class="screen-header">
+                <h2>👤 Профиль</h2>
+                <p class="screen-subtitle">Ваша статистика и настройки</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="profile-container">
+                    <div class="profile-card card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <span class="material-icons-round" style="font-size: 64px; color: #ec407a;">person</span>
+                            </div>
+                            <div class="profile-info">
+                                <h2 id="profile-name">Пользователь</h2>
+                                <p class="profile-id">ID: <span id="profile-id">...</span></p>
+                                <div class="profile-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Стаж:</span>
+                                        <span class="stat-value" id="profile-days">1 день</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Уровень:</span>
+                                        <span class="stat-value" id="profile-level">👶 Новичок</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-balance">
+                            <div class="balance-info">
+                                <span class="balance-label">Баланс:</span>
+                                <span class="balance-value"><strong id="profile-balance">85</strong> ⭐</span>
+                            </div>
+                            <button class="balance-add-btn" id="add-balance-profile">
+                                <span class="material-icons-round">add</span>
+                                Пополнить
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(236, 64, 122, 0.1);">
+                                <span>📸</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-photos">0</h3>
+                                <p>Создано фото</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(66, 165, 245, 0.1);">
+                                <span>🎞️</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-videos">0</h3>
+                                <p>Создано видео</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(156, 39, 176, 0.1);">
+                                <span>💰</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-spent">0</h3>
+                                <p>Потрачено звёзд</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(76, 175, 80, 0.1);">
+                                <span>🎯</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-saved">0</h3>
+                                <p>Сохранено файлов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-history card">
+                        <div class="history-header">
+                            <h3>📅 Последние генерации</h3>
+                            <a href="#" class="view-all" onclick="switchScreen('history'); return false;">Все →</a>
+                        </div>
+                        
+                        <div class="recent-list" id="recent-list">
+                            <div class="recent-empty" id="recent-empty">
+                                <p>У вас еще нет созданных генераций</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section card">
+                        <h3>⚙️ Настройки</h3>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🌙</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Темная тема</span>
+                                        <span class="setting-desc">Автоматически подстраивается под Telegram</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="dark-mode" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">💾</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Автосохранение</span>
+                                        <span class="setting-desc">Сохранять все результаты автоматически</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="auto-save" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🔔</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Уведомления</span>
+                                        <span class="setting-desc">Оповещения о завершении генераций</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="notifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="showNotification('Функция скоро будет доступна')">
+                                <div class="setting-info">
+                                    <span class="setting-icon">👥</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Пригласить друзей</span>
+                                        <span class="setting-desc">Получите 50 звёзд за каждого друга</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">chevron_right</span>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="showNotification('Поддержка: @NeuroFlashStudio_bot')">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🆘</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Помощь и поддержка</span>
+                                        <span class="setting-desc">Напишите нам в Telegram</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">chevron_right</span>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="clearHistory()">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🗑️</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Очистить историю</span>
+                                        <span class="setting-desc">Удалить все записи из истории</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">delete_outline</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- НИЖНИЙ TAB BAR -->
+    <nav class="tab-bar">
+        <button class="tab-btn" data-screen="photo">
+            <span class="tab-icon">
+                <span class="material-icons-round">photo_camera</span>
+            </span>
+            <span class="tab-label">Фото</span>
+        </button>
+        <button class="tab-btn" data-screen="photosession">
+            <span class="tab-icon">
+                <span class="material-icons-round">collections</span>
+            </span>
+            <span class="tab-label">Фотосессии</span>
+        </button>
+        <button class="tab-btn active" data-screen="main">
+            <span class="tab-icon">
+                <span class="material-icons-round">home</span>
+            </span>
+            <span class="tab-label">Главная</span>
+        </button>
+        <button class="tab-btn" data-screen="history">
+            <span class="tab-icon">
+                <span class="material-icons-round">history</span>
+            </span>
+            <span class="tab-label">История</span>
+            <span class="tab-badge"></span>
+        </button>
+        <button class="tab-btn" data-screen="profile">
+            <span class="tab-icon">
+                <span class="material-icons-round">person</span>
+            </span>
+            <span class="tab-label">Профиль</span>
+        </button>
+    </nav>
+
+    <!-- ПОДКЛЮЧАЕМ НАШ СКРИПТ -->
+    <script src="app.js"></script>
+</body>
+</html>
