@@ -1,6 +1,5 @@
-
 // app.js - Nano Banana AI Photo - Old Money Edition
-// Версия 5.0: Полное обновление по техзаданию
+// Версия 5.1: Обновление по техзаданию - исправления интерфейса
 
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
@@ -47,56 +46,56 @@ function getStyleWord(count) {
 const mockGeneratedPhotos = [
     { 
         id: 1, 
-        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+1', 
+        src: 'https://via.placeholder.com/300x400/E0F2FE/1E3A8A?text=Зима+1', 
         title: 'Зимняя сказка',
         date: '23.01.2026',
         type: 'photo'
     },
     { 
         id: 2, 
-        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+2', 
+        src: 'https://via.placeholder.com/300x400/F8E1E7/B76E79?text=ДР+2', 
         title: 'Розовый закат',
         date: '22.01.2026',
         type: 'photo'
     },
     { 
         id: 3, 
-        src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+3', 
+        src: 'https://via.placeholder.com/300x400/FAF3E0/374151?text=Элегант+3', 
         title: 'Элегантность',
         date: '21.01.2026',
         type: 'photo'
     },
     { 
         id: 4, 
-        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+4', 
+        src: 'https://via.placeholder.com/300x400/E0F2FE/1E3A8A?text=Город+4', 
         title: 'Городские огни',
         date: '20.01.2026',
         type: 'photosession'
     },
     { 
         id: 5, 
-        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+5', 
+        src: 'https://via.placeholder.com/300x400/F8E1E7/B76E79?text=Роман+5', 
         title: 'Романтика',
         date: '19.01.2026',
         type: 'photo'
     },
     { 
         id: 6, 
-        src: 'https://via.placeholder.com/300x300/FAF3E0/374151?text=Фото+6', 
+        src: 'https://via.placeholder.com/300x400/FAF3E0/374151?text=Мин+6', 
         title: 'Минимализм',
         date: '18.01.2026',
         type: 'photo'
     },
     { 
         id: 7, 
-        src: 'https://via.placeholder.com/300x300/E0F2FE/1E3A8A?text=Фото+7', 
+        src: 'https://via.placeholder.com/300x400/E0F2FE/1E3A8A?text=Природа+7', 
         title: 'Природа',
         date: '17.01.2026',
         type: 'photosession'
     },
     { 
         id: 8, 
-        src: 'https://via.placeholder.com/300x300/F8E1E7/B76E79?text=Фото+8', 
+        src: 'https://via.placeholder.com/300x400/F8E1E7/B76E79?text=Стиль+8', 
         title: 'Стиль',
         date: '16.01.2026',
         type: 'photo'
@@ -111,14 +110,14 @@ const photosessionCategories = [
         icon: '❄️', 
         color: '#64B5F6',
         styles: [
-            { id: 1, name: "Снежная королева", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+1", views: 17200, rating: 5.0 },
-            { id: 2, name: "Зимний лес", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+2", views: 12300, rating: 5.0 },
-            { id: 3, name: "Новогоднее настроение", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+3", views: 21500, rating: 5.0 },
-            { id: 4, name: "Лыжный курорт", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+4", views: 8900, rating: 5.0 },
-            { id: 5, name: "Морозные узоры", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+5", views: 14200, rating: 5.0 },
-            { id: 6, name: "Рождественский вечер", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+6", views: 18700, rating: 5.0 },
-            { id: 7, name: "Зимний город", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+7", views: 9500, rating: 5.0 },
-            { id: 8, name: "Снеговик", preview: "https://via.placeholder.com/300x300/64B5F6/FFFFFF?text=❄️+8", views: 11200, rating: 5.0 }
+            { id: 1, name: "Снежная королева", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+1", views: 17200, rating: 5.0 },
+            { id: 2, name: "Зимний лес", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+2", views: 12300, rating: 5.0 },
+            { id: 3, name: "Новогоднее настроение", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+3", views: 21500, rating: 5.0 },
+            { id: 4, name: "Лыжный курорт", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+4", views: 8900, rating: 5.0 },
+            { id: 5, name: "Морозные узоры", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+5", views: 14200, rating: 5.0 },
+            { id: 6, name: "Рождественский вечер", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+6", views: 18700, rating: 5.0 },
+            { id: 7, name: "Зимний город", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+7", views: 9500, rating: 5.0 },
+            { id: 8, name: "Снеговик", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+8", views: 11200, rating: 5.0 }
         ]
     },
     { 
@@ -127,9 +126,9 @@ const photosessionCategories = [
         icon: '💍', 
         color: '#EC407A',
         styles: [
-            { id: 1, name: "Романтический закат", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+1", views: 24500, rating: 5.0 },
-            { id: 2, name: "Церковная церемония", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+2", views: 18700, rating: 5.0 },
-            { id: 3, name: "Праздничный банкет", preview: "https://via.placeholder.com/300x300/EC407A/FFFFFF?text=💍+3", views: 16200, rating: 5.0 }
+            { id: 1, name: "Романтический закат", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=💍+1", views: 24500, rating: 5.0 },
+            { id: 2, name: "Церковная церемония", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=💍+2", views: 18700, rating: 5.0 },
+            { id: 3, name: "Праздничный банкет", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=💍+3", views: 16200, rating: 5.0 }
         ]
     },
     { 
@@ -138,8 +137,8 @@ const photosessionCategories = [
         icon: '🏖️', 
         color: '#FFB74D',
         styles: [
-            { id: 1, name: "Закат на море", preview: "https://via.placeholder.com/300x300/FFB74D/FFFFFF?text=🏖️+1", views: 32500, rating: 5.0 },
-            { id: 2, name: "Пальмовый рай", preview: "https://via.placeholder.com/300x300/FFB74D/FFFFFF?text=🏖️+2", views: 27800, rating: 5.0 }
+            { id: 1, name: "Закат на море", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🏖️+1", views: 32500, rating: 5.0 },
+            { id: 2, name: "Пальмовый рай", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🏖️+2", views: 27800, rating: 5.0 }
         ]
     },
     { 
@@ -148,9 +147,9 @@ const photosessionCategories = [
         icon: '💎', 
         color: '#FFD700',
         styles: [
-            { id: 1, name: "Золотой шик", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+1", views: 43200, rating: 5.0 },
-            { id: 2, name: "Алмазный блеск", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+2", views: 38900, rating: 5.0 },
-            { id: 3, name: "Шикарный вечер", preview: "https://via.placeholder.com/300x300/FFD700/FFFFFF?text=💎+3", views: 41500, rating: 5.0 }
+            { id: 1, name: "Золотой шик", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+1", views: 43200, rating: 5.0 },
+            { id: 2, name: "Алмазный блеск", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+2", views: 38900, rating: 5.0 },
+            { id: 3, name: "Шикарный вечер", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+3", views: 41500, rating: 5.0 }
         ]
     }
 ];
@@ -158,55 +157,55 @@ const photosessionCategories = [
 // Примеры стилей для категорий
 const styleExamples = {
     winter: [
-        { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
-        { id: 2, name: "Зимний лес", icon: "🌲", color: "#81C784", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🌲" },
-        { id: 3, name: "Новогоднее настроение", icon: "🎄", color: "#FF8A65", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🎄" },
-        { id: 4, name: "Лыжный курорт", icon: "⛷️", color: "#64B5F6", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=⛷️" },
-        { id: 5, name: "Морозные узоры", icon: "❄️", color: "#90CAF9", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=❄️" },
-        { id: 6, name: "Рождественский вечер", icon: "🎅", color: "#E57373", preview: "https://via.placeholder.com/200x200/64B5F6/FFFFFF?text=🎅" }
+        { id: 1, name: "Снежная королева", icon: "👑", color: "#4FC3F7", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+Королева" },
+        { id: 2, name: "Зимний лес", icon: "🌲", color: "#81C784", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+Лес" },
+        { id: 3, name: "Новогоднее настроение", icon: "🎄", color: "#FF8A65", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+НГ" },
+        { id: 4, name: "Лыжный курорт", icon: "⛷️", color: "#64B5F6", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+Лыжи" },
+        { id: 5, name: "Морозные узоры", icon: "❄️", color: "#90CAF9", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+Узоры" },
+        { id: 6, name: "Рождественский вечер", icon: "🎅", color: "#E57373", preview: "https://via.placeholder.com/300x400/64B5F6/FFFFFF?text=❄️+Рождество" }
     ],
     birthday: [
-        { id: 1, name: "Торт и свечи", icon: "🎂", color: "#FFB74D", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎂" },
-        { id: 2, name: "Праздничный вечер", icon: "🎉", color: "#BA68C8", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎉" },
-        { id: 3, name: "Воздушные шары", icon: "🎈", color: "#4DD0E1", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎈" },
-        { id: 4, name: "Подарки", icon: "🎁", color: "#AED581", preview: "https://via.placeholder.com/200x200/FFB74D/FFFFFF?text=🎁" }
+        { id: 1, name: "Торт и свечи", icon: "🎂", color: "#FFB74D", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🎂+Торт" },
+        { id: 2, name: "Праздничный вечер", icon: "🎉", color: "#BA68C8", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🎂+Вечер" },
+        { id: 3, name: "Воздушные шары", icon: "🎈", color: "#4DD0E1", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🎂+Шары" },
+        { id: 4, name: "Подарки", icon: "🎁", color: "#AED581", preview: "https://via.placeholder.com/300x400/FFB74D/FFFFFF?text=🎂+Подарки" }
     ],
     trends: [
-        { id: 1, name: "Неоновый стиль", icon: "💡", color: "#9575CD", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=💡" },
-        { id: 2, name: "Ретро волна", icon: "📻", color: "#FF8A65", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=📻" },
-        { id: 3, name: "Футуризм", icon: "🚀", color: "#4DB6AC", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=🚀" },
-        { id: 4, name: "Минимализм", icon: "⬜", color: "#90A4AE", preview: "https://via.placeholder.com/200x200/FF5722/FFFFFF?text=⬜" }
+        { id: 1, name: "Неоновый стиль", icon: "💡", color: "#9575CD", preview: "https://via.placeholder.com/300x400/FF5722/FFFFFF?text=🔥+Неон" },
+        { id: 2, name: "Ретро волна", icon: "📻", color: "#FF8A65", preview: "https://via.placeholder.com/300x400/FF5722/FFFFFF?text=🔥+Ретро" },
+        { id: 3, name: "Футуризм", icon: "🚀", color: "#4DB6AC", preview: "https://via.placeholder.com/300x400/FF5722/FFFFFF?text=🔥+Футуризм" },
+        { id: 4, name: "Минимализм", icon: "⬜", color: "#90A4AE", preview: "https://via.placeholder.com/300x400/FF5722/FFFFFF?text=🔥+Мин" }
     ],
     couples: [
-        { id: 1, name: "Романтический вечер", icon: "💕", color: "#F06292", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=💕" },
-        { id: 2, name: "Прогулка в парке", icon: "🌳", color: "#81C784", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=🌳" },
-        { id: 3, name: "Пляжный закат", icon: "🌅", color: "#FFB74D", preview: "https://via.placeholder.com/200x200/EC407A/FFFFFF?text=🌅" }
+        { id: 1, name: "Романтический вечер", icon: "💕", color: "#F06292", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=👫+Вечер" },
+        { id: 2, name: "Прогулка в парке", icon: "🌳", color: "#81C784", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=👫+Парк" },
+        { id: 3, name: "Пляжный закат", icon: "🌅", color: "#FFB74D", preview: "https://via.placeholder.com/300x400/EC407A/FFFFFF?text=👫+Закат" }
     ],
     girls: [
-        { id: 1, name: "Стиль принцессы", icon: "👸", color: "#CE93D8", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=👸" },
-        { id: 2, name: "Деловой образ", icon: "💼", color: "#80CBC4", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=💼" },
-        { id: 3, name: "Спортивный шик", icon: "👟", color: "#FFAB91", preview: "https://via.placeholder.com/200x200/E91E63/FFFFFF?text=👟" }
+        { id: 1, name: "Стиль принцессы", icon: "👸", color: "#CE93D8", preview: "https://via.placeholder.com/300x400/E91E63/FFFFFF?text=💃+Принцесса" },
+        { id: 2, name: "Деловой образ", icon: "💼", color: "#80CBC4", preview: "https://via.placeholder.com/300x400/E91E63/FFFFFF?text=💃+Деловой" },
+        { id: 3, name: "Спортивный шик", icon: "👟", color: "#FFAB91", preview: "https://via.placeholder.com/300x400/E91E63/FFFFFF?text=💃+Спорт" }
     ],
     men: [
-        { id: 1, name: "Классический костюм", icon: "🤵", color: "#78909C", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=🤵" },
-        { id: 2, name: "Спортивный стиль", icon: "🏃", color: "#42A5F5", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=🏃" },
-        { id: 3, name: "Кэжуал образ", icon: "👕", color: "#26A69A", preview: "https://via.placeholder.com/200x200/42A5F5/FFFFFF?text=👕" }
+        { id: 1, name: "Классический костюм", icon: "🤵", color: "#78909C", preview: "https://via.placeholder.com/300x400/42A5F5/FFFFFF?text=🕺+Костюм" },
+        { id: 2, name: "Спортивный стиль", icon: "🏃", color: "#42A5F5", preview: "https://via.placeholder.com/300x400/42A5F5/FFFFFF?text=🕺+Спорт" },
+        { id: 3, name: "Кэжуал образ", icon: "👕", color: "#26A69A", preview: "https://via.placeholder.com/300x400/42A5F5/FFFFFF?text=🕺+Кэжуал" }
     ],
     pets: [
-        { id: 1, name: "Домашний любимец", icon: "🐶", color: "#FFD54F", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=🐶" },
-        { id: 2, name: "Игривый момент", icon: "🎾", color: "#AED581", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=🎾" },
-        { id: 3, name: "Портрет питомца", icon: "📷", color: "#80DEEA", preview: "https://via.placeholder.com/200x200/81C784/FFFFFF?text=📷" }
+        { id: 1, name: "Домашний любимец", icon: "🐶", color: "#FFD54F", preview: "https://via.placeholder.com/300x400/81C784/FFFFFF?text=🐾+Питомец" },
+        { id: 2, name: "Игривый момент", icon: "🎾", color: "#AED581", preview: "https://via.placeholder.com/300x400/81C784/FFFFFF?text=🐾+Игра" },
+        { id: 3, name: "Портрет питомца", icon: "📷", color: "#80DEEA", preview: "https://via.placeholder.com/300x400/81C784/FFFFFF?text=🐾+Портрет" }
     ],
     professions: [
-        { id: 1, name: "Врач", icon: "👨‍⚕️", color: "#EF5350", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👨‍⚕️" },
-        { id: 2, name: "Программист", icon: "💻", color: "#42A5F5", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=💻" },
-        { id: 3, name: "Учитель", icon: "👩‍🏫", color: "#66BB6A", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👩‍🏫" },
-        { id: 4, name: "Повар", icon: "👨‍🍳", color: "#FFA726", preview: "https://via.placeholder.com/200x200/78909C/FFFFFF?text=👨‍🍳" }
+        { id: 1, name: "Врач", icon: "👨‍⚕️", color: "#EF5350", preview: "https://via.placeholder.com/300x400/78909C/FFFFFF?text=💼+Врач" },
+        { id: 2, name: "Программист", icon: "💻", color: "#42A5F5", preview: "https://via.placeholder.com/300x400/78909C/FFFFFF?text=💼+Программист" },
+        { id: 3, name: "Учитель", icon: "👩‍🏫", color: "#66BB6A", preview: "https://via.placeholder.com/300x400/78909C/FFFFFF?text=💼+Учитель" },
+        { id: 4, name: "Повар", icon: "👨‍🍳", color: "#FFA726", preview: "https://via.placeholder.com/300x400/78909C/FFFFFF?text=💼+Повар" }
     ],
     luxury: [
-        { id: 1, name: "Золотой шик", icon: "💰", color: "#FFD700", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=💰" },
-        { id: 2, name: "Алмазный блеск", icon: "💎", color: "#B39DDB", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=💎" },
-        { id: 3, name: "Шикарный вечер", icon: "🍾", color: "#F8BBD0", preview: "https://via.placeholder.com/200x200/FFD700/FFFFFF?text=🍾" }
+        { id: 1, name: "Золотой шик", icon: "💰", color: "#FFD700", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+Золото" },
+        { id: 2, name: "Алмазный блеск", icon: "💎", color: "#B39DDB", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+Алмаз" },
+        { id: 3, name: "Шикарный вечер", icon: "🍾", color: "#F8BBD0", preview: "https://via.placeholder.com/300x400/FFD700/FFFFFF?text=💎+Вечер" }
     ]
 };
 
@@ -343,28 +342,6 @@ function setupNavigation() {
             } else if (screenId === 'profile') {
                 updateProfileStats();
             }
-            
-            // Обновляем заголовок в Telegram
-            updateTelegramHeader(screenId);
-        }
-    }
-    
-    function updateTelegramHeader(screenId) {
-        if (window.Telegram && window.Telegram.WebApp) {
-            const titles = {
-                'main': 'Nano Banana AI',
-                'photo': 'Фото',
-                'photosession': 'Фотосессии',
-                'video': 'Видео',
-                'history': 'История',
-                'profile': 'Профиль',
-                'create-own': 'Создать стиль',
-                'photosession-custom': 'Своя фотосессия'
-            };
-            
-            if (titles[screenId]) {
-                window.Telegram.WebApp.setHeaderColor('#9C27B0');
-            }
         }
     }
     
@@ -399,7 +376,7 @@ function loadPhotoCategories() {
     
     container.innerHTML = '';
     
-    // Сначала показываем горизонтальные блоки
+    // Сначала показываем горизонтальные блоки РЯДОМ
     const horizontalContainer = document.createElement('div');
     horizontalContainer.className = 'horizontal-cards-container';
     horizontalContainer.innerHTML = `
@@ -422,7 +399,7 @@ function loadPhotoCategories() {
     
     container.appendChild(horizontalContainer);
     
-    // Потом добавляем ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ (убрали обычные категории)
+    // ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ
     const horizontalCategories = document.createElement('div');
     horizontalCategories.className = 'horizontal-categories';
     horizontalCategories.id = 'horizontal-categories-main';
@@ -600,15 +577,15 @@ function loadPhotosessionHorizontalCategories() {
             styleCard.innerHTML = `
                 <div class="horizontal-style-preview">
                     <img src="${style.preview}" alt="${style.name}">
-                    <div class="style-stats-overlay">
-                        <div class="stat-item">
-                            <span class="stat-icon">👁️</span>
-                            <span class="stat-value">${viewsText}</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-icon">⭐</span>
-                            <span class="stat-value">${style.rating}</span>
-                        </div>
+                </div>
+                <div class="style-stats">
+                    <div class="stat-item">
+                        <span class="stat-icon">👁️</span>
+                        <span class="stat-value">${viewsText}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">⭐</span>
+                        <span class="stat-value">${style.rating}</span>
                     </div>
                 </div>
                 <div class="horizontal-style-name">${style.name}</div>
@@ -693,7 +670,9 @@ function showCategoryModal(categoryId) {
             styleCard.style.backgroundColor = style.color + '15';
             
             styleCard.innerHTML = `
-                <div class="modal-style-icon" style="background-color: ${style.color}30; color: ${style.color};">${style.icon}</div>
+                <div class="modal-style-preview">
+                    <img src="${style.preview}" alt="${style.name}">
+                </div>
                 <div class="modal-style-name">${style.name}</div>
             `;
             
@@ -751,15 +730,15 @@ function showPhotosessionGalleryModal(categoryId) {
             styleCard.innerHTML = `
                 <div class="photosession-gallery-preview">
                     <img src="${style.preview}" alt="${style.name}">
-                    <div class="photosession-gallery-stats">
-                        <div class="gallery-stat-item">
-                            <span class="stat-icon">👁️</span>
-                            <span class="stat-value">${viewsText}</span>
-                        </div>
-                        <div class="gallery-stat-item">
-                            <span class="stat-icon">⭐</span>
-                            <span class="stat-value">${style.rating}</span>
-                        </div>
+                </div>
+                <div class="photosession-gallery-stats">
+                    <div class="gallery-stat-item">
+                        <span class="stat-icon">👁️</span>
+                        <span class="stat-value">${viewsText}</span>
+                    </div>
+                    <div class="gallery-stat-item">
+                        <span class="stat-icon">⭐</span>
+                        <span class="stat-value">${style.rating}</span>
                     </div>
                 </div>
                 <div class="photosession-gallery-name">${style.name}</div>
@@ -802,7 +781,7 @@ function showPhotosessionSeriesModal(category, style) {
     if (container) {
         container.innerHTML = '';
         
-        // Создаем 10 тестовых изображений для серии
+        // Создаем 10 тестовых изображений для серии (3:4 формат)
         for (let i = 1; i <= 10; i++) {
             const seriesCard = document.createElement('div');
             seriesCard.className = 'photosession-series-card';
@@ -810,7 +789,7 @@ function showPhotosessionSeriesModal(category, style) {
             
             seriesCard.innerHTML = `
                 <div class="photosession-series-preview">
-                    <img src="https://via.placeholder.com/300x300/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${i}" alt="${style.name} ${i}">
+                    <img src="https://via.placeholder.com/300x400/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${i}" alt="${style.name} ${i}">
                 </div>
                 <div class="photosession-series-number">${i}</div>
             `;
@@ -819,7 +798,7 @@ function showPhotosessionSeriesModal(category, style) {
                 currentGalleryImages = [];
                 for (let j = 1; j <= 10; j++) {
                     currentGalleryImages.push({
-                        src: `https://via.placeholder.com/800x800/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${j}`,
+                        src: `https://via.placeholder.com/600x800/${category.color.substring(1)}/FFFFFF?text=${category.icon}+${j}`,
                         alt: `${style.name} ${j}`
                     });
                 }
@@ -1150,7 +1129,7 @@ function showGenerationResult(type, data) {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
     if (image) {
-        image.src = `https://via.placeholder.com/400x400/${randomColor}/1E3A8A?text=Результат+${randomNum}`;
+        image.src = `https://via.placeholder.com/400x533/${randomColor}/1E3A8A?text=Результат+${randomNum}`;
         image.alt = 'Сгенерированное изображение';
     }
     
@@ -1230,7 +1209,7 @@ function loadUserPhotos() {
             showPhotosessionModal();
         });
         
-        // Кнопка "Фотосессия"
+        // Кнопка "Фотосессия" - ТЕПЕРЬ В ЦЕНТРЕ
         const sessionBtn = photoCard.querySelector('.photosession-from-photo-btn');
         if (sessionBtn) {
             sessionBtn.addEventListener('click', (e) => {
@@ -1816,7 +1795,7 @@ function addToHistoryGenerated(type, data) {
     // Создаем новое фото для истории
     const newPhoto = {
         id: Date.now(),
-        src: `https://via.placeholder.com/300x300/${['E0F2FE', 'F8E1E7', 'FAF3E0'][Math.floor(Math.random() * 3)]}/1E3A8A?text=Новое+${type}`,
+        src: `https://via.placeholder.com/300x400/${['E0F2FE', 'F8E1E7', 'FAF3E0'][Math.floor(Math.random() * 3)]}/1E3A8A?text=Новое+${type}`,
         title: type === 'photosession' ? `Фотосессия: ${data.title}` : 
                type === 'create-own' ? 'Свой стиль' : 
                `${categories.find(c => c.id === data.category)?.title || 'Фото'}${data.style ? ' - ' + data.style : ''}`,
@@ -1993,4 +1972,4 @@ function updateProfileStats() {
     document.getElementById('profile-days').textContent = '1 день';
 }
 
-console.log('🍌 Nano Banana App готов! Версия 5.0 с экранами загрузки и обновленным UI');
+console.log('🍌 Nano Banana App готов! Версия 5.1 с исправлениями по ТЗ');
