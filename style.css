@@ -1,30 +1,100 @@
-/* ========== БАЗОВЫЕ СТИЛИ ========== */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+/**
+ * Nano Banana AI Photo - Old Money Edition
+ * Оптимизированные стили версия 6.0
+ */
 
+/* ========== БАЗОВЫЕ СТИЛИ И СБРОС ========== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ========== CSS ПЕРЕМЕННЫЕ ========== */
 :root {
-    --color-cream: #FFF8F3; --color-ivory: #FAF3E0; --color-soft-pink: #F8E1E7; 
-    --color-dusty-pink: #E6B8B8; --color-powder-blue: #E0F2FE; --color-sky-blue: #87CEEB; 
-    --color-navy: #1E3A8A; --color-gold: #D4AF37; --color-rose-gold: #B76E79; 
-    --color-charcoal: #374151; --color-soft-gray: #F3F4F6; --color-success: #4CAF50; 
+    /* Цвета */
+    --color-cream: #FFF8F3;
+    --color-ivory: #FAF3E0;
+    --color-soft-pink: #F8E1E7;
+    --color-dusty-pink: #E6B8B8;
+    --color-powder-blue: #E0F2FE;
+    --color-sky-blue: #87CEEB;
+    --color-navy: #1E3A8A;
+    --color-gold: #D4AF37;
+    --color-rose-gold: #B76E79;
+    --color-charcoal: #374151;
+    --color-soft-gray: #F3F4F6;
+    --color-success: #4CAF50;
     --color-warning: #FF9800;
+
+    /* Градиенты */
     --gradient-primary: linear-gradient(135deg, var(--color-soft-pink) 0%, var(--color-powder-blue) 100%);
     --gradient-accent: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-gold) 100%);
     --gradient-success: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
-    --shadow-soft: 0 8px 32px rgba(231, 182, 184, 0.15); --shadow-medium: 0 12px 48px rgba(231, 182, 184, 0.25);
-    --shadow-hard: 0 4px 16px rgba(30, 58, 138, 0.1); --shadow-elevated: 0 16px 40px rgba(30, 58, 138, 0.15);
-    --radius-small: 12px; --radius-medium: 20px; --radius-large: 32px; --radius-circle: 50%; --radius-pill: 999px;
-    --font-heading: 'Playfair Display', serif; --font-body: 'Inter', sans-serif;
+
+    /* Тени */
+    --shadow-soft: 0 8px 32px rgba(231, 182, 184, 0.15);
+    --shadow-medium: 0 12px 48px rgba(231, 182, 184, 0.25);
+    --shadow-hard: 0 4px 16px rgba(30, 58, 138, 0.1);
+    --shadow-elevated: 0 16px 40px rgba(30, 58, 138, 0.15);
+
+    /* Радиусы скругления */
+    --radius-small: 12px;
+    --radius-medium: 20px;
+    --radius-large: 32px;
+    --radius-circle: 50%;
+    --radius-pill: 999px;
+
+    /* Шрифты */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Анимации */
+    --transition-base: all 0.3s ease;
 }
 
+/* ========== ОСНОВНЫЕ ЭЛЕМЕНТЫ ========== */
 body {
-    font-family: var(--font-body); background: var(--color-cream); color: var(--color-charcoal);
-    min-height: 100vh; overflow-x: hidden; padding-top: 70px; padding-bottom: 85px; transition: all 0.3s ease;
+    font-family: var(--font-body);
+    background: var(--color-cream);
+    color: var(--color-charcoal);
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-top: 70px;
+    padding-bottom: 85px;
+    transition: var(--transition-base);
 }
-body.loaded { opacity: 1; }
-body.dark-theme { background: var(--color-charcoal); color: var(--color-ivory); }
-h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); font-weight: 600; color: var(--color-navy); }
-.dark-theme h1, .dark-theme h2, .dark-theme h3, .dark-theme h4, .dark-theme h5, .dark-theme h6 { color: var(--color-ivory); }
-p { line-height: 1.6; margin-bottom: 1rem; }
+
+body.loaded {
+    opacity: 1;
+}
+
+body.dark-theme {
+    background: var(--color-charcoal);
+    color: var(--color-ivory);
+}
+
+/* Типографика */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme h4,
+.dark-theme h5,
+.dark-theme h6 {
+    color: var(--color-ivory);
+}
+
+p {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
 
 /* ========== HEADER ========== */
 .app-header {
@@ -39,11 +109,25 @@ p { line-height: 1.6; margin-bottom: 1rem; }
 .logo-text { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--color-navy); }
 .dark-theme .logo-text { color: var(--color-ivory); }
 .balance-btn {
-    background: rgba(231, 182, 184, 0.15); border: 1px solid rgba(231, 182, 184, 0.3); border-radius: 20px;
-    padding: 10px 18px; font-size: 16px; font-weight: 600; color: var(--color-rose-gold); cursor: pointer;
-    transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+    background: rgba(231, 182, 184, 0.15);
+    border: 1px solid rgba(231, 182, 184, 0.3);
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-rose-gold);
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-.balance-btn:hover { background: rgba(231, 182, 184, 0.25); transform: translateY(-2px); box-shadow: var(--shadow-soft); }
+
+.balance-btn:hover {
+    background: rgba(231, 182, 184, 0.25);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+}
 .star-icon { font-size: 18px; }
 
 /* ========== MAIN CONTENT ========== */
@@ -92,9 +176,20 @@ p { line-height: 1.6; margin-bottom: 1rem; }
 /* ========== ЭКРАН ФОТО ========== */
 /* ГОРИЗОНТАЛЬНЫЕ КАРТОЧКИ РЯДОМ */
 .horizontal-cards-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
-.prompt-card, .create-own-card {
-    background: white; border-radius: var(--radius-medium); padding: 20px; cursor: pointer; transition: all 0.3s ease;
-    border: 1px solid rgba(231, 182, 184, 0.2); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 160px;
+.prompt-card,
+.create-own-card {
+    background: white;
+    border-radius: var(--radius-medium);
+    padding: 20px;
+    cursor: pointer;
+    transition: var(--transition-base);
+    border: 1px solid rgba(231, 182, 184, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 160px;
 }
 .dark-theme .prompt-card, .dark-theme .create-own-card { background: rgba(55, 65, 81, 0.9); border: 1px solid rgba(30, 58, 138, 0.3); }
 .prompt-card:hover, .create-own-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-medium); border-color: var(--color-dusty-pink); }
