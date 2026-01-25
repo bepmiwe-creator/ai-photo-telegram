@@ -369,7 +369,7 @@
                     <!-- ИНФОРМАЦИЯ -->
                     <div class="result-info">
                         <p>Результат также сохранен в разделе "История".</p>
-                        <button class="view-history-btn" onclick="hideGenerationResult(); switchScreen('history');">
+                        <button class="view-history-btn" data-action="view-history">
                             <span class="material-icons-round">history</span>
                             Посмотреть в истории
                         </button>
@@ -498,7 +498,7 @@
             <div class="overlay-content photosession-modal">
                 <div class="overlay-header">
                     <h3>Создать фотосессию</h3>
-                    <button class="close-btn" onclick="hidePhotosessionModal()">
+                    <button class="close-btn" id="photosession-modal-close-btn">
                         <span class="material-icons-round">close</span>
                     </button>
                 </div>
@@ -576,7 +576,7 @@
             <div class="overlay-content">
                 <div class="overlay-header">
                     <h2>Как это работает?</h2>
-                    <button class="close-btn" onclick="hideHowItWorks()">
+                    <button class="close-btn" id="how-it-works-close-btn">
                         <span class="material-icons-round">close</span>
                     </button>
                 </div>
@@ -945,7 +945,7 @@
                     <div class="profile-history card">
                         <div class="history-header">
                             <h3>📅 Последние генерации</h3>
-                            <a href="#" class="view-all" onclick="switchScreen('history'); return false;">Все →</a>
+                            <a href="#" class="view-all" data-action="switch-screen" data-screen="history">Все →</a>
                         </div>
                         
                         <div class="recent-list" id="recent-list">
@@ -1001,7 +1001,7 @@
                                 </label>
                             </div>
                             
-                            <div class="setting-item clickable" onclick="showNotification('Функция скоро будет доступна')">
+                            <div class="setting-item clickable" data-action="invite-friends">
                                 <div class="setting-info">
                                     <span class="setting-icon">👥</span>
                                     <div class="setting-text">
@@ -1012,7 +1012,7 @@
                                 <span class="material-icons-round">chevron_right</span>
                             </div>
                             
-                            <div class="setting-item clickable" onclick="showNotification('Поддержка: @NeuroFlashStudio_bot')">
+                            <div class="setting-item clickable" data-action="support">
                                 <div class="setting-info">
                                     <span class="setting-icon">🆘</span>
                                     <div class="setting-text">
@@ -1023,7 +1023,7 @@
                                 <span class="material-icons-round">chevron_right</span>
                             </div>
                             
-                            <div class="setting-item clickable" onclick="clearHistory()">
+                            <div class="setting-item clickable" data-action="clear-history">
                                 <div class="setting-info">
                                     <span class="setting-icon">🗑️</span>
                                     <div class="setting-text">
