@@ -172,7 +172,6 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Переход к пополнению баланса (логика ЮKassa будет здесь)');
     });
 
-    // ОБРАБОТЧИКИ ДЛЯ НИЖНЕЙ НАВИГАЦИИ (ИСПРАВЛЕНИЕ)
     document.querySelectorAll('.bottom-nav-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
