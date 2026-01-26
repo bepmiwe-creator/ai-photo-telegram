@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>NeuroFlash Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -11,79 +11,87 @@
 
     <div class="app-container">
 
-        <!-- ГЛАВНАЯ СТРАНИЦА -->
-        <div id="main-page" class="page">
+        <!-- Главная страница -->
+        <div id="home" class="page active">
             <div class="header">
-                <div class="balance-indicator">
-                    <i class="fas fa-wallet"></i>
-                    <span class="user-balance">85 ₽</span>
-                </div>
                 <h1>NeuroFlash Studio</h1>
                 <p>Создай свой уникальный образ с помощью нейросетей</p>
             </div>
             <div class="main-buttons">
-                <div class="main-btn" data-page="photo-page">
-                    <i class="fas fa-camera"></i>
-                    <span>Фото</span>
-                </div>
-                <div class="main-btn" data-page="photosession-page">
-                    <i class="fas fa-film"></i>
-                    <span>Фотосессия</span>
-                </div>
+                <a href="#" class="main-btn nav-link" data-page="photo-page">
+                    <div class="btn-content">
+                        <i class="fas fa-camera"></i>
+                        <span>Фото</span>
+                    </div>
+                </a>
+                <a href="#" class="main-btn nav-link" data-page="photosession-page">
+                    <div class="btn-content">
+                        <i class="fas fa-film"></i>
+                        <span>Фотосессия</span>
+                    </div>
+                </a>
             </div>
             <div class="info-section">
                 <h2>Как это работает?</h2>
                 <div class="steps">
                     <div class="step">
                         <div class="step-icon"><i class="fas fa-upload"></i></div>
-                        <p>Загрузите свои фото</p>
+                        <p>Загрузите свои фотографии</p>
                     </div>
                     <div class="step">
                         <div class="step-icon"><i class="fas fa-magic"></i></div>
-                        <p>Выберите стиль</p>
+                        <p>Выберите стиль или создайте свой</p>
                     </div>
                     <div class="step">
                         <div class="step-icon"><i class="fas fa-image"></i></div>
-                        <p>Получите результат</p>
+                        <p>Получите уникальные изображения</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- СТРАНИЦА "ФОТО" -->
+        <!-- Страница "Фото" -->
         <div id="photo-page" class="page">
             <div class="page-header">
-                <h2><i class="fas fa-photo-video"></i> Фото</h2>
-                <p>Выберите стиль для генерации</p>
+                <h2>Фото</h2>
+            </div>
+            <div class="photo-options-container">
+                <div class="photo-option-card" id="generate-description-btn">
+                    <h3>Генерация по описанию</h3>
+                    <p>Создайте изображение, описав его текстом</p>
+                </div>
+                <div class="photo-option-card" id="create-own-btn">
+                    <h3>Создать свой</h3>
+                    <p>Настройте параметры и получите уникальный стиль</p>
+                </div>
             </div>
             
-            <!-- Горизонтальные карточки -->
-            <div class="photo-options-container">
-                <div id="generate-by-description" class="photo-option-card">
-                    <h3>Генерация по описанию</h3>
-                    <p>Опишите картинку словами, ИИ создаст её <i class="fas fa-arrow-right"></i></p>
+            <h3 class="catalog-title">Каталог стилей</h3>
+            <div class="style-catalog-grid">
+                <div class="style-catalog-preview" data-style="winter">
+                    <img src="img/style-winter.png" alt="Зима">
+                    <div class="style-catalog-overlay">
+                        <h4>Зима</h4>
+                    </div>
                 </div>
-                <div id="create-your-own-style" class="photo-option-card">
-                    <h3>Создать свой</h3>
-                    <p>Ваш стиль <i class="fas fa-arrow-right"></i></p>
+                <div class="style-catalog-preview" data-style="birthday">
+                    <img src="img/style-birthday.png" alt="День рождения">
+                    <div class="style-catalog-overlay">
+                        <h4>День рождения</h4>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Вертикальный каталог стилей -->
-            <div id="categories-list" class="categories-list">
-                <!-- Категории будут вставлены сюда с помощью JS -->
-            </div>
-        </div>
-
-        <!-- СТРАНИЦА ВЫБРАННОГО СТИЛЯ (ДЛЯ "ФОТО") -->
-        <div id="style-page" class="page">
-            <div class="page-header">
-                <h2 id="style-page-title">Название категории</h2>
-            </div>
-            <div id="style-grid" class="style-grid">
-                <!-- Стили будут вставлены сюда с помощью JS -->
-            </div>
-        </div>
+                <div class="style-catalog-preview" data-style="trends">
+                    <img src="img/style-trends.png" alt="Тренды">
+                    <div class="style-catalog-overlay">
+                        <h4>Тренды</h4>
+                    </div>
+                </div>
+                <div class="style-catalog-preview" data-style="couple">
+                    <img src="img/style-couple.png" alt="Парные">
+                    <div class="style-catalog-overlay">
+                        <h4>Парные</h4>
+                    </div>
+                </div>
         <!-- СТРАНИЦА "ФОТОСЕССИИ" -->
         <div id="photosession-page" class="page">
             <div class="page-header">
