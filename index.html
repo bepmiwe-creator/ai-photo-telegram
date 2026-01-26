@@ -1,3 +1,78 @@
+<!-- ПРЕЛОАДЕР -->
+<div id="preloader">
+    <div class="preloader-content">
+        <div class="preloader-logo">🍌</div>
+        <div class="preloader-text">Nano Banana</div>
+        <div class="preloader-spinner"></div>
+    </div>
+</div>
+
+<style>
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #F8E1E7 0%, #E0F2FE 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease;
+}
+
+.preloader-content {
+    text-align: center;
+}
+
+.preloader-logo {
+    font-size: 48px;
+    margin-bottom: 16px;
+    animation: pulse 1.5s infinite;
+}
+
+.preloader-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #1E3A8A;
+    margin-bottom: 24px;
+}
+
+.preloader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(30, 58, 138, 0.2);
+    border-top: 3px solid #B76E79;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+</style>
+
+<script>
+// Убираем прелоадер после загрузки
+window.addEventListener('load', function() {
+    setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+            preloader.style.display = 'none';
+        }, 500);
+    }, 500);
+});
+</script>
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -515,3 +590,4 @@
     <script src="app.js"></script>
 </body>
 </html>
+
