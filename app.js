@@ -1,5 +1,35 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
 // Версия 7.0: Полный функционал с исправлениями
+// Кэширование данных
+const APP_CACHE = {
+    categories: null,
+    styles: null,
+    lastUpdate: null
+};
+
+// Сохраняем в localStorage для быстрой загрузки
+function saveToCache(key, data) {
+    try {
+        localStorage.setItem(`nano_${key}`, JSON.stringify(data));
+        localStorage.setItem(`nano_${key}_time`, Date.now());
+    } catch(e) {
+        console.log('Cache error:', e);
+    }
+}
+
+function getFromCache(key, maxAge = 3600000) { // 1 час
+    try {
+        const time = localStorage.getItem(`nano_${key}_time`);
+        if (time && (Date.now() - parseInt(time)) < maxAge) {
+            return JSON.parse(localStorage.getItem(`nano_${key}`));
+        }
+    } catch(e) {
+        console.log('Cache read error:', e);
+    }
+    return null;
+}
+
+
 
 // ОПРЕДЕЛЕНИЕ ANDROID И ОПТИМИЗАЦИЯ
 (function() {
@@ -1248,4 +1278,5 @@ function setupGenerateHandlers() {
 }
 
 console.log('🍌 Nano Banana App готов! Версия 7.0 - Полный функционал');
+
 
