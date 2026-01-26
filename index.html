@@ -1,147 +1,86 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nano Banana AI Photo</title>
+    <title>Фото Генератор</title>
     <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: Arial; padding: 20px; max-width: 500px; margin: 0 auto; }
+        .btn { 
+            background: linear-gradient(135deg, #B76E79 0%, #D4AF37 100%);
+            color: white; padding: 15px; border-radius: 25px; 
+            border: none; width: 100%; margin: 10px 0; font-size: 16px;
+        }
+        textarea { width: 100%; padding: 15px; border-radius: 12px; margin: 10px 0; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">🍌✨</div>
-        <div class="balance">
-            <span class="stars">85⭐</span>
-            <button class="btn-small" onclick="openProfile()">Пополнить</button>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Welcome -->
-        <section class="welcome-card card">
-            <h1>Nano Banana AI Photo</h1>
-            <p>Создай уникальные фотосессии с помощью AI</p>
-        </section>
-
-        <!-- Quick Actions -->
-        <section class="quick-actions">
-            <h2>Быстрый старт</h2>
-            <div class="grid">
-                <div class="action-card" onclick="openSection('photo')">
-                    <div class="icon">📸</div>
-                    <h3>Фото</h3>
-                    <p>Генерация по описанию</p>
-                </div>
-                <div class="action-card" onclick="openSection('photosession')">
-                    <div class="icon">🎬</div>
-                    <h3>Фотосессии</h3>
-                    <p>Набор из 10+ фото</p>
-                </div>
-                <div class="action-card" onclick="openSection('profile')">
-                    <div class="icon">👤</div>
-                    <h3>Профиль</h3>
-                    <p>Баланс и настройки</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories -->
-        <section class="categories">
-            <h2>Популярные стили</h2>
-            <div class="horizontal-scroll">
-                <div class="category-tag" onclick="openCategory('winter')">❄️ Зима</div>
-                <div class="category-tag" onclick="openCategory('birthday')">🎂 День рождения</div>
-                <div class="category-tag" onclick="openCategory('luxury')">💎 Luxury</div>
-                <div class="category-tag" onclick="openCategory('couple')">👫 Парные</div>
-                <div class="category-tag" onclick="openCategory('pets')">🐾 Питомцы</div>
-            </div>
-        </section>
-    </main>
-<!-- Генерация фото -->
-<section id="generateSection" class="card" style="display: none; margin: 20px;">
-    <h2>🎨 Генерация фото</h2>
-    
-    <div class="form-group">
-        <label for="promptInput">Опишите фото:</label>
-        <textarea 
-            id="promptInput" 
-            placeholder="Например: 'Красивая девушка в зимнем лесу, снег, магия, волшебство, качественное фото'" 
-            rows="3"
-        ></textarea>
+    <!-- Главный экран -->
+    <div id="mainScreen">
+        <h1>🍌 Nano Banana AI</h1>
+        <button class="btn" onclick="showGenerator()">📸 Генерация фото</button>
+        <button class="btn" onclick="showNotification('Фотосессии скоро!')">🎬 Фотосессии</button>
+        <button class="btn" onclick="showNotification('Профиль скоро!')">👤 Профиль</button>
     </div>
     
-    <div class="form-group">
-        <label>Стиль:</label>
-        <select id="styleSelect">
-            <option value="photorealistic">Фотореалистичный</option>
-            <option value="art">Художественный</option>
-            <option value="anime">Аниме</option>
-            <option value="fantasy">Фэнтези</option>
-        </select>
-    </div>
-    
-    <div class="form-group">
-        <label>Формат:</label>
-        <div class="format-grid">
-            <button class="format-btn" data-format="1:1">1:1</button>
-            <button class="format-btn" data-format="4:5">4:5</button>
-            <button class="format-btn active" data-format="3:4">3:4</button>
-            <button class="format-btn" data-format="16:9">16:9</button>
+    <!-- Экран генерации -->
+    <div id="generatorScreen" class="hidden">
+        <h2>🎨 Генерация фото</h2>
+        <textarea id="prompt" placeholder="Опишите фото..."></textarea>
+        <button class="btn" onclick="generate()">✨ Сгенерировать</button>
+        <button class="btn" onclick="goBack()">← Назад</button>
+        
+        <div id="result" class="hidden">
+            <h3>✅ Готово!</h3>
+            <img id="photoResult" src="" style="width: 100%; border-radius: 12px;">
         </div>
     </div>
     
-    <button class="btn-primary" onclick="generatePhoto()">
-        <span id="generateText">Сгенерировать (7⭐)</span>
-        <span id="loadingText" style="display: none;">🎨 Генерируем...</span>
-    </button>
+    <script>
+    function showGenerator() {
+        document.getElementById('mainScreen').classList.add('hidden');
+        document.getElementById('generatorScreen').classList.remove('hidden');
+        
+        if (window.Telegram && Telegram.WebApp) {
+            Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
+    }
     
-    <div id="resultContainer" style="display: none; margin-top: 20px;">
-        <h3>Результат:</h3>
-        <img id="generatedImage" src="" alt="Сгенерированное фото" style="width: 100%; border-radius: 12px;">
-        <button class="btn-primary" onclick="downloadPhoto()" style="margin-top: 10px;">
-            📥 Скачать фото
-        </button>
-    </div>
-</section>
-    <!-- Tab Bar -->
-    <nav class="tab-bar">
-        <button class="tab-btn active" onclick="openTab('home')">
-            <span class="tab-icon">🏠</span>
-            <span class="tab-text">Главная</span>
-        </button>
-        <button class="tab-btn" onclick="openTab('photo')">
-            <span class="tab-icon">📸</span>
-            <span class="tab-text">Фото</span>
-        </button>
-        <button class="tab-btn" onclick="openTab('photosession')">
-            <span class="tab-icon">🎬</span>
-            <span class="tab-text">Фотосессии</span>
-        </button>
-        <button class="tab-btn" onclick="openTab('history')">
-            <span class="tab-icon">📚</span>
-            <span class="tab-text">История</span>
-        </button>
-        <button class="tab-btn" onclick="openTab('profile')">
-            <span class="tab-icon">👤</span>
-            <span class="tab-text">Профиль</span>
-        </button>
-    </nav>
-
-    <!-- Modals -->
-    <div id="photoModal" class="modal">
-        <div class="modal-content">
-            <h2>🎨 Генерация фото</h2>
-            <p>Выберите тип генерации:</p>
-            <button class="btn-primary" onclick="startGeneration('prompt')">По описанию</button>
-            <button class="btn-primary" onclick="startGeneration('style')">Создать стиль</button>
-            <button class="btn-primary" onclick="startGeneration('category')">Из категории</button>
-            <button class="btn-close" onclick="closeModal()">×</button>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
+    function goBack() {
+        document.getElementById('generatorScreen').classList.add('hidden');
+        document.getElementById('mainScreen').classList.remove('hidden');
+    }
+    
+    function generate() {
+        const prompt = document.getElementById('prompt').value;
+        if (!prompt) {
+            showNotification('Введите описание!');
+            return;
+        }
+        
+        showNotification('🎨 Генерация началась...');
+        
+        // Демо-фото
+        setTimeout(() => {
+            const demoPhotos = [
+                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop',
+                'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=600&fit=crop'
+            ];
+            
+            document.getElementById('photoResult').src = demoPhotos[Math.floor(Math.random() * demoPhotos.length)];
+            document.getElementById('result').classList.remove('hidden');
+            
+            showNotification('✅ Фото готово!');
+        }, 2000);
+    }
+    
+    function showNotification(message) {
+        if (window.Telegram && Telegram.WebApp) {
+            Telegram.WebApp.showAlert(message);
+        } else {
+            alert(message);
+        }
+    }
+    </script>
 </body>
 </html>
