@@ -76,6 +76,42 @@ window.addEventListener('load', function() {
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <!-- ОПТИМИЗАЦИЯ ДЛЯ ANDROID -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+
+<!-- Предзагрузка шрифтов -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+
+<!-- Оптимизация рендеринга -->
+<style>
+    /* Критичные стили для быстрой загрузки */
+    body { 
+        margin: 0; 
+        background: #FFF8F3;
+        -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Отключаем анимации на слабых устройствах */
+    @media (max-width: 768px) and (hover: none) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    
+    /* Оптимизация для Android WebView */
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+</style>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nano Banana | Old Money AI Photo</title>
@@ -590,4 +626,5 @@ window.addEventListener('load', function() {
     <script src="app.js"></script>
 </body>
 </html>
+
 
