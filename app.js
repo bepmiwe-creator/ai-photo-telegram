@@ -195,7 +195,10 @@ function initFormatButtons() {
     });
 }
 
-// Генерация фото (ДЕМО-РЕЖИМ)
+// Настройки
+const BACKEND_URL = 'https://nano-banana-backend.onrender.com'; // Замени на свой URL Render!
+
+// Реальная генерация через AI
 async function generatePhoto() {
     if (isGenerating) return;
     
@@ -211,9 +214,9 @@ async function generatePhoto() {
         return;
     }
     
-    // Проверяем баланс (демо)
+    // Проверяем баланс
     const starsElement = document.querySelector('.stars');
-    let stars = 85; // Начальный баланс
+    let stars = 85;
     if (starsElement) {
         const starsText = starsElement.textContent;
         stars = parseInt(starsText) || 85;
@@ -234,62 +237,90 @@ async function generatePhoto() {
         Telegram.WebApp.HapticFeedback.impactOccurred('medium');
     }
     
-    // Демо-изображения (разные в зависимости от запроса)
-    const prompt = promptInput.value.toLowerCase();
-    let demoImage;
-    
-    if (prompt.includes('зим') || prompt.includes('snow') || prompt.includes('winter')) {
-        demoImage = 'https://images.unsplash.com/photo-1549476464-37392f717541?w=400&h=600&fit=crop';
-    } else if (prompt.includes('лет') || prompt.includes('summer') || prompt.includes('beach')) {
-        demoImage = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&h=600&fit=crop';
-    } else if (prompt.includes('город') || prompt.includes('city') || prompt.includes('urban')) {
-        demoImage = 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&h=600&fit=crop';
-    } else if (prompt.includes('портрет') || prompt.includes('portrait') || prompt.includes('face')) {
-        demoImage = 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop';
-    } else if (prompt.includes('природа') || prompt.includes('nature') || prompt.includes('forest')) {
-        demoImage = 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&h=600&fit=crop';
-    } else {
-        // Случайное фото из коллекции
-        const demoImages = [
-            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop',
-            'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=600&fit=crop'
-        ];
-        demoImage = demoImages[Math.floor(Math.random() * demoImages.length)];
-    }
-    
-    // Имитация загрузки (2-3 секунды)
-    const delay = 2000 + Math.random() * 1000; // 2-3 секунды
-    
-    setTimeout(() => {
+    try {
+        // Подготавливаем данные для AI
+        const generationData = {
+            prompt: promptInput.value,
+            style: styleSelect.value,
+            format: currentFormat,
+            // В будущем добавим проверку пользователя
+            userId: window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'demo'
+        };
+        
+        console.log('Отправляем запрос к AI:', generationData);
+        
+        // Отправляем запрос на наш AI сервер
+        const response = await fetch(`${BACKEND_URL}/generate`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(generationData)
+        });
+        
+        const result = await response.json();
+        
         // Скрываем загрузку
         if (generateText) generateText.style.display = 'inline';
         if (loadingText) loadingText.style.display = 'none';
         isGenerating = false;
         
-        // Показываем результат
+        if (result.success) {
+            // Показываем результат от AI
+            if (resultContainer) {
+                resultContainer.style.display = 'block';
+            }
+            if (generatedImage && result.imageUrl) {
+                generatedImage.src = result.imageUrl;
+                generatedImage.alt = 'AI фото: ' + promptInput.value.substring(0, 30) + '...';
+            }
+            
+            // Обновляем баланс
+            const newStars = stars - 7;
+            if (starsElement) {
+                starsElement.textContent = `${newStars}⭐`;
+            }
+            
+            // Прокручиваем к результату
+            if (resultContainer) {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            
+            showNotification(result.message || '🎉 AI сгенерировал фото!');
+            
+            // Успешный тактильный отклик
+            if (window.Telegram && Telegram.WebApp) {
+                Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+            }
+            
+        } else {
+            showNotification('❌ Ошибка: ' + (result.error || 'Неизвестная ошибка AI'));
+        }
+        
+    } catch (error) {
+        console.error('Ошибка соединения с AI:', error);
+        
+        // Скрываем загрузку
+        if (generateText) generateText.style.display = 'inline';
+        if (loadingText) loadingText.style.display = 'none';
+        isGenerating = false;
+        
+        // Демо-режим при ошибке
+        const demoImages = [
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=512&h=768&fit=crop',
+            'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=512&h=768&fit=crop'
+        ];
+        
         if (resultContainer) {
             resultContainer.style.display = 'block';
         }
-        if (generatedImage && demoImage) {
-            generatedImage.src = demoImage;
-            generatedImage.alt = 'Сгенерированное фото: ' + promptInput.value.substring(0, 30) + '...';
+        if (generatedImage) {
+            generatedImage.src = demoImages[Math.floor(Math.random() * demoImages.length)];
         }
         
-        // Обновляем баланс (демо)
-        const newStars = stars - 7;
-        if (starsElement) {
-            starsElement.textContent = `${newStars}⭐`;
-        }
-        
-        // Прокручиваем к результату
-        if (resultContainer) {
-            resultContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-        
-        showNotification('🎉 Фото успешно сгенерировано!');
+        showNotification('⚠️ AI сервер временно недоступен. Демо-режим.');
+    }
+}7
         
         // Успешный тактильный отклик
         if (window.Telegram && Telegram.WebApp) {
@@ -419,3 +450,4 @@ window.openTab = openTab;
 window.openSection = openSection;
 window.openProfile = openProfile;
 window.closeModal = closeModal;
+
