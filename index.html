@@ -36,29 +36,35 @@
                     <p class="welcome-subtitle">Элегантные технологии для создания изысканных изображений</p>
                 </div>
                 
-                <div class="quick-grid">
+                <div class="quick-grid-vertical">
                     <div class="quick-card" data-screen="photo">
                         <div class="quick-icon-bg">
                             <span class="quick-icon">✨</span>
                         </div>
-                        <div class="quick-text">ФОТО</div>
-                        <div class="quick-hint">Стили и генерация</div>
+                        <div class="quick-content">
+                            <div class="quick-text">ФОТО</div>
+                            <div class="quick-hint">Стили и генерация</div>
+                        </div>
                     </div>
                     
                     <div class="quick-card" data-screen="photosession">
                         <div class="quick-icon-bg">
                             <span class="quick-icon">📸</span>
                         </div>
-                        <div class="quick-text">ФОТОСЕССИЯ</div>
-                        <div class="quick-hint">Создай съемку мечты</div>
+                        <div class="quick-content">
+                            <div class="quick-text">ФОТОСЕССИЯ</div>
+                            <div class="quick-hint">Создай съемку мечты</div>
+                        </div>
                     </div>
                     
                     <div class="quick-card" data-screen="video">
                         <div class="quick-icon-bg">
                             <span class="quick-icon">🎬</span>
                         </div>
-                        <div class="quick-text">ВИДЕО</div>
-                        <div class="quick-hint">AI-анимация</div>
+                        <div class="quick-content">
+                            <div class="quick-text">ВИДЕО</div>
+                            <div class="quick-hint">AI-анимация</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -113,14 +119,18 @@
                 </div>
 
                 <div class="photosession-info card">
-                    <h3 class="info-title">Как работает фотос">
+                    <h3 class="info-title">Как работает фотосессия?</h3>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
                                 <strong>Выберите фото из вашей коллекции</strong>
                                 <p>Любое сгенерированное фото</p>
                             </div>
                         </div>
                         <div class="step">
                             <div class="step-number">2</div>
-                            <div class="step-content
+                            <div class="step-content">
                                 <strong>Выберите количество кадров (от 10)</strong>
                                 <p>Минимум 10, максимум 20 кадров</p>
                             </div>
@@ -147,7 +157,7 @@
         <!-- ЭКРАН СОЗДАНИЯ СВОЕЙ ФОТОСЕССИИ -->
         <div class="screen" id="screen-photosession-custom">
             <div class="screen-header">
-                <button class="back-btn" id="photosession-back-btn">
+                <button class="back-btn" onclick="switchScreen('photosession')">
                     <span class="material-icons-round">arrow_back</span>
                 </button>
                 <h2>🎨 Своя фотосессия</h2>
@@ -175,44 +185,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
-        <div class="overlay" id="category-modal">
-            <div class="overlay-content category-modal">
-                <div class="overlay-header">
-                    <h3 id="category-modal-title">Категория</h3>
-                    <button class="close-btn" id="category-modal-close">
-                        <span class="material-icons-round">close</span>
-                    </button>
-                </div>
-                
-                <div class="overlay-body">
-                    <div class="category-styles-grid" id="category-styles-container">
-                        <!-- Стили загружаются через JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ -->
-        <div class="overlay" id="photosession-gallery-modal">
-            <div class="overlay-content photosession-gallery-modal">
-                <div class="overlay-header">
-                    <button class="back-btn" id="photosession-gallery-back-btn">
-                        <span class="material-icons-round">arrow_back</span>
-                    </button>
-                    <h3 id="photosession-gallery-title">Галерея фотосессий</h3>
-                    <div class="header-placeholder"></div>
-                </div>
-                
-                <div class="overlay-body">
-                    <div class="photosession-gallery-grid" id="photosession-gallery-container">
-                        <!-- Фотосессии загружаются через JavaScript -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
             <div class="screen-header">
@@ -253,7 +225,7 @@
                                     </div>
                                     <div class="stat">
                                         <span class="stat-label">Уровень:</span>
-                                        <span class="stat-value" id="profile-level">👶 Новичок</span>
+                                        <span class="stat-value stat-level" id="profile-level">Новичок</span>
                                     </div>
                                 </div>
                             </div>
@@ -303,11 +275,64 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="profile-actions">
+                        <button class="action-btn">
+                            <span class="material-icons-round">settings</span>
+                            Настройки
+                        </button>
+                        <button class="action-btn">
+                            <span class="material-icons-round">help_outline</span>
+                            Поддержка
+                        </button>
+                        <button class="action-btn">
+                            <span class="material-icons-round">info_outline</span>
+                            О приложении
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- МОДАЛЬНЫЕ ОКНА -->
+    
+    <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
+    <div class="overlay" id="category-modal">
+        <div class="overlay-content category-modal">
+            <div class="overlay-header">
+                <h3 id="category-modal-title">Категория</h3>
+                <button class="close-btn" id="category-modal-close">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            
+            <div class="overlay-body">
+                <div class="category-styles-grid" id="category-styles-container">
+                    <!-- Стили загружаются через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ -->
+    <div class="overlay" id="photosession-gallery-modal">
+        <div class="overlay-content photosession-gallery-modal">
+            <div class="overlay-header">
+                <button class="back-btn" id="photosession-gallery-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h3 id="photosession-gallery-title">Галерея фотосессий</h3>
+                <div class="header-placeholder"></div>
+            </div>
+            
+            <div class="overlay-body">
+                <div class="photosession-gallery-grid" id="photosession-gallery-container">
+                    <!-- Фотосессии загружаются через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- НИЖНИЙ TAB BAR -->
     <nav class="tab-bar">
         <button class="tab-btn" data-screen="photo">
@@ -341,6 +366,151 @@
             <span class="tab-label">Профиль</span>
         </button>
     </nav>
+
+    <!-- ПРОГРЕСС-ИНДИКАТОР ГЕНЕРАЦИИ -->
+    <style>
+        .generation-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .generation-progress.show {
+            opacity: 1;
+        }
+        
+        .progress-content {
+            text-align: center;
+            color: white;
+        }
+        
+        .progress-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .progress-content h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .progress-content p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+        
+        /* Дополнительные стили для исправлений */
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 16px;
+        }
+        
+        .history-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .history-card img {
+            width: 100%;
+            aspect-ratio: 3/4;
+            object-fit: cover;
+        }
+        
+        .history-info {
+            padding: 12px;
+        }
+        
+        .history-info h4 {
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--color-navy);
+        }
+        
+        .history-info p {
+            font-size: 12px;
+            color: var(--color-charcoal);
+            opacity: 0.7;
+            margin: 0;
+        }
+        
+        .profile-actions {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .action-btn {
+            background: white;
+            border: 1px solid rgba(231, 182, 184, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--color-navy);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background: var(--color-soft-gray);
+            transform: translateX(4px);
+        }
+        
+        .action-btn .material-icons-round {
+            color: var(--color-rose-gold);
+        }
+        
+        .dark-theme .action-btn {
+            background: rgba(55, 65, 81, 0.9);
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            color: var(--color-ivory);
+        }
+        
+        .dark-theme .action-btn:hover {
+            background: rgba(55, 65, 81, 0.7);
+        }
+        
+        .dark-theme .history-card {
+            background: rgba(55, 65, 81, 0.9);
+        }
+        
+        .dark-theme .history-info h4 {
+            color: var(--color-ivory);
+        }
+        
+        .dark-theme .history-info p {
+            color: var(--color-ivory);
+        }
+    </style>
 
     <script src="app.js"></script>
 </body>
