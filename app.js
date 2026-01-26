@@ -1,6 +1,66 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
 // Версия 7.0: Полный функционал с исправлениями
 
+// ОПРЕДЕЛЕНИЕ ANDROID И ОПТИМИЗАЦИЯ
+(function() {
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isTelegramWebView = window.Telegram && window.Telegram.WebApp;
+    
+    if (isAndroid && isTelegramWebView) {
+        // Отключаем тяжелые эффекты на Android
+        document.documentElement.classList.add('android-device');
+        
+        // Упрощаем анимации
+        const style = document.createElement('style');
+        style.textContent = `
+            .android-device * {
+                transform: translateZ(0) !important;
+                -webkit-transform: translateZ(0) !important;
+                backface-visibility: hidden !important;
+                -webkit-backface-visibility: hidden !important;
+            }
+            
+            .android-device .screen {
+                animation: none !important;
+            }
+            
+            .android-device .card,
+            .android-device .quick-card {
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            }
+            
+            .android-device .horizontal-scroll-container {
+                overflow-x: scroll !important;
+                -webkit-overflow-scrolling: auto !important;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Задержка инициализации для Android
+        setTimeout(() => {
+            initApp();
+        }, 100);
+    } else {
+        // Быстрая загрузка для iOS и веб
+        initApp();
+    }
+})();
+
+function initApp() {
+    // Перенеси сюда весь код из DOMContentLoaded
+    console.log('🍌 Nano Banana запускается...');
+    
+    initTelegram();
+    setupNavigation();
+    loadPhotoCategories();
+    // ... остальной код инициализации
+}
+
+// Убери или закомментируй старый DOMContentLoaded
+// document.addEventListener('DOMContentLoaded', function() { ... });
+
+
+
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
 let uploadedImages = [];
@@ -1188,3 +1248,4 @@ function setupGenerateHandlers() {
 }
 
 console.log('🍌 Nano Banana App готов! Версия 7.0 - Полный функционал');
+
