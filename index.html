@@ -35,25 +35,15 @@
                     <h1>Добро пожаловать в мир AI-фото</h1>
                     <p class="welcome-subtitle">Элегантные технологии для создания изысканных изображений</p>
                 </div>
-                
                 <div class="quick-grid">
-                    <div class="quick-card" data-screen="photo">
-                        <div class="quick-icon-bg"><span class="quick-icon">✨</span></div>
-                        <div class="quick-text">ФОТО</div>
-                        <div class="quick-hint">Стили и генерация</div>
-                    </div>
-                    
-                    <div class="quick-card" data-screen="photosession">
-                        <div class="quick-icon-bg"><span class="quick-icon">📸</span></div>
-                        <div class="quick-text">ФОТОСЕССИЯ</div>
-                        <div class="quick-hint">Создай съемку мечты</div>
-                    </div>
-                    
-                    <div class="quick-card" data-screen="video">
-                        <div class="quick-icon-bg"><span class="quick-icon">🎬</span></div>
-                        <div class="quick-text">ВИДЕО</div>
-                        <div class="quick-hint">AI-анимация</div>
-                    </div>
+                    <div class="quick-card" data-screen="photo"><div class="quick-icon-bg"><span class="quick-icon">✨</span></div><div class="quick-text">ФОТО</div><div class="quick-hint">Стили и генерация</div></div>
+                    <div class="quick-card" data-screen="photosession"><div class="quick-icon-bg"><span class="quick-icon">📸</span></div><div class="quick-text">ФОТОСЕССИЯ</div><div class="quick-hint">Создай съемку мечты</div></div>
+                    <div class="quick-card" data-screen="video"><div class="quick-icon-bg"><span class="quick-icon">🎬</span></div><div class="quick-text">ВИДЕО</div><div class="quick-hint">AI-анимация</div></div>
+                </div>
+                <div class="welcome-features">
+                    <div class="feature"><span class="feature-icon">🎨</span><span class="feature-text">Уникальные стили</span></div>
+                    <div class="feature"><span class="feature-icon">⚡</span><span class="feature-text">Быстрая генерация</span></div>
+                    <div class="feature"><span class="feature-icon">🔒</span><span class="feature-text">Конфиденциально</span></div>
                 </div>
             </div>
         </div>
@@ -65,124 +55,87 @@
                 <p class="screen-subtitle">Выберите стиль для генерации</p>
             </div>
             <div class="screen-content">
-                <div id="categories-container">
-                    <!-- JS: Карточки "Генерация по описанию" и "Создать свой" -->
-                </div>
-                <div id="horizontal-categories-main">
-                    <!-- JS: Сетки со стилями -->
-                </div>
+                <div class="horizontal-cards-container" id="categories-container"></div>
+                <div id="horizontal-categories-main"></div>
             </div>
         </div>
 
         <!-- ЭКРАН СОЗДАТЬ СВОЙ СТИЛЬ -->
         <div class="screen" id="screen-create-own">
-            <div class="screen-header with-back-button">
+            <div class="screen-header">
                 <button class="back-btn" id="create-own-back-btn"><span class="material-icons-round">arrow_back</span></button>
                 <h2>Создать свой стиль</h2>
                 <button class="help-btn" id="how-it-works-btn"><span class="material-icons-round">help_outline</span></button>
             </div>
             <div class="screen-content">
                 <div class="create-own-instructions">
-                    <p>Загрузите фото-пример (стиль, который хотите повторить) и свое фото. AI проанализирует пример и создаст похожее изображение с вашим лицом.</p>
+                    <p class="instructions-text">Загрузите фото-пример (стиль, который хотите повторить) и свое фото. AI проанализирует пример и создаст похожее изображение с вашим лицом.</p>
                 </div>
                 <div class="upload-comparison">
-                    <div class="upload-column">
-                        <div class="upload-column-header">
-                            <div class="upload-label">Фото пример</div>
-                            <div class="upload-subtitle">Стиль из интернета</div>
-                        </div>
-                        <div class="upload-container" id="example-container"></div>
-                    </div>
+                    <div class="upload-column"><div class="upload-column-header"><div class="upload-label">Фото пример</div><div class="upload-subtitle">Стиль из интернета</div></div><div class="upload-container" id="example-container"></div></div>
                     <div class="arrow-column"><div class="arrow-icon"><span class="material-icons-round">arrow_forward</span></div></div>
-                    <div class="upload-column">
-                        <div class="upload-column-header">
-                            <div class="upload-label">Ваше фото</div>
-                            <div class="upload-subtitle">Ваше лицо анфас</div>
-                        </div>
-                        <div class="upload-container" id="face-container"></div>
-                    </div>
+                    <div class="upload-column"><div class="upload-column-header"><div class="upload-label">Ваше фото</div><div class="upload-subtitle">Ваше лицо анфас</div></div><div class="upload-container" id="face-container"></div></div>
                 </div>
                 <div class="generate-action create-own-action">
-                    <button class="generate-btn large" id="create-own-generate-btn" disabled>
-                        <span class="generate-icon">📷</span>
-                        <span id="create-own-btn-text">Загрузите оба фото</span>
-                    </button>
+                    <button class="generate-btn large" id="create-own-generate-btn" disabled><span class="generate-icon">📷</span><span id="create-own-btn-text">Загрузите оба фото</span></button>
                 </div>
             </div>
         </div>
 
-        <!-- ЭКРАН ФОТОСЕССИЙ (ПРЕСЕТЫ) -->
+        <!-- ЭКРАН ФОТОСЕССИЙ -->
         <div class="screen" id="screen-photosession">
             <div class="screen-header">
                 <h2>📸 Фотосессии</h2>
-                <p class="screen-subtitle">Готовые пакеты в едином стиле</p>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
             </div>
             <div class="screen-content">
-                <div class="photosession-top-button">
-                    <button class="photosession-btn create-btn" data-pack="custom">
-                        <span class="material-icons-round">add_photo_alternate</span>
-                        Создать свою из фото
-                    </button>
-                </div>
-                <div id="photosession-horizontal-categories">
-                    <!-- JS: Горизонтальные каталоги фотосессий -->
-                </div>
+                <div class="photosession-top-button"><button class="photosession-btn create-btn" data-pack="custom"><span class="material-icons-round">camera</span>Создать свою фотосессию</button></div>
+                <div class="horizontal-categories" id="photosession-horizontal-categories"></div>
             </div>
         </div>
 
         <!-- ЭКРАН СОЗДАНИЯ СВОЕЙ ФОТОСЕССИИ -->
         <div class="screen" id="screen-photosession-custom">
-            <div class="screen-header with-back-button">
+            <div class="screen-header">
                 <button class="back-btn" id="photosession-back-btn"><span class="material-icons-round">arrow_back</span></button>
                 <h2>🎨 Своя фотосессия</h2>
                 <div class="header-placeholder"></div>
             </div>
             <div class="screen-content">
                 <div class="photosession-title-card">
-                    <h3>Создайте фотосессию из вашего фото</h3>
-                    <p>Выберите любое сгенерированное ранее фото, и ИИ создаст серию в похожем стиле.</p>
+                    <h3>Создайте полноценную фотосессию из 1 фото</h3>
+                    <p class="photosession-subtitle">Выберите любое сгенерированное фото - ИИ создаст уникальную серию в разных образах, позах и локациях</p>
                 </div>
                 <div class="user-photos-section">
                     <div class="section-header">
                         <h4>Ваши сгенерированные фото</h4>
-                        <div class="photos-count" id="user-photos-count">0 фото</div>
+                        <div class="photos-count" id="user-photos-count">8 фото</div>
                     </div>
-                    <div class="user-photos-grid" id="user-photos-container">
-                        <!-- JS: Фото пользователя для выбора -->
-                    </div>
+                    <div class="user-photos-grid" id="user-photos-container"></div>
                 </div>
             </div>
         </div>
 
         <!-- ЭКРАН ВИДЕО -->
         <div class="screen" id="screen-video">
-             <div class="screen-header">
-                <h2>🎬 Видео (в разработке)</h2>
-                <p class="screen-subtitle">Скоро здесь появится магия AI-видео!</p>
-            </div>
+            <div class="screen-header"><h2>🎬 Видео</h2><p class="screen-subtitle">AI-генерация видео из фото и текста.</p></div>
             <div class="screen-content">
-                <div class="placeholder-card">
+                 <div class="placeholder-card">
                     <div class="placeholder-icon">🚧</div>
-                    <h3>Раздел в активной разработке</h3>
-                    <p>Мы усердно работаем, чтобы вы могли оживлять свои фото и создавать видео по текстовому описанию. Следите за обновлениями!</p>
+                    <h3>Раздел в разработке</h3>
+                    <p>Скоро здесь появится магия AI-видео. Следите за обновлениями!</p>
                 </div>
             </div>
         </div>
 
         <!-- ЭКРАН ИСТОРИИ -->
         <div class="screen" id="screen-history">
-            <div class="screen-header">
-                <h2>📚 История</h2>
-                <p class="screen-subtitle">Все ваши генерации</p>
-            </div>
+            <div class="screen-header"><h2>📚 История</h2><p class="screen-subtitle">Все ваши сгенерированные фото</p></div>
             <div class="screen-content">
-                <div class="history-info">
-                    <p>Показаны последние 20 генераций. Записи хранятся 7 дней.</p>
-                    <div id="history-count">0 записей</div>
+                <div class="history-filters card">
+                    <div class="filter-info"><span id="history-count">0</span> записей</div>
                 </div>
-                <div class="user-photos-grid" id="history-photos-container">
-                     <!-- JS: Сгенерированные фото из истории -->
-                </div>
+                <div class="user-photos-grid" id="history-photos-container"></div>
                 <div class="empty-state" id="history-empty" style="display: none;">
                     <div class="empty-icon">📂</div>
                     <h3>История пуста</h3>
@@ -193,98 +146,78 @@
 
         <!-- ЭКРАН ПРОФИЛЯ -->
         <div class="screen" id="screen-profile">
-            <div class="screen-header">
-                <h2>👤 Профиль</h2>
-            </div>
+            <div class="screen-header"><h2>👤 Профиль</h2><p class="screen-subtitle">Ваша статистика и настройки</p></div>
             <div class="screen-content">
-                <div class="profile-card card">
-                    <div class="profile-header">
-                        <div class="profile-avatar"><span class="material-icons-round">person</span></div>
-                        <div class="profile-info">
-                            <h2 id="profile-name">Пользователь</h2>
-                            <p class="profile-id" id="profile-id">ID: ...</p>
+                <div class="profile-container">
+                    <div class="profile-card card">
+                        <div class="profile-header">
+                            <div class="profile-avatar"><span class="material-icons-round">person</span></div>
+                            <div class="profile-info">
+                                <h2 id="profile-name">Пользователь</h2>
+                                <p class="profile-id" id="profile-id">ID: ...</p>
+                                <div class="profile-stats">
+                                    <div class="stat"><span class="stat-label">Стаж:</span><span class="stat-value" id="profile-days">1 день</span></div>
+                                    <div class="stat"><span class="stat-label">Уровень:</span><span class="stat-value" id="profile-level">👶 Новичок</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-balance">
+                            <div class="balance-info"><span class="balance-label">Баланс:</span><span class="balance-value"><strong id="profile-balance">85</strong> ⭐</span></div>
+                            <button class="balance-add-btn" id="add-balance-profile">Пополнить</button>
                         </div>
                     </div>
-                    <div class="profile-stats">
-                        <div class="stat"><span class="stat-value" id="profile-level">👶 Новичок</span><span class="stat-label">Уровень</span></div>
-                        <div class="stat"><span class="stat-value" id="profile-days">1 день</span><span class="stat-label">В приложении</span></div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-icon">📸</div><div class="stat-content"><h3 id="stats-photos">0</h3><p>Создано фото</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">🎞️</div><div class="stat-content"><h3 id="stats-videos">0</h3><p>Создано видео</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-content"><h3 id="stats-spent">0</h3><p>Потрачено звёзд</p></div></div>
+                        <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-content"><h3 id="stats-saved">0</h3><p>Сохранено</p></div></div>
                     </div>
-                    <div class="profile-balance">
-                        <div class="balance-info">
-                            <span class="balance-label">Баланс:</span>
-                            <span class="balance-value"><strong id="profile-balance">85</strong> ⭐</span>
-                        </div>
-                        <button class="balance-add-btn" id="add-balance-profile">Пополнить</button>
-                    </div>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-icon">📸</div><div class="stat-content"><h3 id="stats-photos">0</h3><p>Создано фото</p></div></div>
-                    <div class="stat-card"><div class="stat-icon">🎞️</div><div class="stat-content"><h3 id="stats-videos">0</h3><p>Создано видео</p></div></div>
-                    <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-content"><h3 id="stats-spent">0</h3><p>Потрачено звёзд</p></div></div>
-                    <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-content"><h3 id="stats-saved">0</h3><p>Всего действий</p></div></div>
-                </div>
-                <div class="settings-section card">
-                    <h3>📅 Недавняя активность</h3>
-                    <div class="recent-list" id="recent-list">
-                        <div class="empty-state small" id="recent-empty"><p>Здесь будут ваши последние генерации</p></div>
-                    </div>
-                </div>
-                <div class="settings-section card">
-                    <h3>⚙️ Настройки</h3>
-                    <div class="settings-list">
-                        <div class="setting-item">
-                            <div class="setting-info"><span class="setting-icon">🌙</span><span class="setting-title">Темная тема</span></div>
-                            <label class="switch"><input type="checkbox" id="dark-mode"><span class="slider"></span></label>
-                        </div>
-                        <div class="setting-item clickable" id="clear-history-btn" onclick="clearHistory()">
-                            <div class="setting-info"><span class="setting-icon">🗑️</span><span class="setting-title">Очистить историю</span></div>
-                            <span class="material-icons-round">chevron_right</span>
+                    <div class="settings-section card">
+                        <h3>⚙️ Настройки</h3>
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info"><span class="setting-icon">🌙</span><div class="setting-text"><span class="setting-title">Темная тема</span></div></div>
+                                <label class="switch"><input type="checkbox" id="dark-mode"><span class="slider"></span></label>
+                            </div>
+                            <div class="setting-item clickable" onclick="clearHistory()">
+                                <div class="setting-info"><span class="setting-icon">🗑️</span><div class="setting-text"><span class="setting-title">Очистить историю</span></div></div>
+                                <span class="material-icons-round">chevron_right</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    
-    <!-- ========== OVERLAYS (ВОЗВРАЩЕНЫ НА МЕСТО) ========== -->
+
+    <!-- НИЖНИЙ TAB BAR -->
+    <nav class="tab-bar">
+        <button class="tab-btn" data-screen="photo"><span class="tab-icon"><span class="material-icons-round">photo_camera</span></span><span class="tab-label">Фото</span></button>
+        <button class="tab-btn" data-screen="photosession"><span class="tab-icon"><span class="material-icons-round">collections</span></span><span class="tab-label">Фотосессии</span></button>
+        <button class="tab-btn active" data-screen="main"><span class="tab-icon"><span class="material-icons-round">home</span></span><span class="tab-label">Главная</span></button>
+        <button class="tab-btn" data-screen="history"><span class="tab-icon"><span class="material-icons-round">history</span></span><span class="tab-label">История</span><span class="tab-badge"></span></button>
+        <button class="tab-btn" data-screen="profile"><span class="tab-icon"><span class="material-icons-round">person</span></span><span class="tab-label">Профиль</span></button>
+    </nav>
+
+    <!-- ========== OVERLAYS ========== -->
 
     <!-- ЭКРАН ЗАГРУЗКИ / ГЕНЕРАЦИИ -->
     <div class="overlay" id="loading-screen">
         <div class="overlay-content loading-container">
-            <div class="overlay-header">
-                <h3 id="loading-title">Идет генерация фото</h3>
-                <button class="close-btn" id="loading-close-btn"><span class="material-icons-round">close</span></button>
-            </div>
-            <div class="overlay-body">
-                <div class="loading-animation">
-                    <div class="loading-icon">
-                        <div class="loading-spinner"></div>
-                        <div class="loading-banana">🍌</div>
-                    </div>
-                    <p class="loading-subtitle">Обычно занимает 30-60 секунд</p>
-                </div>
-            </div>
+            <div class="overlay-header"><h3 id="loading-title">Идет генерация...</h3><button class="close-btn" id="loading-close-btn"><span class="material-icons-round">close</span></button></div>
+            <div class="overlay-body"><div class="loading-animation"><div class="loading-icon"><div class="loading-spinner"></div><div class="loading-banana">🍌</div></div><p class="loading-subtitle">Обычно это занимает 30-60 секунд</p></div></div>
         </div>
     </div>
 
     <!-- ЭКРАН РЕЗУЛЬТАТА ГЕНЕРАЦИИ -->
     <div class="overlay" id="generation-result-modal">
         <div class="overlay-content result-container">
-            <div class="overlay-header">
-                <h3 id="result-title">Генерация завершена!</h3>
-                <button class="close-btn" id="result-close-btn"><span class="material-icons-round">close</span></button>
-            </div>
+            <div class="overlay-header"><h3 id="result-title">Генерация завершена!</h3><button class="close-btn" id="result-close-btn"><span class="material-icons-round">close</span></button></div>
             <div class="overlay-body">
-                <div class="result-preview">
-                    <img id="result-image" src="" alt="Результат генерации">
-                    <div class="result-success"><span class="success-icon">✅</span><span>Готово!</span></div>
-                </div>
+                <div class="result-preview"><img id="result-image" src="" alt="Результат"><div class="result-success"><span class="success-icon">✅</span><span>Готово!</span></div></div>
                 <div class="result-action">
-                    <button class="download-btn large" id="result-download-btn">
-                        <span class="material-icons-round">file_download</span>
-                        <span>Скачать фото</span>
-                    </button>
-                    <p class="result-hint">Файл будет отправлен в чат Telegram бота</p>
+                    <button class="download-btn large" id="result-download-btn"><span class="download-icon material-icons-round">file_download</span><span>Скачать фото</span></button>
+                    <p class="result-hint">Файл будет отправлен в чат Telegram бота.</p>
                 </div>
             </div>
         </div>
@@ -293,52 +226,29 @@
     <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
     <div class="overlay" id="category-modal">
         <div class="overlay-content category-modal">
-            <div class="overlay-header">
-                <h3 id="category-modal-title">Категория</h3>
-                <button class="close-btn" id="category-modal-close"><span class="material-icons-round">close</span></button>
-            </div>
-            <div class="overlay-body">
-                <div class="category-styles-grid" id="category-styles-container"></div>
-            </div>
+            <div class="overlay-header"><h3 id="category-modal-title">Категория</h3><button class="close-btn" id="category-modal-close"><span class="material-icons-round">close</span></button></div>
+            <div class="overlay-body"><div class="category-styles-grid" id="category-styles-container"></div></div>
         </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ -->
     <div class="overlay" id="photosession-gallery-modal">
         <div class="overlay-content photosession-gallery-modal">
-            <div class="overlay-header">
-                <button class="back-btn" id="photosession-gallery-back-btn"><span class="material-icons-round">arrow_back</span></button>
-                <h3 id="photosession-gallery-title">Галерея фотосессий</h3>
-                <div class="header-placeholder"></div>
-            </div>
-            <div class="overlay-body">
-                <div class="photosession-gallery-grid" id="photosession-gallery-container"></div>
-            </div>
+            <div class="overlay-header"><button class="back-btn" id="photosession-gallery-back-btn"><span class="material-icons-round">arrow_back</span></button><h3 id="photosession-gallery-title">Галерея</h3><div class="header-placeholder"></div></div>
+            <div class="overlay-body"><div class="photosession-gallery-grid" id="photosession-gallery-container"></div></div>
         </div>
     </div>
 
     <!-- МОДАЛЬНОЕ ОКНО СЕРИИ ФОТОСЕССИИ -->
     <div class="overlay" id="photosession-series-modal">
         <div class="overlay-content photosession-series-modal">
-            <div class="overlay-header">
-                <button class="back-btn" id="photosession-series-back-btn"><span class="material-icons-round">arrow_back</span></button>
-                <h3 id="photosession-series-title">Серия фотосессии</h3>
-                <div class="header-placeholder"></div>
-            </div>
+            <div class="overlay-header"><button class="back-btn" id="photosession-series-back-btn"><span class="material-icons-round">arrow_back</span></button><h3 id="photosession-series-title">Серия</h3><div class="header-placeholder"></div></div>
             <div class="overlay-body">
                 <div class="photosession-series-grid" id="photosession-series-container"></div>
-                <div class="photosession-balance-info">
-                    <div class="balance-info-item">
-                        <span class="balance-label">Баланс:</span>
-                        <span class="balance-value"><span id="photosession-series-balance">85</span> ⭐</span>
-                    </div>
-                </div>
+                <div class="photosession-balance-info"><div class="balance-info-item"><span>Баланс:</span><span class="balance-value"><span id="photosession-series-balance">85</span> ⭐</span></div></div>
                 <div class="photosession-series-action">
-                    <button class="generate-btn large" id="photosession-series-generate-btn">
-                        <span class="generate-icon">✨</span>
-                        <span id="photosession-series-btn-text"></span>
-                    </button>
-                    <p class="photosession-result-hint">Вы получите 10 фото в стиле серии + 3 фото в подарок</p>
+                    <button class="generate-btn large" id="photosession-series-generate-btn"><span id="photosession-series-btn-text"></span></button>
+                    <p class="photosession-result-hint">Вы получите 10 фото + 3 в подарок</p>
                 </div>
             </div>
         </div>
@@ -349,11 +259,7 @@
         <div class="fullscreen-container">
             <img class="fullscreen-image" id="fullscreen-image" src="" alt="">
             <div class="fullscreen-controls" id="fullscreen-controls">
-                <div class="fullscreen-top-bar">
-                    <button class="fullscreen-close-btn" id="fullscreen-close-btn"><span class="material-icons-round">close</span></button>
-                    <div class="fullscreen-counter" id="fullscreen-counter"></div>
-                    <div class="header-placeholder"></div>
-                </div>
+                <div class="fullscreen-top-bar"><button class="fullscreen-close-btn" id="fullscreen-close-btn"><span class="material-icons-round">close</span></button><div class="fullscreen-counter" id="fullscreen-counter"></div><div class="header-placeholder"></div></div>
                 <div class="fullscreen-navigation">
                     <button class="fullscreen-nav-btn prev" id="fullscreen-prev-btn"><span class="material-icons-round">chevron_left</span></button>
                     <button class="fullscreen-nav-btn next" id="fullscreen-next-btn"><span class="material-icons-round">chevron_right</span></button>
@@ -365,31 +271,19 @@
     <!-- ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ -->
     <div class="overlay" id="photosession-modal">
         <div class="overlay-content photosession-modal">
-            <div class="overlay-header">
-                <h3>Создать фотосессию</h3>
-                <button class="close-btn" onclick="hidePhotosessionModal()"><span class="material-icons-round">close</span></button>
-            </div>
+            <div class="overlay-header"><h3>Создать фотосессию</h3><button class="close-btn" onclick="hidePhotosessionModal()"><span class="material-icons-round">close</span></button></div>
             <div class="overlay-body">
                 <div class="selected-photo-preview"><img id="selected-photo-img" src="" alt="Выбранное фото"></div>
                 <div class="frames-selection">
-                    <div class="frames-header">
-                        <h4>Количество кадров</h4>
-                        <div class="frames-price"><span id="photosession-price">159</span> ⭐</div>
-                    </div>
+                    <div class="frames-header"><h4>Количество кадров</h4><div class="frames-price"><span id="photosession-price">159</span> ⭐</div></div>
                     <div class="frames-control">
                         <button class="frame-btn minus" onclick="decreasePhotosessionFrames()"><span class="material-icons-round">remove</span></button>
-                        <div class="frames-count">
-                            <div class="frames-number" id="photosession-count">10</div>
-                            <div class="frames-bonus">+3 фото бесплатно</div>
-                        </div>
+                        <div class="frames-count"><div class="frames-number" id="photosession-count">10</div><div class="frames-bonus">+3 фото бесплатно</div></div>
                         <button class="frame-btn plus" onclick="increasePhotosessionFrames()"><span class="material-icons-round">add</span></button>
                     </div>
                 </div>
                 <div class="photosession-action">
-                    <button class="generate-btn large" id="start-photosession-btn">
-                        <span class="generate-icon">✨</span>
-                        <span>Создать фотосессию</span>
-                    </button>
+                    <button class="generate-btn large" id="start-photosession-btn"><span class="generate-icon">✨</span><span>Создать фотосессию</span></button>
                     <p class="photosession-result-hint">Итого вы получите <span id="result-photo-count">13</span> фото.</p>
                 </div>
             </div>
@@ -399,12 +293,9 @@
     <!-- ОВЕРЛЕЙ "КАК ЭТО РАБОТАЕТ" -->
     <div class="overlay" id="how-it-works-overlay">
         <div class="overlay-content">
-            <div class="overlay-header">
-                <h3>Как это работает?</h3>
-                <button class="close-btn" onclick="hideHowItWorks()"><span class="material-icons-round">close</span></button>
-            </div>
+            <div class="overlay-header"><h2>Как это работает?</h2><button class="close-btn" onclick="hideHowItWorks()"><span class="material-icons-round">close</span></button></div>
             <div class="overlay-body">
-                <!-- Содержимое справки -->
+                <!-- Содержимое справки из оригинального файла -->
             </div>
         </div>
     </div>
@@ -421,7 +312,7 @@
                 <div class="generate-type"><div class="type-badge" id="type-badge"></div></div>
                 <div class="prompt-section" id="prompt-section" style="display: none;">
                     <h4>Опишите изображение</h4>
-                    <textarea class="prompt-textarea" id="ai-prompt" placeholder="Например: девушка в розовом платье на берегу океана на закате..." rows="4"></textarea>
+                    <textarea class="prompt-textarea" id="ai-prompt" placeholder="Пример: девушка в розовом платье на берегу океана..." rows="4"></textarea>
                 </div>
                 <div class="upload-section">
                     <h4>Загрузите свои фото <span class="required-badge">Обязательно</span></h4>
@@ -446,24 +337,12 @@
                     </div>
                 </div>
                 <div class="generate-action">
-                    <button class="generate-btn" id="start-generate-btn" disabled>
-                        <span class="generate-icon">📝</span>
-                        <span id="generate-btn-text">Загрузите фото</span>
-                    </button>
+                    <button class="generate-btn" id="start-generate-btn" disabled><span class="generate-icon">📝</span><span id="generate-btn-text">Загрузите фото</span></button>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- НИЖНИЙ TAB BAR -->
-    <nav class="tab-bar">
-        <button class="tab-btn" data-screen="photo"><span class="tab-icon"><span class="material-icons-round">photo_camera</span></span><span class="tab-label">Фото</span></button>
-        <button class="tab-btn" data-screen="photosession"><span class="tab-icon"><span class="material-icons-round">collections</span></span><span class="tab-label">Фотосессии</span></button>
-        <button class="tab-btn active" data-screen="main"><span class="tab-icon"><span class="material-icons-round">home</span></span><span class="tab-label">Главная</span></button>
-        <button class="tab-btn" data-screen="history"><span class="tab-icon"><span class="material-icons-round">history</span></span><span class="tab-label">История</span><span class="tab-badge"></span></button>
-        <button class="tab-btn" data-screen="profile"><span class="tab-icon"><span class="material-icons-round">person</span></span><span class="tab-label">Профиль</span></button>
-    </nav>
-
+    
     <script src="app.js"></script>
 </body>
 </html>
