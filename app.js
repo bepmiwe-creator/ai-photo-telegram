@@ -128,7 +128,6 @@ document.querySelectorAll('.format-btn').forEach(btn => {
     });
 });
 
-// Генерация фото (ТЕСТОВАЯ ВЕРСИЯ - без реального API)
 async function generatePhoto() {
     if (isGenerating) return;
     
@@ -142,51 +141,35 @@ async function generatePhoto() {
         return;
     }
     
-    // Проверяем баланс (в будущем будет проверка с сервера)
-    const stars = parseInt(document.querySelector('.stars').textContent);
-    if (stars < 7) {
-        showNotification('Недостаточно звёзд! Пополните баланс.');
-        return;
-    }
-    
     // Показываем загрузку
     isGenerating = true;
     generateText.style.display = 'none';
     loadingText.style.display = 'inline';
     
-    // Тактильный отклик
-    if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-    }
+    // Демо-изображения
+    const demoImages = [
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=400&h=600&fit=crop',
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop'
+    ];
     
-    // ВРЕМЕННО: Имитация генерации (3 секунды)
-    // В БУДУЩЕМ: Здесь будет реальный запрос к API
-    
+    // Имитация загрузки 2 секунды
     setTimeout(() => {
         // Скрываем загрузку
         generateText.style.display = 'inline';
         loadingText.style.display = 'none';
         isGenerating = false;
         
-        // Показываем результат (тестовое изображение)
+        // Показываем случайное демо-изображение
+        const randomImage = demoImages[Math.floor(Math.random() * demoImages.length)];
         document.getElementById('resultContainer').style.display = 'block';
-        document.getElementById('generatedImage').src = 
-            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=600&fit=crop&crop=faces';
+        document.getElementById('generatedImage').src = randomImage;
         
-        // Обновляем баланс (тестово)
-        const newStars = stars - 7;
-        document.querySelector('.stars').textContent = `${newStars}⭐`;
-        
-        showNotification('✅ Фото успешно сгенерировано!');
-        
-        if (window.Telegram && Telegram.WebApp) {
-            Telegram.WebApp.HapticFeedback.notificationOccurred('success');
-        }
+        showNotification('✅ Демо: фото сгенерировано!');
         
         // Прокручиваем к результату
         document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
-        
-    }, 3000);
+    }, 2000);
 }
 
 // Скачивание фото
@@ -212,3 +195,4 @@ function openSection(section) {
         showNotification('Открыт профиль');
     }
 }
+
