@@ -1,95 +1,56 @@
 // app.js - Nano Banana AI Photo - Old Money Edition
 // Версия 7.0: Полный функционал с исправлениями
-// Кэширование данных
-const APP_CACHE = {
-    categories: null,
-    styles: null,
-    lastUpdate: null
-};
+// ========== ОПРЕДЕЛЕНИЕ УСТРОЙСТВА ==========
+const isAndroid = /Android/i.test(navigator.userAgent);
+const isTelegramWebView = window.Telegram && window.Telegram.WebApp;
 
-// Сохраняем в localStorage для быстрой загрузки
-function saveToCache(key, data) {
-    try {
-        localStorage.setItem(`nano_${key}`, JSON.stringify(data));
-        localStorage.setItem(`nano_${key}_time`, Date.now());
-    } catch(e) {
-        console.log('Cache error:', e);
-    }
-}
+// ========== ДАННЫЕ ПРИЛОЖЕНИЯ ==========
+let userBalance = 85;
+let selectedStyle = null;
+let currentCategory = null;
+let selectedModel = 'nano';
+let selectedFormat = '1:1';
+let uploadedExample = null;
+let uploadedFace = null;
+let selectedPhotoForSession = null;
+let currentPhotosessionCategory = null;
+let photosessionFrames = 10;
+let selectedCategoryForModal = null;
 
-function getFromCache(key, maxAge = 3600000) { // 1 час
-    try {
-        const time = localStorage.getItem(`nano_${key}_time`);
-        if (time && (Date.now() - parseInt(time)) < maxAge) {
-            return JSON.parse(localStorage.getItem(`nano_${key}`));
-        }
-    } catch(e) {
-        console.log('Cache read error:', e);
-    }
-    return null;
-}
+// ... (оставь все остальные переменные categories, styleExamples и т.д. как есть)
 
-
-
-// ОПРЕДЕЛЕНИЕ ANDROID И ОПТИМИЗАЦИЯ
-(function() {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isTelegramWebView = window.Telegram && window.Telegram.WebApp;
-    
-    if (isAndroid && isTelegramWebView) {
-        // Отключаем тяжелые эффекты на Android
-        document.documentElement.classList.add('android-device');
-        
-        // Упрощаем анимации
-        const style = document.createElement('style');
-        style.textContent = `
-            .android-device * {
-                transform: translateZ(0) !important;
-                -webkit-transform: translateZ(0) !important;
-                backface-visibility: hidden !important;
-                -webkit-backface-visibility: hidden !important;
-            }
-            
-            .android-device .screen {
-                animation: none !important;
-            }
-            
-            .android-device .card,
-            .android-device .quick-card {
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
-            }
-            
-            .android-device .horizontal-scroll-container {
-                overflow-x: scroll !important;
-                -webkit-overflow-scrolling: auto !important;
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Задержка инициализации для Android
-        setTimeout(() => {
-            initApp();
-        }, 100);
-    } else {
-        // Быстрая загрузка для iOS и веб
-        initApp();
-    }
-})();
-
-function initApp() {
-    // Перенеси сюда весь код из DOMContentLoaded
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+document.addEventListener('DOMContentLoaded', function() {
     console.log('🍌 Nano Banana запускается...');
     
+    // Проверка Android и добавление оптимизаций
+    if (isAndroid && isTelegramWebView) {
+        document.documentElement.classList.add('android-device');
+        console.log('📱 Обнаружен Android');
+    }
+    
+    // Инициализация всех модулей
     initTelegram();
     setupNavigation();
-    loadPhotoCategories();
-    // ... остальной код инициализации
-}
-
-// Убери или закомментируй старый DOMContentLoaded
-// document.addEventListener('DOMContentLoaded', function() { ... });
-
-
+    setupButtons();
+    setupModalHandlers();
+    setupRealUpload();
+    setupHistoryAndProfile();
+    updateBalance();
+    
+    // Скрываем прелоадер
+    setTimeout(() => {
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        }
+    }, 300);
+    
+    console.log('✅ Приложение загружено');
+});
 
 // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
 let userBalance = 85;
@@ -1278,5 +1239,6 @@ function setupGenerateHandlers() {
 }
 
 console.log('🍌 Nano Banana App готов! Версия 7.0 - Полный функционал');
+
 
 
