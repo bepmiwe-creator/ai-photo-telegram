@@ -196,7 +196,7 @@ function initFormatButtons() {
 }
 
 // Настройки
-const BACKEND_URL = 'https://nano-banana-backend.onrender.com'; // Замени на свой URL Render!
+const BACKEND_URL = 'https://nano-banana-backend.onrender.com';
 
 // Реальная генерация через AI
 async function generatePhoto() {
@@ -450,4 +450,5 @@ window.openTab = openTab;
 window.openSection = openSection;
 window.openProfile = openProfile;
 window.closeModal = closeModal;
+
 
