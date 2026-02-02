@@ -48,7 +48,7 @@ API_TIMEOUT: 30000
 |-------|------|------------|
 | GET | `/api/balance` | Ответ: `{ "balance": number }` |
 | POST | `/api/generate` | Тело: `{ "type": "photo"|"create-own"|"photosession", "data": { ... } }`. Ответ: `{ "imageUrl"?: string, "taskId"?: string }` |
-| GET | `/api/task/:taskId` | (опционально) Статус задачи: `{ "status": "done"|"pending", "imageUrl"?: string }` |
+| GET | `/api/task/:taskId` | (опционально) Статус задачи Replicate: `{ "status": "succeeded"|"starting"|…, "imageUrl"?: string }` |
 | GET | `/api/my-photos` | Ответ: массив `[{ id, src, title, date, type }]` |
 | GET | `/api/history` | (опционально) История генераций |
 | POST | `/api/send-to-chat` | Тело: `{ "resultId", "type" }` — отправить результат в чат пользователю |
@@ -69,6 +69,17 @@ API_TIMEOUT: 30000
 ### 5. Проверка initData на бэкенде
 
 На сервере проверяйте подпись Telegram для `initData`, чтобы убедиться, что запрос от реального пользователя бота. Документация: [Telegram WebApp — validating data](https://core.telegram.org/bots/webapps#validating-data-received-via-the-mini-app).
+
+### 6. Готовый бэкенд (папка `backend/`)
+
+В репозитории есть готовый бэкенд на Node.js (Express), который:
+
+- Проверяет Telegram `initData` по токену бота.
+- Реализует `GET /api/balance` (заглушка) и `POST /api/generate` с интеграцией Replicate.
+- Сопоставляет уровни **Nano Banana** и **Nano Banana Pro** с моделями Replicate (по умолчанию FLUX Schnell и FLUX.1 [dev]).
+- Поддерживает форматы изображений (1:1, 4:5, 16:9 и т.д.) и опционально image-to-image (референс) для Pro.
+
+Установка и запуск: см. [backend/README.md](backend/README.md). Для работы генерации нужны `REPLICATE_API_TOKEN` и при желании `TELEGRAM_BOT_TOKEN` в `.env`.
 
 ---
 

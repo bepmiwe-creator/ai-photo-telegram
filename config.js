@@ -6,14 +6,14 @@
     'use strict';
 
     var APP_CONFIG = {
-        /** Базовый URL API бэкенда (без слэша в конце) */
-        API_BASE_URL: '',
+        /** Базовый URL API бэкенда 'https://bepmiwe-creator.github.io/ai-photo-telegram/' */
+        API_BASE_URL: 'http://127.0.0.1:3000',
 
         /** Ссылка на бота для пополнения баланса и поддержки */
         BOT_LINK: 'https://t.me/NeuroFlashStudio_bot',
 
         /** true = работать без бэкенда (мок-данные), false = вызывать API */
-        USE_MOCK: true,
+        USE_MOCK: false,
 
         /** Таймаут запросов к API (мс) */
         API_TIMEOUT: 30000,
