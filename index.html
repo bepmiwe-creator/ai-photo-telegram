@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nano Banana | Old Money AI Photo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <!-- ВЕРХНИЙ HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon">🍌</span>
+                <span class="logo-text">Nano</span>
+            </div>
+            <button class="balance-btn" id="balance-btn">
+                <span class="star-icon">⭐</span>
+                <span id="header-balance">85</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ОСНОВНОЕ СОДЕРЖИМОЕ -->
+    <main class="app-main" id="app-main">
+        <!-- ГЛАВНЫЙ ЭКРАН -->
+        <div class="screen active" id="screen-main">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <h1>Добро пожаловать в мир AI-фото</h1>
+                    <p class="welcome-subtitle">Элегантные технологии для создания изысканных изображений</p>
+                </div>
+                
+                <div class="quick-grid">
+                    <div class="quick-card" data-screen="photo">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">✨</span>
+                        </div>
+                        <div class="quick-text">ФОТО</div>
+                        <div class="quick-hint">Стили и генерация</div>
+                    </div>
+                    
+                    <div class="quick-card" data-screen="photosession">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">📸</span>
+                        </div>
+                        <div class="quick-text">ФОТОСЕССИЯ</div>
+                        <div class="quick-hint">Создай съемку мечты</div>
+                    </div>
+                    
+                    <div class="quick-card" data-screen="video">
+                        <div class="quick-icon-bg">
+                            <span class="quick-icon">🎬</span>
+                        </div>
+                        <div class="quick-text">ВИДЕО</div>
+                        <div class="quick-hint">AI-анимация</div>
+                    </div>
+                </div>
+                
+                <div class="welcome-features">
+                    <div class="feature">
+                        <span class="feature-icon">🎨</span>
+                        <span class="feature-text">Уникальные стили</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">⚡</span>
+                        <span class="feature-text">Быстрая генерация</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🔒</span>
+                        <span class="feature-text">Конфиденциально</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ФОТО -->
+        <div class="screen" id="screen-photo">
+            <div class="screen-header">
+                <h2>✨ Фото</h2>
+                <p class="screen-subtitle">Выберите стиль для генерации</p>
+            </div>
+
+            <div class="screen-content">
+                <!-- ГОРИЗОНТАЛЬНЫЕ КНОПКИ В ВЕРХНЕЙ ЧАСТИ -->
+                <div class="horizontal-cards-container" id="categories-container">
+                    <!-- Загружается через JavaScript -->
+                </div>
+
+                <!-- ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ СТИЛЕЙ -->
+                <div class="horizontal-categories" id="horizontal-categories-main">
+                    <!-- Категории загружаются через JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СОЗДАТЬ СВОЙ СТИЛЬ -->
+        <div class="screen" id="screen-create-own">
+            <div class="screen-header">
+                <button class="back-btn" id="create-own-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h2>Создать свой стиль</h2>
+                <button class="help-btn" id="how-it-works-btn">
+                    <span class="material-icons-round">help_outline</span>
+                </button>
+            </div>
+
+            <div class="screen-content">
+                <div class="create-own-instructions">
+                    <p class="instructions-text">
+                        Загрузите фото-пример (стиль, который хотите повторить) и свое фото. 
+                        AI проанализирует пример и создаст похожее изображение с вашим лицом.
+                    </p>
+                </div>
+
+                <!-- КОНТЕЙНЕРЫ ДЛЯ ЗАГРУЗКИ -->
+                <div class="upload-comparison" id="create-own-upload-comparison">
+                    <div class="upload-column" id="create-own-example-column">
+                        <div class="upload-column-header">
+                            <div class="upload-label">Фото пример</div>
+                            <div class="upload-subtitle">Стиль из интернета</div>
+                        </div>
+                        <div class="upload-container" id="example-container">
+                            <!-- Загружается через JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="arrow-column">
+                        <div class="arrow-icon">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </div>
+                    </div>
+
+                    <div class="upload-column" id="create-own-face-column">
+                        <div class="upload-column-header">
+                            <div class="upload-label">Ваше фото</div>
+                            <div class="upload-subtitle">Ваше лицо анфас</div>
+                        </div>
+                        <div class="upload-container" id="face-container">
+                            <!-- Загружается через JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- РЕКОМЕНДАЦИИ -->
+                <div class="upload-recommendations">
+                    <div class="recommendation-icon">
+                        <span class="material-icons-round">lightbulb</span>
+                    </div>
+                    <div class="recommendation-text">
+                        <strong>Рекомендуем:</strong> портреты с хорошим освещением, вид лица анфас. 
+                        Для примера выбирайте четкие фото с хорошим качеством.
+                    </div>
+                </div>
+
+                <!-- КНОПКА ГЕНЕРАЦИИ -->
+                <div class="generate-action create-own-action" id="create-own-action">
+                    <button class="generate-btn large" id="create-own-generate-btn" disabled>
+                        <span class="generate-icon" id="create-own-generate-icon">📷</span>
+                        <span id="create-own-btn-text">Загрузите оба фото</span>
+                    </button>
+                    <p class="generate-hint" id="create-own-generate-hint">
+                        Загрузите оба фото для активации генерации
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ФОТОСЕССИЙ -->
+        <div class="screen" id="screen-photosession">
+            <div class="screen-header">
+                <h2>📸 Фотосессии</h2>
+                <p class="screen-subtitle">Пакеты из 10 фото в едином стиле + 3 фото в подарок</p>
+            </div>
+            
+            <div class="screen-content">
+                <!-- КНОПКА "СОЗДАТЬ СВОЮ" В ВЕРХНЕЙ ЧАСТИ -->
+                <div class="photosession-top-button" id="photosession-top-button">
+                    <button class="photosession-btn create-btn" id="photosession-create-custom-btn" data-pack="custom">
+                        <span class="material-icons-round">camera</span>
+                        Создать свою фотосессию
+                    </button>
+                </div>
+
+                <!-- ГОРИЗОНТАЛЬНЫЕ КАТАЛОГИ ФОТОСЕССИЙ -->
+                <div class="horizontal-categories" id="photosession-horizontal-categories">
+                    <!-- Категории загружаются через JavaScript -->
+                </div>
+
+                <!-- ИНФОРМАЦИЯ О ФОТОСЕССИИ -->
+                <div class="photosession-info card">
+                    <h3 class="info-title">Как работает фотосессия?</h3>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Выберите фото из вашей коллекции</strong>
+                                <p>Любое сгенерированное фото</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Выберите количество кадров (от 10)</strong>
+                                <p>Минимум 10, максимум 20 кадров</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>ИИ создаст вариации в разных стилях</strong>
+                                <p>Разные позы, фоны и образы</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>+3 фото в подарок к каждому заказу!</strong>
+                                <p>Итого получите на 3 фото больше</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН СОЗДАНИЯ СВОЕЙ ФОТОСЕССИИ -->
+        <div class="screen" id="screen-photosession-custom">
+            <div class="screen-header">
+                <button class="back-btn" id="photosession-back-btn">
+                    <span class="material-icons-round">arrow_back</span>
+                </button>
+                <h2>🎨 Своя фотосессия</h2>
+                <div class="header-placeholder"></div>
+            </div>
+
+            <div class="screen-content">
+                <!-- ЗАГОЛОВОК -->
+                <div class="photosession-title-card">
+                    <h3>Создайте полноценную фотосессию из 1 фото</h3>
+                    <p class="photosession-subtitle">
+                        Выберите любое сгенерированное фото - ИИ создаст уникальную серию 
+                        в разных образах, позах и локациях
+                    </p>
+                </div>
+
+                <!-- СГЕНЕРИРОВАННЫЕ ФОТО ПОЛЬЗОВАТЕЛЯ -->
+                <div class="user-photos-section">
+                    <div class="section-header">
+                        <h4>Ваши сгенерированные фото</h4>
+                        <div class="photos-count" id="user-photos-count">8 фото</div>
+                    </div>
+                    
+                    <div class="user-photos-grid" id="user-photos-container">
+                        <!-- Фото загружаются через JavaScript -->
+                    </div>
+                </div>
+
+                <!-- ИНФОРМАЦИЯ О ФОТОСЕССИИ -->
+                <div class="photosession-info card">
+                    <h3 class="info-title">Как работает фотосессия?</h3>
+                    <div class="info-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <strong>Выберите фото из вашей коллекции</strong>
+                                <p>Любое сгенерированное фото</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <strong>Выберите количество кадров (от 10)</strong>
+                                <p>Минимум 10, максимум 20 кадров</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <strong>ИИ создаст вариации в разных стилях</strong>
+                                <p>Разные позы, фоны и образы</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <strong>+3 фото в подарок к каждому заказу!</strong>
+                                <p>Итого получите на 3 фото больше</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ЗАГРУЗКИ / ГЕНЕРАЦИИ -->
+        <div class="overlay" id="loading-screen">
+            <div class="overlay-content loading-container">
+                <div class="overlay-header">
+                    <h3 id="loading-title">Идет генерация фото</h3>
+                    <button class="close-btn" id="loading-close-btn">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- АНИМИРОВАННЫЙ ИНДИКАТОР -->
+                    <div class="loading-animation">
+                        <div class="loading-icon">
+                            <div class="loading-spinner"></div>
+                            <div class="loading-banana">🍌</div>
+                        </div>
+                        <div class="loading-text">
+                            <p class="loading-subtitle">Обычно занимает 30-60 секунд</p>
+                        </div>
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИОННЫЙ БЛОК -->
+                    <div class="loading-info">
+                        <div class="info-icon">
+                            <span class="material-icons-round">info</span>
+                        </div>
+                        <div class="info-content">
+                            <h4>Продолжайте пользоваться приложением</h4>
+                            <p>Результат будет доступен позже в разделе "История". Вы получите уведомление о готовности.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН РЕЗУЛЬТАТА ГЕНЕРАЦИИ -->
+        <div class="overlay" id="generation-result-modal">
+            <div class="overlay-content result-container">
+                <div class="overlay-header">
+                    <h3 id="result-title">Генерация завершена!</h3>
+                    <button class="close-btn" id="result-close-btn">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- РЕЗУЛЬТАТ -->
+                    <div class="result-preview" id="result-preview">
+                        <img id="result-image" src="" alt="Результат генерации">
+                        <div class="result-success">
+                            <span class="success-icon">✅</span>
+                            <span class="success-text">Готово!</span>
+                        </div>
+                    </div>
+                    
+                    <!-- КНОПКА СКАЧИВАНИЯ -->
+                    <div class="result-action" id="result-action">
+                        <button class="download-btn large" id="result-download-btn">
+                            <span class="download-icon material-icons-round" id="result-download-icon">file_download</span>
+                            <span id="result-download-label">Скачать фото</span>
+                        </button>
+                        <p class="result-hint">
+                            Файл будет отправлен в чат Telegram бота
+                        </p>
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИЯ -->
+                    <div class="result-info">
+                        <p>Результат также сохранен в разделе "История".</p>
+                        <button class="view-history-btn" onclick="hideGenerationResult(); switchScreen('history');">
+                            <span class="material-icons-round">history</span>
+                            Посмотреть в истории
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО КАТЕГОРИИ -->
+        <div class="overlay" id="category-modal">
+            <div class="overlay-content category-modal">
+                <div class="overlay-header">
+                    <h3 id="category-modal-title">Категория</h3>
+                    <button class="close-btn" id="category-modal-close">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="category-styles-grid" id="category-styles-container">
+                        <!-- Стили загружаются через JavaScript (2 колонки) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ГАЛЕРЕИ ФОТОСЕССИЙ -->
+        <div class="overlay" id="photosession-gallery-modal">
+            <div class="overlay-content photosession-gallery-modal">
+                <div class="overlay-header">
+                    <button class="back-btn" id="photosession-gallery-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="photosession-gallery-title">Галерея фотосессий</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="photosession-gallery-grid" id="photosession-gallery-container">
+                        <!-- Фотосессии загружаются через JavaScript (2 колонки) -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО СЕРИИ ФОТОСЕССИИ -->
+        <div class="overlay" id="photosession-series-modal">
+            <div class="overlay-content photosession-series-modal">
+                <div class="overlay-header">
+                    <button class="back-btn" id="photosession-series-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="photosession-series-title">Серия фотосессии</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- СЕРИЯ ФОТОГРАФИЙ -->
+                    <div class="photosession-series-grid" id="photosession-series-container">
+                        <!-- Фотографии серии загружаются через JavaScript -->
+                    </div>
+                    
+                    <!-- ИНФОРМАЦИЯ О БАЛАНСЕ -->
+                    <div class="photosession-balance-info">
+                        <div class="balance-info-item">
+                            <span class="balance-label">Баланс:</span>
+                            <span class="balance-value"><span id="photosession-series-balance">85</span> ⭐</span>
+                        </div>
+                    </div>
+                    
+                    <!-- КНОПКА ГЕНЕРАЦИИ -->
+                    <div class="photosession-series-action">
+                        <button class="generate-btn large" id="photosession-series-generate-btn">
+                            <span class="generate-icon">✨</span>
+                            <span id="photosession-series-btn-text">Сгенерировать фотосессию за 159 звёзд</span>
+                        </button>
+                        <p class="photosession-result-hint">
+                            Вы получите 10 фото в стиле выбранной фотосессии + 3 фото в подарок
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ПОЛНОЭКРАННЫЙ ПРОСМОТР -->
+        <div class="overlay fullscreen-overlay" id="fullscreen-viewer">
+            <div class="fullscreen-container">
+                <!-- ИЗОБРАЖЕНИЕ -->
+                <img class="fullscreen-image" id="fullscreen-image" src="" alt="">
+                
+                <!-- ЭЛЕМЕНТЫ УПРАВЛЕНИЯ -->
+                <div class="fullscreen-controls" id="fullscreen-controls">
+                    <!-- ВЕРХНЯЯ ПАНЕЛЬ -->
+                    <div class="fullscreen-top-bar">
+                        <button class="fullscreen-close-btn" id="fullscreen-close-btn">
+                            <span class="material-icons-round">close</span>
+                        </button>
+                        <div class="fullscreen-counter" id="fullscreen-counter">1/10</div>
+                        <div class="fullscreen-placeholder"></div>
+                    </div>
+                    
+                    <!-- ЦЕНТРАЛЬНЫЕ КНОПКИ НАВИГАЦИИ -->
+                    <div class="fullscreen-navigation">
+                        <button class="fullscreen-nav-btn prev" id="fullscreen-prev-btn">
+                            <span class="material-icons-round">chevron_left</span>
+                        </button>
+                        <div class="fullscreen-center-space"></div>
+                        <button class="fullscreen-nav-btn next" id="fullscreen-next-btn">
+                            <span class="material-icons-round">chevron_right</span>
+                        </button>
+                    </div>
+                    
+                    <!-- НИЖНЯЯ ПАНЕЛЬ -->
+                    <div class="fullscreen-bottom-bar">
+                        <button class="fullscreen-save-btn" id="fullscreen-save-btn">
+                            <span class="material-icons-round">file_download</span>
+                            Сохранить фото
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОВЕРЛЕЙ СОЗДАНИЯ ФОТОСЕССИИ -->
+        <div class="overlay" id="photosession-modal">
+            <div class="overlay-content photosession-modal">
+                <div class="overlay-header">
+                    <h3>Создать фотосессию</h3>
+                    <button class="close-btn" onclick="hidePhotosessionModal()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <!-- ВЫБРАННОЕ ФОТО -->
+                    <div class="selected-photo-preview">
+                        <img id="selected-photo-img" src="" alt="Выбранное фото">
+                    </div>
+
+                    <!-- ВЫБОР КОЛИЧЕСТВА КАДРОВ -->
+                    <div class="frames-selection">
+                        <div class="frames-header">
+                            <h4>Количество</h4>
+                            <div class="frames-price">
+                                <span id="photosession-price">159</span> ⭐
+                            </div>
+                        </div>
+                        
+                        <div class="frames-control">
+                            <button class="frame-btn minus" onclick="decreasePhotosessionFrames()">
+                                <span class="material-icons-round">remove</span>
+                            </button>
+                            
+                            <div class="frames-count">
+                                <div class="frames-number" id="photosession-count">10</div>
+                                <div class="frames-bonus">+3 фото бесплатно</div>
+                            </div>
+                            
+                            <button class="frame-btn plus" onclick="increasePhotosessionFrames()">
+                                <span class="material-icons-round">add</span>
+                            </button>
+                        </div>
+                        
+                        <div class="frames-hint">
+                            <span class="material-icons-round">info</span>
+                            <span>Минимум 10 кадров. Каждый дополнительный кадр +15 звёзд</span>
+                        </div>
+                    </div>
+
+                    <!-- ИТОГОВАЯ ИНФОРМАЦИЯ -->
+                    <div class="photosession-summary">
+                        <div class="summary-item">
+                            <span>Выбранных кадров:</span>
+                            <span id="photosession-count-summary">10</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Бесплатных фото:</span>
+                            <span>3</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span>Итого получите:</span>
+                            <span class="total-count">
+                                <span id="photosession-total">13</span> фото
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- КНОПКА СОЗДАНИЯ -->
+                    <div class="photosession-action">
+                        <button class="generate-btn large" id="start-photosession-btn">
+                            <span class="generate-icon">✨</span>
+                            <span>Создать фотосессию</span>
+                        </button>
+                        <p class="photosession-result-hint">
+                            Вы получите <span id="result-photo-count">13</span> фото в стиле выбранного изображения
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОВЕРЛЕЙ "КАК ЭТО РАБОТАЕТ" -->
+        <div class="overlay" id="how-it-works-overlay">
+            <div class="overlay-content">
+                <div class="overlay-header">
+                    <h2>Как это работает?</h2>
+                    <button class="close-btn" onclick="hideHowItWorks()">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="info-section">
+                        <div class="info-icon-large">🎨</div>
+                        <h3>Генерация по примеру</h3>
+                        <p class="info-text">
+                            Нашли крутое фото в интернете и хотите такое же, но с собой? 
+                            Загрузите его как пример, добавьте своё фото — и AI создаст похожее изображение с вашим лицом!
+                        </p>
+                    </div>
+
+                    <div class="info-section">
+                        <div class="steps-list">
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <strong>Загрузите фото-пример</strong>
+                                    <div class="step-subtext">Стиль, поза, одежда, фон</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <strong>Загрузите своё фото</strong>
+                                    <div class="step-subtext">Чёткое фото лица анфас</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <strong>AI проанализирует пример</strong>
+                                    <div class="step-subtext">Определит стиль и особенности</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <strong>Создаст похожее фото</strong>
+                                    <div class="step-subtext">С вашим лицом в выбранном стиле</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>💡 Советы</h4>
+                        <ul class="tips-list">
+                            <li>Выбирайте чёткие примеры с хорошим освещением</li>
+                            <li>Ваше фото должно быть с видимым лицом</li>
+                            <li>Лучше всего работает с портретами</li>
+                            <li>Избегайте групповых фото в примерах</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-section price-section">
+                        <div class="price-icon">💰</div>
+                        <div class="price-content">
+                            <h4>Стоимость</h4>
+                            <p class="price-text">10 звёзд за генерацию</p>
+                            <p class="price-note">Первые 2 генерации бесплатно для новых пользователей</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ГЕНЕРАЦИИ -->
+        <div class="overlay" id="screen-generate">
+            <div class="overlay-content generate-container">
+                <div class="overlay-header">
+                    <button class="back-btn" id="generate-back-btn">
+                        <span class="material-icons-round">arrow_back</span>
+                    </button>
+                    <h3 id="generate-title">Генерация фото</h3>
+                    <div class="header-placeholder"></div>
+                </div>
+                
+                <div class="overlay-body">
+                    <div class="generate-type">
+                        <div class="type-badge" id="type-badge">✨ По описанию</div>
+                    </div>
+                    
+                    <div class="prompt-section" id="prompt-section" style="display: none;">
+                        <h4 id="prompt-section-title">Опишите изображение</h4>
+                        <p class="input-hint" id="prompt-section-hint">Детально опишите, что вы хотите увидеть на фото (до 2000 знаков)</p>
+                        
+                        <textarea class="prompt-textarea" id="ai-prompt" aria-label="Описание изображения" 
+                                  placeholder="Пример: Девушка в розовом платье стоит на берегу океана на закате, волны, песок, золотистый свет, фотореалистично, высокая детализация..." 
+                                  rows="4" maxlength="2000"></textarea>
+                        
+                        <div class="prompt-counter" id="prompt-counter">
+                            <span id="char-count">0</span> / 2000 знаков
+                        </div>
+                    </div>
+                    
+                    <div class="upload-section" id="upload-section">
+                        <div class="upload-header" id="upload-header">
+                            <h4 id="upload-section-title">Загрузите свои фото</h4>
+                            <span class="required-badge" id="upload-required-badge">Обязательно</span>
+                        </div>
+                        <p class="input-hint" id="upload-section-hint">Загрузите 1-5 своих фото для генерации. ИИ учтёт черты лица.</p>
+                        
+                        <div class="upload-grid" id="upload-grid">
+                            <div class="upload-item upload-add" id="upload-add-btn">
+                                <span class="material-icons-round" id="upload-add-icon">add</span>
+                                <span id="upload-add-label">Добавить фото</span>
+                                <div class="upload-count" id="upload-count">0/5</div>
+                            </div>
+                        </div>
+                        
+                        <div class="upload-info" id="upload-info">
+                            <span class="material-icons-round">info</span>
+                            <span>Рекомендуем: портреты с хорошим освещением, вид лица анфас</span>
+                        </div>
+                    </div>
+                    
+                    <div class="format-section" id="format-section">
+                        <h4 id="format-section-title">Формат фото</h4>
+                        <p class="input-hint" id="format-section-hint">Выберите соотношение сторон</p>
+                        
+                        <select class="format-select" id="format-select" aria-label="Формат фото">
+                            <option value="1:1">Квадрат (1:1)</option>
+                            <option value="4:5">Портрет (4:5)</option>
+                            <option value="16:9">Широкий (16:9)</option>
+                            <option value="9:16">Сторис (9:16)</option>
+                            <option value="3:4">Классика (3:4)</option>
+                            <option value="2:3">Постер (2:3)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="model-section" id="model-section">
+                        <h4 id="model-section-title">Модель ИИ</h4>
+                        <p class="input-hint" id="model-section-hint">Выберите качество генерации</p>
+                        
+                        <div class="model-options" id="model-options">
+                            <div class="model-card selected" id="model-card-nano" data-model="nano" data-price="7">
+                                <div class="model-badge">⭐ 7</div>
+                                <div class="model-name">Nano Banana</div>
+                                <div class="model-desc">Стандартное качество</div>
+                                <div class="model-hint">Быстро, для соцсетей</div>
+                            </div>
+                            <div class="model-card" id="model-card-pro" data-model="pro" data-price="35">
+                                <div class="model-badge best">⭐ 35</div>
+                                <div class="model-name">Nano Banana Pro</div>
+                                <div class="model-desc">Высокое качество</div>
+                                <div class="model-hint">Детализация, для печати</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="generate-action" id="generate-action">
+                        <button class="generate-btn" id="start-generate-btn" disabled>
+                            <span class="generate-icon" id="start-generate-icon">📝</span>
+                            <span id="generate-btn-text">Загрузите фото</span>
+                        </button>
+                        <p class="generate-hint" id="generate-hint">Загрузите хотя бы одно фото для генерации</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ВИДЕО -->
+        <div class="screen" id="screen-video">
+            <div class="screen-header">
+                <h2>🎬 Видео</h2>
+                <p class="screen-subtitle">AI-генерация видео из фото и текста. Длительность: 3-10 секунд</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="video-options">
+                    <!-- TEXT-TO-VIDEO -->
+                    <div class="video-card" data-video-type="text">
+                        <div class="video-icon">✍️</div>
+                        <div class="video-title">Text-to-Video</div>
+                        <div class="video-desc">Опишите сцену словами, ИИ создаст видео</div>
+                        <div class="video-details">
+                            <span class="detail">🎞️ 3-5 сек</span>
+                            <span class="detail">🔄 AI SVD</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="text">Создать</button>
+                    </div>
+                    
+                    <!-- IMAGE-TO-VIDEO -->
+                    <div class="video-card" data-video-type="image">
+                        <div class="video-icon">🔄</div>
+                        <div class="video-title">Image-to-Video</div>
+                        <div class="video-desc">Анимация перехода между двумя кадрами</div>
+                        <div class="video-details">
+                            <span class="detail">📸 Start/End frames</span>
+                            <span class="detail">🎬 5-7 сек</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="image">Создать</button>
+                    </div>
+                    
+                    <!-- REFERENCE VIDEO -->
+                    <div class="video-card" data-video-type="reference">
+                        <div class="video-icon">🎞️</div>
+                        <div class="video-title">Reference Video</div>
+                        <div class="video-desc">Видео в стиле загруженной картинки</div>
+                        <div class="video-details">
+                            <span class="detail">🎨 Стиль картинки</span>
+                            <span class="detail">⏱️ 4-6 сек</span>
+                        </div>
+                        <div class="video-price">70 звёзд</div>
+                        <button class="video-btn" data-video-type="reference">Создать</button>
+                    </div>
+                    
+                    <!-- ОЖИВИТЬ ФОТО -->
+                    <div class="video-card premium" data-video-type="animate">
+                        <div class="video-badge">ПРЕМИУМ</div>
+                        <div class="video-icon">🖼️</div>
+                        <div class="video-title">Оживить фото</div>
+                        <div class="video-desc">Слайд-шоу из фото с музыкой и эффектами</div>
+                        <div class="video-details">
+                            <span class="detail">🎵 С музыкой</span>
+                            <span class="detail">✨ Эффекты</span>
+                        </div>
+                        <div class="video-price">300 звёзд</div>
+                        <button class="video-btn premium" data-video-type="animate">Создать</button>
+                    </div>
+                </div>
+                
+                <div class="video-info card">
+                    <div class="info-icon">📹</div>
+                    <div class="info-content">
+                        <h4>Технические детали</h4>
+                        <ul class="tech-list">
+                            <li>Формат видео: MP4, 720p или 1080p</li>
+                            <li>Частота кадров: 24-30 FPS</li>
+                            <li>Длительность: 3-10 секунд</li>
+                            <li>Модели: Stable Video Diffusion, AnimateDiff</li>
+                            <li>Время генерации: 30-90 секунд</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ИСТОРИИ -->
+        <div class="screen" id="screen-history">
+            <div class="screen-header">
+                <h2>📚 История</h2>
+                <p class="screen-subtitle">Все ваши сгенерированные фото</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="history-filters card">
+                    <button class="filter-btn active" data-filter="all">Все</button>
+                    <button class="filter-btn" data-filter="photo">Фото</button>
+                    <button class="filter-btn" data-filter="photosession">Фотосессии</button>
+                    <button class="filter-btn" data-filter="video">Видео</button>
+                    <div class="filter-info">
+                        <span id="history-count">0</span> записей
+                    </div>
+                </div>
+                
+                <!-- ГРИД С ФОТОГРАФИЯМИ -->
+                <div class="history-photos-grid" id="history-photos-container">
+                    <!-- Фото загружаются через JavaScript (2 колонки) -->
+                </div>
+                
+                <div class="history-info card">
+                    <div class="info-icon">💾</div>
+                    <div class="info-content">
+                        <h4>Как работает история?</h4>
+                        <ul class="info-list">
+                            <li>Все генерации хранятся 7 дней</li>
+                            <li>Вы можете скачать результаты в любое время</li>
+                            <li>История автоматически очищается по истечении срока</li>
+                            <li>Для постоянного хранения используйте скачивание</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ЭКРАН ПРОФИЛЯ -->
+        <div class="screen" id="screen-profile">
+            <div class="screen-header">
+                <h2>👤 Профиль</h2>
+                <p class="screen-subtitle">Ваша статистика и настройки</p>
+            </div>
+            
+            <div class="screen-content">
+                <div class="profile-container">
+                    <div class="profile-card card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <span class="material-icons-round" style="font-size: 64px; color: #ec407a;">person</span>
+                            </div>
+                            <div class="profile-info">
+                                <h2 id="profile-name">Пользователь</h2>
+                                <p class="profile-id">ID: <span id="profile-id">...</span></p>
+                                <div class="profile-stats">
+                                    <div class="stat">
+                                        <span class="stat-label">Стаж:</span>
+                                        <span class="stat-value" id="profile-days">1 день</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="stat-label">Уровень:</span>
+                                        <span class="stat-value" id="profile-level">👶 Новичок</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-balance">
+                            <div class="balance-info">
+                                <span class="balance-label">Баланс:</span>
+                                <span class="balance-value"><strong id="profile-balance">85</strong> ⭐</span>
+                            </div>
+                            <button class="balance-add-btn" id="add-balance-profile">
+                                <span class="material-icons-round">add</span>
+                                Пополнить
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(236, 64, 122, 0.1);">
+                                <span>📸</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-photos">0</h3>
+                                <p>Создано фото</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(66, 165, 245, 0.1);">
+                                <span>🎞️</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-videos">0</h3>
+                                <p>Создано видео</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(156, 39, 176, 0.1);">
+                                <span>💰</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-spent">0</h3>
+                                <p>Потрачено звёзд</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background: rgba(76, 175, 80, 0.1);">
+                                <span>🎯</span>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="stats-saved">0</h3>
+                                <p>Сохранено файлов</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-history card">
+                        <div class="history-header">
+                            <h3>📅 Последние генерации</h3>
+                            <a href="#" class="view-all" onclick="switchScreen('history'); return false;">Все →</a>
+                        </div>
+                        
+                        <div class="recent-list" id="recent-list">
+                            <div class="recent-empty" id="recent-empty">
+                                <p>У вас еще нет созданных генераций</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-section card">
+                        <h3>⚙️ Настройки</h3>
+                        
+                        <div class="settings-list">
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🌙</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Темная тема</span>
+                                        <span class="setting-desc">Автоматически подстраивается под Telegram</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="dark-mode" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">💾</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Автосохранение</span>
+                                        <span class="setting-desc">Сохранять все результаты автоматически</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="auto-save" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🔔</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Уведомления</span>
+                                        <span class="setting-desc">Оповещения о завершении генераций</span>
+                                    </div>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="notifications" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="showNotification('Функция скоро будет доступна')">
+                                <div class="setting-info">
+                                    <span class="setting-icon">👥</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Пригласить друзей</span>
+                                        <span class="setting-desc">Получите 50 звёзд за каждого друга</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">chevron_right</span>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="showNotification('Поддержка: @NeuroFlashStudio_bot')">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🆘</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Помощь и поддержка</span>
+                                        <span class="setting-desc">Напишите нам в Telegram</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">chevron_right</span>
+                            </div>
+                            
+                            <div class="setting-item clickable" onclick="clearHistory()">
+                                <div class="setting-info">
+                                    <span class="setting-icon">🗑️</span>
+                                    <div class="setting-text">
+                                        <span class="setting-title">Очистить историю</span>
+                                        <span class="setting-desc">Удалить все записи из истории</span>
+                                    </div>
+                                </div>
+                                <span class="material-icons-round">delete_outline</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- НИЖНИЙ TAB BAR -->
+    <nav class="tab-bar">
+        <button class="tab-btn" data-screen="photo">
+            <span class="tab-icon">
+                <span class="material-icons-round">photo_camera</span>
+            </span>
+            <span class="tab-label">Фото</span>
+        </button>
+        <button class="tab-btn" data-screen="photosession">
+            <span class="tab-icon">
+                <span class="material-icons-round">collections</span>
+            </span>
+            <span class="tab-label">Фотосессии</span>
+        </button>
+        <button class="tab-btn active" data-screen="main">
+            <span class="tab-icon">
+                <span class="material-icons-round">home</span>
+            </span>
+            <span class="tab-label">Главная</span>
+        </button>
+        <button class="tab-btn" data-screen="history">
+            <span class="tab-icon">
+                <span class="material-icons-round">history</span>
+            </span>
+            <span class="tab-label">История</span>
+            <span class="tab-badge"></span>
+        </button>
+        <button class="tab-btn" data-screen="profile">
+            <span class="tab-icon">
+                <span class="material-icons-round">person</span>
+            </span>
+            <span class="tab-label">Профиль</span>
+        </button>
+    </nav>
+
+    <!-- ПОДКЛЮЧАЕМ НАШ СКРИПТ -->
+    <script src="app.js"></script>
+</body>
+</html>
